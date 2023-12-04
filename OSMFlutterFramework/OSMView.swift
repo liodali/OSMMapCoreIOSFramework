@@ -48,7 +48,7 @@ public class OSMView: UIViewController {
                                                                     loaders: [MCTextureLoader()])
     private let identifier = MCCoordinateSystemIdentifiers.epsg4326()
 
-    public let markerManager:MarkerManager
+    private let markerManager:MarkerManager
     
     private let rasterCallback: RasterCallbackInterface = RasterCallbackInterface()
     private var mapGesture: OnMapGesture?
@@ -92,19 +92,8 @@ public class OSMView: UIViewController {
             moveTo(location: initLocation!, zoom: zoomConfiguration.initZoom, animated: false)
         }
     }*/
-    public func moveTo(location: CLLocationCoordinate2D,zoom:Int?,animated:Bool){
-        var innerZoom =  mapView.camera.getZoom()
-        if let izoom = zoom {
-            innerZoom = getZoomFromZoomIdentifier(zoom: izoom)
-        }
-        print("move to \(location),zoom \(String(describing: zoom))")
-        print("inner zoom \(innerZoom)")
-        self.mapView.camera.setZoom(innerZoom, animated: false)
-        self.mapView.camera.move(toCenterPositionZoom: location.mcCoord,zoom:innerZoom, animated: animated)
-    }
-    public func zoom()-> Double {
-        self.mapView.camera.getZoom()
-    }
+    
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -118,4 +107,39 @@ public class OSMView: UIViewController {
         }?.zoom ?? 8735660.37545
     }
     
+}
+
+extension OSMView {
+    /**
+     Responsible to manage Marker for OSMView where you can add/remove/update markers
+     */
+    public func getMarkerManager() -> MarkerManager {
+        self.markerManager
+    }
+    /**
+     Responsible set area Limit for camera of MapView
+     */
+    public func setBoundingBox(bounds:BoundingBox) {
+        self.mapView.camera.setBounds(bounds.toMCRectCoord())
+    }
+    
+    /**
+     Responsible to move the camera to [location] with zoom,animation
+     */
+    public func moveTo(location: CLLocationCoordinate2D,zoom:Int?,animated:Bool){
+        var innerZoom =  mapView.camera.getZoom()
+        if let izoom = zoom {
+            innerZoom = getZoomFromZoomIdentifier(zoom: izoom)
+        }
+        print("move to \(location),zoom \(String(describing: zoom))")
+        print("inner zoom \(innerZoom)")
+        self.mapView.camera.setZoom(innerZoom, animated: false)
+        self.mapView.camera.move(toCenterPositionZoom: location.mcCoord,zoom:innerZoom, animated: animated)
+    }
+    /**
+     this responsible to manage Marker for OSMView where you can add/remove/update markers
+     */
+    public func zoom()-> Double {
+        self.mapView.camera.getZoom()
+    }
 }
