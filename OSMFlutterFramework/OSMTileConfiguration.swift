@@ -18,8 +18,8 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
         tile = tileURL
     }
     
-    public func setTileURL(){
-        
+    public func setTileURL(tileURL:String){
+        tile = tileURL
     }
     
     func getTileUrl(_ x: Int32, y: Int32, t: Int32, zoom: Int32) -> String {

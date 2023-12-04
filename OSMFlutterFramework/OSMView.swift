@@ -110,12 +110,7 @@ public class OSMView: UIViewController {
 }
 
 extension OSMView {
-    /**
-     Responsible to manage Marker for OSMView where you can add/remove/update markers
-     */
-    public func getMarkerManager() -> MarkerManager {
-        self.markerManager
-    }
+   
     /**
      Responsible set area Limit for camera of MapView
      */
@@ -131,10 +126,20 @@ extension OSMView {
         if let izoom = zoom {
             innerZoom = getZoomFromZoomIdentifier(zoom: izoom)
         }
-        print("move to \(location),zoom \(String(describing: zoom))")
-        print("inner zoom \(innerZoom)")
         self.mapView.camera.setZoom(innerZoom, animated: false)
         self.mapView.camera.move(toCenterPositionZoom: location.mcCoord,zoom:innerZoom, animated: animated)
+    }
+    /**
+     Responsible to move the camera to [location] with zoom,animation
+     */
+    public func setCustomTile(tile:CustomTiles){
+        self.osmTiledConfiguration.setTileURL()
+    }
+    /**
+     Responsible to manage Marker for OSMView where you can add/remove/update markers
+     */
+    public func getMarkerManager() -> MarkerManager {
+        self.markerManager
     }
     /**
      this responsible to manage Marker for OSMView where you can add/remove/update markers

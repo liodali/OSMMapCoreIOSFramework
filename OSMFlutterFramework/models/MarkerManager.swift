@@ -15,106 +15,39 @@ protocol LocationHandler {
 
 public class MarkerManager {
     let map: MCMapView
-    var markers: [(location: CLLocationCoordinate2D,layer: MCIconLayerInterface)] = []
-    var pois: (id: String,layer: MCIconLayerInterface)? = nil
+    var markers: [Marker] = []
+    var pois: (id: String,angle:Float,layer: MCIconLayerInterface)? = nil
     init(map: MCMapView) {
         self.map = map
     }
     
     
     
-    public func addMarker(location:CLLocationCoordinate2D, icon:UIImage){
-        let mccoord = location.toMCCoordEpsg3857()
+    public func addMarker(marker:Marker){
+        var nMarker = marker
         let iconLayer = MCIconLayerInterface.create()
         iconLayer?.setLayerClickable(true)
-        let texture = try! TextureHolder(icon.cgImage!)
-        let icon = MCIconFactory.createIcon("",
-                                 coordinate: mccoord,
-                                 texture: texture,
-                                 iconSize: .init(x: Float(texture.getImageWidth()), y: Float(texture.getImageHeight())),
-                                            scale: MCIconType.FIXED)
-        
+        let mccoord = marker.location.toMCCoordEpsg3857()
+        let texture = marker.icon.toTexture(angle: marker.angle)
+        let icon = marker.createMapIcon()
         iconLayer?.add(icon)
         iconLayer?.setCallbackHandler (IconLayerHander())
+        nMarker.setLayer(iconLayerInterface: iconLayer!)
         //iconLayer?.setCallbackHandler(handler)
         map.add(layer: iconLayer?.asLayerInterface())
+        markers.append(nMarker)
     }
-   
-   public func addMarkerWithAnchor(location:CLLocationCoordinate2D, icon:UIImage,anchor:(x:Int,y:Int)){
-        let mccoord = location.toMCCoordEpsg3857()
-        let iconLayer = MCIconLayerInterface.create()
-        iconLayer?.setLayerClickable(true)
-        let texture = try! TextureHolder(icon.cgImage!)
-        let icon = MCIconFactory.createIcon(location.id(),
-                                 coordinate: mccoord,
-                                 texture: texture,
-                                 iconSize: .init(x: Float(texture.getImageWidth()), y: Float(texture.getImageHeight())),
-                                            scale: MCIconType.FIXED)
-        
-        iconLayer?.add(icon)
-        iconLayer?.setCallbackHandler(IconLayerHander())
-        //iconLayer?.setCallbackHandler(handler)
-        map.add(layer: iconLayer?.asLayerInterface())
-    }
-    public func updateMarker(oldlocation:CLLocationCoordinate2D,newlocation:CLLocationCoordinate2D,icon:UIImage?){
-      let marker = markers.first { marker in
+    public func updateMarker(oldlocation:CLLocationCoordinate2D,newlocation:CLLocationCoordinate2D,icon:UIImage?,angle:Float?,anchor:(x:Int,y:Int)?){
+        var marker = markers.first { marker in
           marker.location == oldlocation
         }
-        removeMarker(location: oldlocation)
-        var texture = marker!.layer.getIcons().first?.getTexture()
-        if icon != nil {
-            texture = try! TextureHolder(icon!.cgImage!)
-        }
-        innerAddMarker(location: newlocation, iconTexture: texture as! TextureHolder)
-    }
-    public func updateMarkerWithAnchor(oldlocation:CLLocationCoordinate2D,newlocation:CLLocationCoordinate2D,icon:UIImage?,anchor:(x:Int,y:Int)){
-      let marker = markers.first { marker in
-          marker.location == oldlocation
-        }
-        removeMarker(location: oldlocation)
-        var texture = marker!.layer.getIcons().first?.getTexture()
-        if icon != nil {
-            texture = try! TextureHolder(icon!.cgImage!)
-        }
-        innerAddMarkerWithAnchor(location: newlocation,iconTexture: texture! as! TextureHolder,anchor: anchor)
+        marker?.updateMarker(newLocation: newlocation, configuration: MarkerConfiguration(icon: icon, angle: angle, anchor: anchor))
     }
     public func removeMarker(location:CLLocationCoordinate2D){
       let marker = markers.first { marker in
           marker.location == location
         }
-        map.remove(layer: marker?.layer.asLayerInterface())
-    }
-    func innerAddMarker(location:CLLocationCoordinate2D, iconTexture:TextureHolder){
-        let mccoord = location.toMCCoordEpsg3857()
-        let iconLayer = MCIconLayerInterface.create()
-        iconLayer?.setLayerClickable(true)
-
-        let icon = MCIconFactory.createIcon(location.id(),
-                                 coordinate: mccoord,
-                                 texture: iconTexture,
-                                 iconSize: .init(x: Float(iconTexture.getImageWidth()), y: Float(iconTexture.getImageHeight())),
-                                            scale: MCIconType.FIXED)
-        
-        iconLayer?.add(icon)
-        iconLayer?.setCallbackHandler (IconLayerHander())
-        //iconLayer?.setCallbackHandler(handler)
-        map.add(layer: iconLayer?.asLayerInterface())
-    }
-    func innerAddMarkerWithAnchor(location:CLLocationCoordinate2D, iconTexture:TextureHolder,anchor:(x:Int,y:Int)){
-        let mccoord = location.toMCCoordEpsg3857()
-        let iconLayer = MCIconLayerInterface.create()
-        iconLayer?.setLayerClickable(true)
-
-        let icon = MCIconFactory.createIcon(withAnchor: location.id(),
-                                 coordinate: mccoord,
-                                 texture: iconTexture,
-                                 iconSize: .init(x: Float(iconTexture.getImageWidth()), y: Float(iconTexture.getImageHeight())),
-                                            scale: MCIconType.FIXED,iconAnchor:MCVec2F(x: Float(anchor.x), y: Float(anchor.y)))
-        
-        iconLayer?.add(icon)
-        iconLayer?.setCallbackHandler (IconLayerHander())
-        //iconLayer?.setCallbackHandler(handler)
-        map.add(layer: iconLayer?.asLayerInterface())
+        map.remove(layer: marker?.iconLayerInterface?.asLayerInterface())
     }
 }
 class IconLayerHander:MCIconLayerCallbackInterface {
