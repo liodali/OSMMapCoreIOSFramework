@@ -133,7 +133,7 @@ extension OSMView {
      Responsible to move the camera to [location] with zoom,animation
      */
     public func setCustomTile(tile:CustomTiles){
-        self.osmTiledConfiguration.setTileURL()
+        self.osmTiledConfiguration.setTileURL(tileURL: tile.toString())
     }
     /**
      Responsible to manage Marker for OSMView where you can add/remove/update markers
