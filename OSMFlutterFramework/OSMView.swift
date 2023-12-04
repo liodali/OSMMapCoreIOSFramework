@@ -69,8 +69,8 @@ public class OSMView: UIViewController {
         self.mapView = MCMapView(mapConfig: mapConfig)
         self.markerManager =  MarkerManager(map: mapView)
         super.init(nibName: nil, bundle: nil)
-        //rasterLayer?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
-        //rasterLayer?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
+        rasterLayer?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
+        rasterLayer?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
         view.frame = rect
         self.mapView.backgroundColor = .gray.withAlphaComponent(CGFloat(200))
 
