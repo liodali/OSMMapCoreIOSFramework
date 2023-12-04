@@ -20,6 +20,7 @@
 		90B8B8462B1281EC0021DA8F /* OSMView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8412B1281EC0021DA8F /* OSMView.swift */; };
 		90B8B8472B1281EC0021DA8F /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8432B1281EC0021DA8F /* BoundingBox.swift */; };
 		90B8B8482B1281EC0021DA8F /* ZoomConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8442B1281EC0021DA8F /* ZoomConfiguration.swift */; };
+		90ED38362B1E24220012F419 /* OSMMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90ED38352B1E24220012F419 /* OSMMarker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		90B8B8412B1281EC0021DA8F /* OSMView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSMView.swift; sourceTree = "<group>"; };
 		90B8B8432B1281EC0021DA8F /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
 		90B8B8442B1281EC0021DA8F /* ZoomConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomConfiguration.swift; sourceTree = "<group>"; };
+		90ED38352B1E24220012F419 /* OSMMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMMarker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				90B8B8442B1281EC0021DA8F /* ZoomConfiguration.swift */,
 				9005B1C42B1A76E000F20F5D /* extensions.swift */,
 				9005B1C62B1A997E00F20F5D /* MarkerManager.swift */,
+				90ED38352B1E24220012F419 /* OSMMarker.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				9005B1C52B1A76E000F20F5D /* extensions.swift in Sources */,
 				9005CBA22B1DC37400724B22 /* CustomTiles.swift in Sources */,
 				90B8B8472B1281EC0021DA8F /* BoundingBox.swift in Sources */,
+				90ED38362B1E24220012F419 /* OSMMarker.swift in Sources */,
 				90B8B8462B1281EC0021DA8F /* OSMView.swift in Sources */,
 				9005B1C72B1A997E00F20F5D /* MarkerManager.swift in Sources */,
 				90B8B8452B1281EC0021DA8F /* OSMTileConfiguration.swift in Sources */,
