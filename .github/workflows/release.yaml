@@ -1,0 +1,33 @@
+name: "Release OSMMapCore"
+
+on:
+    push:
+      tags:
+        - '[0-9]+.[0-9]+.[0-9]+*'
+jobs:
+  build-deploy-ios:
+    name: "Build and Deploy iOS Release"
+    runs-on: macos-14.1
+    steps:
+      - name: "Checkout Repository"
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: "Set version variable"
+        run: |
+          RELEASE_VERSION=$(if [[ ${{ github.ref_type }} == "tag" ]]; then echo ${{ github.ref_name }}; else echo ${{ github.sha }}; fi)
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+      - name: "set permission build.sh"
+        run: chmod +x build.sh
+      - name: "run build.sh"
+        run: ./build.sh
+      - name: "Arrange pod contents"
+        run: |
+          mkdir build/pod
+          cp -r build/ios/Release/TangramMap.xcframework build/pod/TangramMap.xcframework
+
+      - name: "Upload pod"
+        uses: actions/upload-artifact@v2
+        with:
+          name: tangram-ios-${{ env.TAG_VRELEASE_VERSIONERSION }}
+          path: build/pod/
