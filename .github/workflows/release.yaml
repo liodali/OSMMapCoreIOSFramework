@@ -7,7 +7,7 @@ on:
 jobs:
   build-deploy-ios:
     name: "Build and Deploy iOS Release"
-    runs-on: macos-14.1
+    runs-on: macos-latest
     steps:
       - name: "Checkout Repository"
         uses: actions/checkout@v2
