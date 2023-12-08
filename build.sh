@@ -14,20 +14,35 @@ copyMapCoreBundle()
    echo -e "\n"
    cp -r $1 $2/OSMFlutterFramework.framework/MapCore_MapCore.bundle
 }
+if [ $# -ne 1 ]
+  then
+    echo "No version supplied"
+    exit 1
+fi
+argVersion="\ts.version = \'$1\'" #1
+awk  -v version="$argVersion" 'NR==4 {$0=version} 1' OSMFlutterFramework.podspec > temp.txt && mv temp.txt OSMFlutterFramework.podspec
 
 version=$(sed  -n 4p  OSMFlutterFramework.podspec | awk '{print $3}' | xargs)
 
+echo " the new version : $version "
+echo "================================"   
 echo "building for iOS (Devices/Simulator)"
 echo -e "\n"
 
-xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
+xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES > log.txt
 
+rm -rf log.txt
+
+echo "================================"   
+echo -e "\n"
 version = $0
 echo "retrieve build directory"
 
 
 dir_build=$(xcodebuild -project OSMFlutterFramework.xcodeproj -showBuildSettings | grep BUILD_ROOT| awk '{print $3}')
-
+dir_project=$(xcodebuild -project OSMFlutterFramework.xcodeproj -showBuildSettings | grep PROJECT_DIR| awk '{print $3}')
+echo "================================"   
+echo -e "\n"
 xcframeworklocation="${dir_build}/OSMFlutterFramework.xcframework"
 
 #cd DerivedData/OSMFlutterFramework/Build/Products
@@ -58,19 +73,23 @@ xcodebuild -create-xcframework -framework $frameworkiphoneos -framework $framewo
 
 if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ] 
 then
+   echo "================================"   
+   echo -e "\n"
    echo "xcframework generated successfully"
    echo -e "\n"
    copyMapCoreBundle $frameworkBundleiphoneos  $xcframeworkiphoneosBundle
    copyMapCoreBundle $frameworkBundleiphonesimulator  $xcframeworkiphonesimulatorBundle
-   ziplocation="${dir_build}/OSMFlutterFramework-$version.zip"
+   ziplocation="${dir_build}/OSMFlutterFramework.zip"
    if [ -d $ziplocation ] 
    then
    rm -rf $ziplocation
    fi
-   zip -r $ziplocation $xcframeworklocation
+   zip -r OSMFlutterFramework.zip OSMFlutterFramework.xcframework
 else
    echo "xcframework not generated"
 fi
-
-mkrdir build/pod
-cp -r $xcframeworklocation build/pod/OSMFlutterFramework-$version.zip
+echo "================================"   
+echo -e "\n"
+echo $(pwd)
+mkdir -p $dir_project/build/pod
+cp -r OSMFlutterFramework.zip $dir_project/build/pod/OSMFlutterFramework-$version.zip
