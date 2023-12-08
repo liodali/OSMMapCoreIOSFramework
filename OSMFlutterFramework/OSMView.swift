@@ -84,7 +84,6 @@ public class OSMView: UIViewController {
         self.rasterLayer?.setCallbackHandler(rasterCallback)
         self.mapView.insert(layer: rasterLayer?.asLayerInterface(), at: 0)
         self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoomConfiguration.initZoom), animated: false)
-
     }
     /*
      public override func viewDidAppear(_ animated: Bool) {

@@ -9,7 +9,7 @@ import Foundation
 import MapKit
 @_implementationOnly import MapCore
 
-protocol LocationHandler {
+public protocol LocationHandler {
     func onTap(location:CLLocationCoordinate2D)
 }
 
@@ -23,7 +23,7 @@ public class MarkerManager {
     
     
     
-    public func addMarker(marker:Marker){
+    public func addMarker(marker:Marker,handler:LocationHandler){
         var nMarker = marker
         let iconLayer = MCIconLayerInterface.create()
         iconLayer?.setLayerClickable(true)
@@ -31,13 +31,14 @@ public class MarkerManager {
         let texture = marker.icon.toTexture(angle: marker.angle)
         let icon = marker.createMapIcon()
         iconLayer?.add(icon)
-        iconLayer?.setCallbackHandler (IconLayerHander())
+        iconLayer?.setCallbackHandler (IconLayerHander(handler))
         nMarker.setLayer(iconLayerInterface: iconLayer!)
         //iconLayer?.setCallbackHandler(handler)
         map.add(layer: iconLayer?.asLayerInterface())
         markers.append(nMarker)
     }
-    public func updateMarker(oldlocation:CLLocationCoordinate2D,newlocation:CLLocationCoordinate2D,icon:UIImage?,angle:Float?,anchor:(x:Int,y:Int)?){
+    public func updateMarker(oldlocation:CLLocationCoordinate2D,newlocation:CLLocationCoordinate2D,
+                             icon:UIImage?,angle:Float?,anchor:(x:Int,y:Int)?){
         var marker = markers.first { marker in
           marker.location == oldlocation
         }
