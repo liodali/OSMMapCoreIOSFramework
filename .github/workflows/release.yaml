@@ -21,13 +21,10 @@ jobs:
         run: chmod +x build.sh
       - name: "run build.sh"
         run: ./build.sh
-      - name: "Arrange pod contents"
-        run: |
-          mkdir build/pod
-          cp -r build/ios/Release/TangramMap.xcframework build/pod/TangramMap.xcframework
 
       - name: "Upload pod"
         uses: actions/upload-artifact@v2
         with:
           name: tangram-ios-${{ env.TAG_VRELEASE_VERSIONERSION }}
           path: build/pod/
+          

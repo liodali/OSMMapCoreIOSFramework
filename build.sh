@@ -15,6 +15,8 @@ copyMapCoreBundle()
    cp -r $1 $2/OSMFlutterFramework.framework/MapCore_MapCore.bundle
 }
 
+version=$(sed  -n 4p  OSMFlutterFramework.podspec | awk '{print $3}' | xargs)
+
 echo "building for iOS (Devices/Simulator)"
 echo -e "\n"
 
@@ -42,6 +44,7 @@ cd $dir_build
 echo -e "\n"
 echo "generate xcframework"
 echo -e "\n"
+
 frameworkiphoneos="${dir_build}/Release-iphoneos/OSMFlutterFramework.framework"
 frameworkiphonesimulator="${dir_build}/Release-iphonesimulator/OSMFlutterFramework.framework"
 
@@ -59,7 +62,7 @@ then
    echo -e "\n"
    copyMapCoreBundle $frameworkBundleiphoneos  $xcframeworkiphoneosBundle
    copyMapCoreBundle $frameworkBundleiphonesimulator  $xcframeworkiphonesimulatorBundle
-   ziplocation="${dir_build}/OSMFlutterFramework.zip"
+   ziplocation="${dir_build}/OSMFlutterFramework-$version.zip"
    if [ -d $ziplocation ] 
    then
    rm -rf $ziplocation
@@ -68,3 +71,6 @@ then
 else
    echo "xcframework not generated"
 fi
+
+mkrdir build/pod
+cp -r $xcframeworklocation build/pod/OSMFlutterFramework-$version.zip
