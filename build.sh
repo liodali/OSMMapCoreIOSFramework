@@ -35,7 +35,7 @@ rm -rf log.txt
 
 echo "================================"   
 echo -e "\n"
-version = $0
+#version=$0
 echo "retrieve build directory"
 
 
