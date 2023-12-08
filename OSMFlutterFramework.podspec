@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
     s.name    = 'OSMFlutterFramework'
-	s.version = '0.1.0'
+	s.version = '0.0.1'
 
     s.summary           = 'Open source OSM Map use MapCore SDK to provide more simple APIs'
     s.description       = 'Open source OSM Map use MapCore SDK to provide more simple APIs'
