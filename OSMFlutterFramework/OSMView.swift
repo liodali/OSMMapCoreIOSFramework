@@ -79,12 +79,8 @@ public class OSMView: UIViewController {
     public override func loadView() {
         view = self.mapView
     }
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        self.rasterLayer?.setCallbackHandler(rasterCallback)
-        self.mapView.insert(layer: rasterLayer?.asLayerInterface(), at: 0)
-        self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoomConfiguration.initZoom), animated: false)
-    }
+
+    
     /*
      public override func viewDidAppear(_ animated: Bool) {
         if initLocation != nil {
@@ -109,7 +105,17 @@ public class OSMView: UIViewController {
 }
 
 extension OSMView {
-   
+    /**
+     Responsible set area Limit for camera of MapView
+     */
+    public func initOSMMap(tile:CustomTiles?) {
+        self.rasterLayer?.setCallbackHandler(rasterCallback)
+        if(tile != nil){
+            osmTiledConfiguration.setTileURL(tileURL: tile!.toString())
+        }
+        self.mapView.insert(layer: rasterLayer?.asLayerInterface(), at: 0)
+        self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoomConfiguration.initZoom), animated: false)
+    }
     /**
      Responsible set area Limit for camera of MapView
      */
