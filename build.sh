@@ -29,9 +29,8 @@ echo "================================"
 echo "building for iOS (Devices/Simulator)"
 echo -e "\n"
 
-xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES > log.txt
+xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
 
-rm -rf log.txt
 
 echo "================================"   
 echo -e "\n"
