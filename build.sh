@@ -28,9 +28,13 @@ echo " the new version : $version "
 echo "================================"   
 echo "building for iOS (Devices/Simulator)"
 echo -e "\n"
+if [ $# -eq 2 ]
+  then
+    xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES PROVISIONING_PROFILE=$2
 
+else
 xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
-
+fi
 
 echo "================================"   
 echo -e "\n"
@@ -69,7 +73,7 @@ xcframeworkiphoneosBundle="${xcframeworklocation}/ios-arm64"
 xcframeworkiphonesimulatorBundle="${xcframeworklocation}/ios-arm64_x86_64-simulator"
 licence="${dir_project}/LICENSE"
 
-xcodebuild -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation
+xcodebuild -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation 
 
 if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ] 
 then
