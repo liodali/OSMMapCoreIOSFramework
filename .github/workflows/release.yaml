@@ -46,7 +46,7 @@ jobs:
             # apply provisioning profile
             mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
             cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-            PROVUUID=$(security cms -D -i path/to/YourProfile.mobileprovision | grep -A1 UUID | awk -F'[<>]' '/string/ {print $3}')
+            PROVUUID=$(security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision | grep -A1 UUID | awk -F'[<>]' '/string/ {print $3}')
             echo "PROVUUID=$PROVUUID" >> $GITHUB_ENV
       #- name: "install xcodeproj"
       #  run: gem install xcodeproj
