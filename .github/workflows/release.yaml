@@ -45,7 +45,11 @@ jobs:
   
             # apply provisioning profile
             mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-            cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles 
+            cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+      - name: "install xcodeproj"
+        run: gem install xcodeproj
+      - name: "create xcodeproj"
+        run: ruby create_xproj.rb
       - name: "set permission build.sh"
         run: chmod +x build.sh
       - name: "run build.sh"
