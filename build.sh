@@ -30,7 +30,7 @@ echo "building for iOS (Devices/Simulator)"
 echo -e "\n"
 if [ -n "$2" ]
   then
-    xcodebuild -workspace OSMFlutterFramework.xcworkspace -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES PROVISIONING_PROFILE=$2
+    xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES PROVISIONING_PROFILE=$2
 
 else
 xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
