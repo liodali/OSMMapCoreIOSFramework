@@ -48,10 +48,10 @@ jobs:
             cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
             PROVUUID=$(security cms -D -i path/to/YourProfile.mobileprovision | grep -A1 UUID | awk -F'[<>]' '/string/ {print $3}')
             echo "PROVUUID=$PROVUUID" >> $GITHUB_ENV
-      - name: "install xcodeproj"
-        run: gem install xcodeproj
-      - name: "create xcodeproj"
-        run: ruby create_xproj.rb
+      #- name: "install xcodeproj"
+      #  run: gem install xcodeproj
+      #- name: "create xcodeproj"
+      #  run: ruby create_xproj.rb
       - name: "set permission build.sh"
         run: chmod +x build.sh
       - name: "run build.sh"
