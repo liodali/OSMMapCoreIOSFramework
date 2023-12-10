@@ -14,7 +14,7 @@ copyMapCoreBundle()
    echo -e "\n"
    cp -r $1 $2/OSMFlutterFramework.framework/MapCore_MapCore.bundle
 }
-if [ $# -ne 1 ]
+if [ -z "$1" ]
   then
     echo "No version supplied"
     exit 1
@@ -28,7 +28,7 @@ echo " the new version : $version "
 echo "================================"   
 echo "building for iOS (Devices/Simulator)"
 echo -e "\n"
-if [ $# -ge 2 ]
+if [ -n "$2" ]
   then
     xcodebuild -workspace OSMFlutterFramework.xcworkspace -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES PROVISIONING_PROFILE=$2
 
