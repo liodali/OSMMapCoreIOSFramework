@@ -152,4 +152,30 @@ extension OSMView {
     public func zoom()-> Double {
         self.mapView.camera.getZoom()
     }
+    public func zoomIn(step:Int?) {
+        let currentZoom = self.mapView.camera.getZoom()
+        let stepZoom = step ?? zoomConfiguration.step
+        let nextZoom = if Int(currentZoom) + stepZoom > zoomConfiguration.maxZoom {
+            zoomConfiguration.maxZoom
+        }else{
+            Int(currentZoom) + stepZoom
+        }
+        self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: nextZoom), animated: true)
+    }
+    public func zoomOut(step:Int?) {
+        let currentZoom = self.mapView.camera.getZoom()
+        let stepZoom = step ?? zoomConfiguration.step
+        let nextZoom = if Int(currentZoom) - stepZoom < zoomConfiguration.minZoom {
+            zoomConfiguration.minZoom
+        }else{
+            Int(currentZoom) - stepZoom
+        }
+        self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: nextZoom), animated: true)
+    }
+    public func setZoom(zoom:Int) {
+        if zoom >= zoomConfiguration.minZoom || zoom <= zoomConfiguration.maxZoom {
+            self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoom), animated: true)
+        }
+
+    }
 }

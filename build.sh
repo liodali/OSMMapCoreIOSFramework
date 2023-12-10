@@ -29,7 +29,7 @@ echo "================================"
 echo "building for iOS (Devices/Simulator)"
 echo -e "\n"
 
-xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
+xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
 
 
 echo "================================"   
@@ -66,7 +66,8 @@ frameworkBundleiphoneos="${dir_build}/Release-iphoneos/MapCore_MapCore.bundle"
 frameworkBundleiphonesimulator="${dir_build}/Release-iphonesimulator/MapCore_MapCore.bundle"
 
 xcframeworkiphoneosBundle="${xcframeworklocation}/ios-arm64"
-xcframeworkiphonesimulatorBundle="${xcframeworklocation}/ios-arm64-simulator"
+xcframeworkiphonesimulatorBundle="${xcframeworklocation}/ios-arm64_x86_64-simulator"
+licence="${dir_project}/LICENSE"
 
 xcodebuild -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation
 
@@ -83,7 +84,9 @@ then
    then
    rm -rf $ziplocation
    fi
-   zip -r OSMFlutterFramework.zip OSMFlutterFramework.xcframework
+   cp  $licence $dir_build/LICENSE
+   zip -r OSMFlutterFramework.zip OSMFlutterFramework.xcframework LICENSE
+   rm -rf LICENSE
 else
    echo "xcframework not generated"
 fi
