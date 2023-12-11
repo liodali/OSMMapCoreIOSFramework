@@ -94,18 +94,17 @@ public class OSMView: UIViewController {
     }
     func getZoomFromZoomIdentifier(zoom:Int) -> Double {
         if zoom < zoomConfiguration.minZoom && zoom > zoomConfiguration.maxZoom {
-            return 279541132.015
+            return 139770566.007
         }
        return osmTiledConfiguration.getZoomLevelInfos().first { level in
             level.zoomLevelIdentifier == zoom
             
-        }?.zoom ?? 8735660.37545
+        }?.zoom ?? 139770566.007
     }
     func getZoomIdentifierFromZoom(zoom:Double) -> Int32 {
 
        return osmTiledConfiguration.getZoomLevelInfos().first { level in
            level.zoom == zoom
-
        }?.zoomLevelIdentifier ?? Int32(zoomConfiguration.maxZoom)
     }
     
@@ -157,11 +156,14 @@ extension OSMView {
      this responsible to manage Marker for OSMView where you can add/remove/update markers
      */
     public func zoom()-> Int32 {
-      let zoom =  self.mapView.camera.getZoom()
+        let zoom =  self.mapView.camera.getZoom()
         return getZoomIdentifierFromZoom(zoom: zoom)
     }
     public func zoomIn(step:Int?) {
         let currentZoom = zoom()
+        if( currentZoom == zoomConfiguration.maxZoom){
+            return
+        }
         let stepZoom = step ?? zoomConfiguration.step
         let nextZoom = if Int(currentZoom) + stepZoom > zoomConfiguration.maxZoom {
             zoomConfiguration.maxZoom
@@ -172,6 +174,9 @@ extension OSMView {
     }
     public func zoomOut(step:Int?) {
         let currentZoom = zoom()
+        if( currentZoom == zoomConfiguration.minZoom){
+            return
+        }
         let stepZoom = step ?? zoomConfiguration.step
         let nextZoom = if Int(currentZoom) - stepZoom < zoomConfiguration.minZoom {
             zoomConfiguration.minZoom

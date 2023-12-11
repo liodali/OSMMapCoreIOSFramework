@@ -70,109 +70,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5142801191E8D1DF6D8A43C2 /* xcschemes */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = xcschemes;
-			path = OSMFlutterFramework.xcodeproj/project.xcworkspace/xcuserdata/dalihamza.xcuserdatad/xcschemes;
-			sourceTree = "<group>";
-		};
-		514280DEF7D73BFF342038F8 /* attachments */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = attachments;
-			sourceTree = "<group>";
-		};
-		514281B75902A43E1D310261 /* attachments */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = attachments;
-			sourceTree = "<group>";
-		};
-		51428522540DC34E2C19A706 /* .fleet */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = .fleet;
-			sourceTree = "<group>";
-		};
-		5142854A775CD53E9A6B3BED /* eeb4cea1d18c96fab5ccf19ae04d7a9f.xcbuilddata */ = {
-			isa = PBXGroup;
-			children = (
-				514280DEF7D73BFF342038F8 /* attachments */,
-			);
-			name = eeb4cea1d18c96fab5ccf19ae04d7a9f.xcbuilddata;
-			path = DerivedData/OSMFlutterFramework/Index.noindex/Build/Intermediates.noindex/XCBuildData/eeb4cea1d18c96fab5ccf19ae04d7a9f.xcbuilddata;
-			sourceTree = "<group>";
-		};
-		5142854C657757275F371566 /* attachments */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = attachments;
-			sourceTree = "<group>";
-		};
-		51428836259BC421CE2C02BB /* attachments */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = attachments;
-			sourceTree = "<group>";
-		};
-		51428973EB75CFCEECF82C3E /* c775e644735538d3b768849a94015aae.xcbuilddata */ = {
-			isa = PBXGroup;
-			children = (
-				51428836259BC421CE2C02BB /* attachments */,
-			);
-			name = c775e644735538d3b768849a94015aae.xcbuilddata;
-			path = DerivedData/OSMFlutterFramework/Index.noindex/Build/Intermediates.noindex/XCBuildData/c775e644735538d3b768849a94015aae.xcbuilddata;
-			sourceTree = "<group>";
-		};
-		51428A59B3D5C5DD8BF3CE32 /* 307f20ac2ff052ca9886f55047bbb5f8.xcbuilddata */ = {
-			isa = PBXGroup;
-			children = (
-				5142854C657757275F371566 /* attachments */,
-			);
-			name = 307f20ac2ff052ca9886f55047bbb5f8.xcbuilddata;
-			path = DerivedData/OSMFlutterFramework/Index.noindex/Build/Intermediates.noindex/XCBuildData/307f20ac2ff052ca9886f55047bbb5f8.xcbuilddata;
-			sourceTree = "<group>";
-		};
-		51428C0CC07FDB9917DE85FC /* ac3f045344ff34f7bcc11c705b73865a.xcbuilddata */ = {
-			isa = PBXGroup;
-			children = (
-				514281B75902A43E1D310261 /* attachments */,
-			);
-			name = ac3f045344ff34f7bcc11c705b73865a.xcbuilddata;
-			path = DerivedData/OSMFlutterFramework/Index.noindex/Build/Intermediates.noindex/XCBuildData/ac3f045344ff34f7bcc11c705b73865a.xcbuilddata;
-			sourceTree = "<group>";
-		};
-		51428C3C5213379A4B18587A /* attachments */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = attachments;
-			path = DerivedData/OSMFlutterFramework/Index.noindex/Build/Intermediates.noindex/XCBuildData/5f0804ee5b4479b8201ace979ec3cf63.xcbuilddata/attachments;
-			sourceTree = "<group>";
-		};
-		51428D3A63C5329E221183DD /* cb04a075e6e48d8b3c73b89716c6d1bf.xcbuilddata */ = {
-			isa = PBXGroup;
-			children = (
-				51428FBE6432603C70233485 /* attachments */,
-			);
-			name = cb04a075e6e48d8b3c73b89716c6d1bf.xcbuilddata;
-			path = DerivedData/OSMFlutterFramework/Index.noindex/Build/Intermediates.noindex/XCBuildData/cb04a075e6e48d8b3c73b89716c6d1bf.xcbuilddata;
-			sourceTree = "<group>";
-		};
-		51428FBE6432603C70233485 /* attachments */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = attachments;
-			sourceTree = "<group>";
-		};
 		9005CBAB2B1DD43C00724B22 /* OSMFlutterFrameworkTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,14 +85,6 @@
 				9005CBAB2B1DD43C00724B22 /* OSMFlutterFrameworkTests */,
 				90B8B8372B1281BF0021DA8F /* Products */,
 				90B8B8602B1402D80021DA8F /* Frameworks */,
-				5142801191E8D1DF6D8A43C2 /* xcschemes */,
-				51428C3C5213379A4B18587A /* attachments */,
-				51428522540DC34E2C19A706 /* .fleet */,
-				5142854A775CD53E9A6B3BED /* eeb4cea1d18c96fab5ccf19ae04d7a9f.xcbuilddata */,
-				51428973EB75CFCEECF82C3E /* c775e644735538d3b768849a94015aae.xcbuilddata */,
-				51428A59B3D5C5DD8BF3CE32 /* 307f20ac2ff052ca9886f55047bbb5f8.xcbuilddata */,
-				51428C0CC07FDB9917DE85FC /* ac3f045344ff34f7bcc11c705b73865a.xcbuilddata */,
-				51428D3A63C5329E221183DD /* cb04a075e6e48d8b3c73b89716c6d1bf.xcbuilddata */,
 			);
 			sourceTree = "<group>";
 		};

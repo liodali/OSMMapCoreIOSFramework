@@ -74,7 +74,12 @@ xcframeworkiphonesimulatorBundle="${xcframeworklocation}/ios-arm64_x86_64-simula
 licence="${dir_project}/LICENSE"
 
 xcodebuild -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation 
-
+if [ $# -ge 2 ]; then
+    # Check if should we skip th zip
+    if [ "$2" = "nozip" ]; then
+       exit 0
+    fi
+fi
 if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ] 
 then
    echo "================================"   
