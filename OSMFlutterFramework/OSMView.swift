@@ -102,10 +102,10 @@ public class OSMView: UIViewController {
         }?.zoom ?? 8735660.37545
     }
     func getZoomIdentifierFromZoom(zoom:Double) -> Int32 {
-       
+
        return osmTiledConfiguration.getZoomLevelInfos().first { level in
            level.zoom == zoom
-            
+
        }?.zoomLevelIdentifier ?? Int32(zoomConfiguration.maxZoom)
     }
     
@@ -161,7 +161,7 @@ extension OSMView {
         return getZoomIdentifierFromZoom(zoom: zoom)
     }
     public func zoomIn(step:Int?) {
-        let currentZoom = self.mapView.camera.getZoom()
+        let currentZoom = zoom()
         let stepZoom = step ?? zoomConfiguration.step
         let nextZoom = if Int(currentZoom) + stepZoom > zoomConfiguration.maxZoom {
             zoomConfiguration.maxZoom
@@ -171,7 +171,7 @@ extension OSMView {
         self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: nextZoom), animated: true)
     }
     public func zoomOut(step:Int?) {
-        let currentZoom = self.mapView.camera.getZoom()
+        let currentZoom = zoom()
         let stepZoom = step ?? zoomConfiguration.step
         let nextZoom = if Int(currentZoom) - stepZoom < zoomConfiguration.minZoom {
             zoomConfiguration.minZoom

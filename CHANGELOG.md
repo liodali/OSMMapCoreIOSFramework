@@ -1,4 +1,5 @@
 
+## 0.0.4: Fix Bugs
 ## 0.0.3: Add new APIs
 ## 0.0.2: Improve APIs
 ## 0.0.1: 
