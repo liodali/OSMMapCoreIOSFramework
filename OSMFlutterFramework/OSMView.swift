@@ -101,6 +101,13 @@ public class OSMView: UIViewController {
             
         }?.zoom ?? 8735660.37545
     }
+    func getZoomIdentifierFromZoom(zoom:Double) -> Int32 {
+       
+       return osmTiledConfiguration.getZoomLevelInfos().first { level in
+           level.zoom == zoom
+            
+       }?.zoomLevelIdentifier ?? Int32(zoomConfiguration.maxZoom)
+    }
     
 }
 
@@ -149,8 +156,9 @@ extension OSMView {
     /**
      this responsible to manage Marker for OSMView where you can add/remove/update markers
      */
-    public func zoom()-> Double {
-        self.mapView.camera.getZoom()
+    public func zoom()-> Int32 {
+      let zoom =  self.mapView.camera.getZoom()
+        return getZoomIdentifierFromZoom(zoom: zoom)
     }
     public func zoomIn(step:Int?) {
         let currentZoom = self.mapView.camera.getZoom()
@@ -177,5 +185,14 @@ extension OSMView {
             self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoom), animated: true)
         }
 
+    }
+    public func getBoundingBox()->BoundingBox {
+        self.mapView.camera.getBounds().toBoundingBox()
+    }
+    public func enableRotation(enable:Bool) {
+        self.mapView.camera.setRotationEnabled(enable)
+    }
+    public func setRotation(angle:Double) {
+        self.mapView.camera.setRotation(Float(angle), animated: true)
     }
 }
