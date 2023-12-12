@@ -53,10 +53,7 @@ public class OSMView: UIViewController {
     private let rasterCallback: RasterCallbackInterface = RasterCallbackInterface()
     private var mapGesture: OnMapGesture?
     public var onMapGesture: OnMapGesture? {
-       get {
-           return mapGesture
-       }
-        set(mapGesture){
+       didSet(mapGesture){
             self.mapGesture = mapGesture
             rasterCallback.onMapGesture = mapGesture
         }
