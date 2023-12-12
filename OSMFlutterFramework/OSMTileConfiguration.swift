@@ -14,8 +14,10 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
     }
     
     private var tile:String
-    init(tileURL:String="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png") {
+    let onMapChanged:OnMapChanged
+    init(tileURL:String="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",onChanged:OnMapChanged) {
         tile = tileURL
+        self.onMapChanged = onChanged
     }
     
     public func setTileURL(tileURL:String){
@@ -23,11 +25,10 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
     }
     
     func getTileUrl(_ x: Int32, y: Int32, t: Int32, zoom: Int32) -> String {
-        //"https://example.com/tiles/\(zoom)/\(x)/\(y).png"
-        print("z,x,y:\(zoom),\(x),\(y)")
         print(tile.replacingOccurrences(of: "{z}", with: "\(zoom)")
             .replacingOccurrences(of: "{y}", with: "\(y)")
             .replacingOccurrences(of: "{x}", with: "\(x)"))
+        self.onMapChanged.onChanged()
         return tile.replacingOccurrences(of: "{z}", with: "\(zoom)")
             .replacingOccurrences(of: "{y}", with: "\(y)")
             .replacingOccurrences(of: "{x}", with: "\(x)")

@@ -12,9 +12,9 @@ public protocol PoylineHandler {
     func onTap(roadId:String)
 }
 
-class RoadManager {
+public class RoadManager {
     
-    let mapView:MCMapView
+    private let mapView:MCMapView
     let lineHandler = LineLayerHander()
     var polylineHandlerDelegate:PoylineHandler?  {
         didSet(handler){
@@ -33,6 +33,9 @@ class RoadManager {
     init(map:MCMapView){
         self.mapView = map
         polylineLayerHandler = LineLayerHander()
+    }
+    
+    func initRoadManager(){
         self.mapView.insert(layer: lineLayer?.asLayerInterface(), at: 1)
         lineLayer?.setLayerClickable(true)
         lineLayer?.setCallbackHandler(polylineLayerHandler)
@@ -81,7 +84,7 @@ class RoadManager {
         }
     }
 }
-public struct Road {
+struct Road {
     let id:String
     let lineLayer:MCLineInfoInterface?
     init(id: String, lineLayer: MCLineInfoInterface?) {

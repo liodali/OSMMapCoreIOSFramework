@@ -13,6 +13,12 @@ public protocol OnMapGesture {
     func onSingleTap(location:CLLocationCoordinate2D)
     func onLongTap(location:CLLocationCoordinate2D)
 }
+public protocol OnMapMoved {
+    func onMove(center:CLLocationCoordinate2D,bounds:BoundingBox)
+}
+protocol OnMapChanged {
+    func onChanged()
+}
 private class RasterCallbackInterface : MCTiled2dMapRasterLayerCallbackInterface{
     var onMapGesture:OnMapGesture?
     init(onMapGesture: OnMapGesture? = nil) {
@@ -34,7 +40,9 @@ private class RasterCallbackInterface : MCTiled2dMapRasterLayerCallbackInterface
     
     
 }
-public class OSMView: UIViewController {
+public class OSMView: UIViewController,OnMapChanged {
+    
+    
     
     
     private  let initLocation:CLLocationCoordinate2D?
@@ -43,12 +51,13 @@ public class OSMView: UIViewController {
 
     private  let mapView:MCMapView
      
-    private lazy var osmTiledConfiguration = OSMTiledLayerConfig();
+    private lazy var osmTiledConfiguration = OSMTiledLayerConfig(onChanged: self)
     private lazy var rasterLayer = MCTiled2dMapRasterLayerInterface.create(osmTiledConfiguration,
                                                                     loaders: [MCTextureLoader()])
     private let identifier = MCCoordinateSystemIdentifiers.epsg4326()
 
     private let markerManager:MarkerManager
+    private let roadManager:RoadManager
     
     private let rasterCallback: RasterCallbackInterface = RasterCallbackInterface()
     private var mapGesture: OnMapGesture?
@@ -58,6 +67,11 @@ public class OSMView: UIViewController {
             rasterCallback.onMapGesture = mapGesture
         }
     }
+    public var onMapMove: OnMapMoved? {
+       didSet(onMove){
+            self.onMapMove = onMove
+        }
+    }
     
     
     public init(rect:CGRect,location: CLLocationCoordinate2D?,zoomConfig:ZoomConfiguration) {
@@ -65,18 +79,23 @@ public class OSMView: UIViewController {
         self.zoomConfiguration = zoomConfig
         self.mapView = MCMapView(mapConfig: mapConfig)
         self.markerManager =  MarkerManager(map: mapView)
+        self.roadManager =  RoadManager(map: mapView)
         super.init(nibName: nil, bundle: nil)
         rasterLayer?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
         rasterLayer?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
         view.frame = rect
         self.mapView.backgroundColor = .gray.withAlphaComponent(CGFloat(200))
-
-       
     }
     public override func loadView() {
         view = self.mapView
     }
-
+    func onChanged() {
+        if onMapMove != nil {
+            let center = center()
+            let boundingBox = getBoundingBox()
+            onMapMove?.onMove(center: center, bounds: boundingBox)
+        }
+    }
     
     /*
      public override func viewDidAppear(_ animated: Bool) {
@@ -108,6 +127,7 @@ public class OSMView: UIViewController {
 }
 
 extension OSMView {
+    
     /**
      Responsible set area Limit for camera of MapView
      */
@@ -118,6 +138,19 @@ extension OSMView {
         }
         self.mapView.insert(layer: rasterLayer?.asLayerInterface(), at: 0)
         self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoomConfiguration.initZoom), animated: false)
+        self.roadManager.initRoadManager()
+    }
+    /**
+     Responsible to manage Marker for OSMView where you can add/remove/update markers
+     */
+    public func getMarkerManager() -> MarkerManager {
+        self.markerManager
+    }
+    /**
+     Responsible to manage Roads for OSMView where you can add/remove/update poylines
+     */
+    public func getRoadManager() -> RoadManager {
+        self.roadManager
     }
     /**
      Responsible set area Limit for camera of MapView
@@ -143,12 +176,7 @@ extension OSMView {
     public func setCustomTile(tile:CustomTiles){
         self.osmTiledConfiguration.setTileURL(tileURL: tile.toString())
     }
-    /**
-     Responsible to manage Marker for OSMView where you can add/remove/update markers
-     */
-    public func getMarkerManager() -> MarkerManager {
-        self.markerManager
-    }
+   
     /**
      this responsible to manage Marker for OSMView where you can add/remove/update markers
      */
@@ -196,5 +224,8 @@ extension OSMView {
     }
     public func setRotation(angle:Double) {
         self.mapView.camera.setRotation(Float(angle), animated: true)
+    }
+    public func center()->CLLocationCoordinate2D {
+        self.mapView.camera.getCenterPosition().toCLLocation2D()
     }
 }
