@@ -41,7 +41,7 @@ public class MarkerManager {
         let iconLayer = MCIconLayerInterface.create()
         iconLayer?.setLayerClickable(true)
         let mccoord = marker.location.toMCCoordEpsg3857()
-        let texture = marker.icon.toTexture(angle: marker.angle)
+        let texture = marker.markerConfiguration.icon.toTexture(angle: marker.markerConfiguration.angle ?? 0)
         let icon = marker.createMapIcon()
         iconLayer?.add(icon)
         iconLayer?.setCallbackHandler(markerHandler)
@@ -55,7 +55,11 @@ public class MarkerManager {
         var marker = markers.first { marker in
           marker.location == oldlocation
         }
-        marker?.updateMarker(newLocation: newlocation, configuration: MarkerConfiguration(icon: icon, angle: angle, anchor: anchor))
+        if marker != nil {
+            let config = marker!.markerConfiguration.copyWith(icon: icon, angle: angle, anchor: anchor)
+            marker?.updateMarker(newLocation: newlocation, configuration: config)
+        }
+        
     }
     public func removeMarker(location:CLLocationCoordinate2D){
       let marker = markers.first { marker in
