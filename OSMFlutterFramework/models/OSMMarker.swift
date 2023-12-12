@@ -17,7 +17,7 @@ public struct Marker : Equatable{
     private(set) var anchor:(x:Int,y:Int)?
     
     private(set) var iconLayerInterface:MCIconLayerInterface? = nil
-    init(location: CLLocationCoordinate2D,icon:UIImage, angle: Float = 0, anchor: (x: Int, y: Int)?) {
+    public init(location: CLLocationCoordinate2D,icon:UIImage, angle: Float = 0, anchor: (x: Int, y: Int)?) {
         self.id = location.id()
         self.location = location
         self.icon = icon
