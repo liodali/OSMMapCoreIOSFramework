@@ -53,7 +53,7 @@ public struct MarkerConfiguration{
     let iconSize:MarkerIconSize?
     let anchor:(x:Int,y:Int)?
     let scaleType:MarkerScaleType
-    init(icon:UIImage,iconSize:MarkerIconSize? = nil,angle: Float?, anchor: (x: Int, y: Int)?,scaleType:MarkerScaleType = MarkerScaleType.Scale) {
+    public init(icon:UIImage,iconSize:MarkerIconSize? = nil,angle: Float?, anchor: (x: Int, y: Int)?,scaleType:MarkerScaleType = MarkerScaleType.Scale) {
         self.icon = icon
         self.angle = angle
         self.anchor = anchor
