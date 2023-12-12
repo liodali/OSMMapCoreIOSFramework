@@ -18,9 +18,8 @@ public class MarkerManager {
     var markers: [Marker] = []
     var pois: (id: String,angle:Float,layer: MCIconLayerInterface)? = nil
     public var locationHandlerDelegate:LocationHandler?  {
-        didSet(handler){
-            self.locationHandlerDelegate = handler
-            if let nhandler = handler {
+        didSet{
+            if let nhandler = locationHandlerDelegate {
                 markerHandler.setHandler(markerHandler: nhandler)
             }else {
                 markerHandler.removeHandler()

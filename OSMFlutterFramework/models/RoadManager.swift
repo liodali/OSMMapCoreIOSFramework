@@ -17,9 +17,8 @@ public class RoadManager {
     private let mapView:MCMapView
     let lineHandler = LineLayerHander()
     var polylineHandlerDelegate:PoylineHandler?  {
-        didSet(handler){
-            self.polylineHandlerDelegate = handler
-            if let nhandler = handler {
+        didSet{
+            if let nhandler = polylineHandlerDelegate {
                 polylineLayerHandler.setHandler(poylineHandler: nhandler)
             }else {
                 polylineLayerHandler.removeHandler()
