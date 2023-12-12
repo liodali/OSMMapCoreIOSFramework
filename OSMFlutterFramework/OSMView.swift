@@ -60,11 +60,10 @@ public class OSMView: UIViewController,OnMapChanged {
     private let roadManager:RoadManager
     
     private let rasterCallback: RasterCallbackInterface = RasterCallbackInterface()
-    private var mapGesture: OnMapGesture?
-    public var onMapGesture: OnMapGesture? {
+    public var onMapGestureDelegate: OnMapGesture? {
        didSet(mapGesture){
-            self.mapGesture = mapGesture
-            rasterCallback.onMapGesture = mapGesture
+            self.onMapGestureDelegate = mapGesture
+            rasterCallback.onMapGesture = onMapGestureDelegate
         }
     }
     public var onMapMove: OnMapMoved? {

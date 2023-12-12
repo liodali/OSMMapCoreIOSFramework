@@ -17,7 +17,7 @@ public class MarkerManager {
     let map: MCMapView
     var markers: [Marker] = []
     var pois: (id: String,angle:Float,layer: MCIconLayerInterface)? = nil
-    var locationHandlerDelegate:LocationHandler?  {
+    public var locationHandlerDelegate:LocationHandler?  {
         didSet(handler){
             self.locationHandlerDelegate = handler
             if let nhandler = handler {
