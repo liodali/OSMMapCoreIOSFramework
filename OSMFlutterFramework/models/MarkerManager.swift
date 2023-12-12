@@ -17,13 +17,27 @@ public class MarkerManager {
     let map: MCMapView
     var markers: [Marker] = []
     var pois: (id: String,angle:Float,layer: MCIconLayerInterface)? = nil
+    var locationHandlerDelegate:LocationHandler?  {
+        didSet(handler){
+            self.locationHandlerDelegate = handler
+            if let nhandler = handler {
+                markerHandler.setHandler(markerHandler: nhandler)
+            }else {
+                markerHandler.removeHandler()
+            }
+         
+      }
+    }
+    
+    private let markerHandler:IconLayerHander
     init(map: MCMapView) {
         self.map = map
+        markerHandler = IconLayerHander(self.locationHandlerDelegate)
     }
     
     
     
-    public func addMarker(marker:Marker,handler:LocationHandler){
+    public func addMarker(marker:Marker){
         var nMarker = marker
         let iconLayer = MCIconLayerInterface.create()
         iconLayer?.setLayerClickable(true)
@@ -31,7 +45,7 @@ public class MarkerManager {
         let texture = marker.icon.toTexture(angle: marker.angle)
         let icon = marker.createMapIcon()
         iconLayer?.add(icon)
-        iconLayer?.setCallbackHandler (IconLayerHander(handler))
+        iconLayer?.setCallbackHandler(markerHandler)
         nMarker.setLayer(iconLayerInterface: iconLayer!)
         //iconLayer?.setCallbackHandler(handler)
         map.add(layer: iconLayer?.asLayerInterface())
@@ -52,7 +66,7 @@ public class MarkerManager {
     }
 }
 class IconLayerHander:MCIconLayerCallbackInterface {
-    let markerHandler: LocationHandler?
+    private var markerHandler: LocationHandler?
     init(_ markerHandler: LocationHandler? = nil) {
         self.markerHandler = markerHandler
     }
@@ -62,6 +76,10 @@ class IconLayerHander:MCIconLayerCallbackInterface {
         }
         return true
     }
-    
-    
+    func setHandler(markerHandler: LocationHandler){
+        self.markerHandler = markerHandler
+    }
+    func removeHandler(){
+        self.markerHandler = nil
+    }
 }
