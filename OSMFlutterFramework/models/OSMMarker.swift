@@ -62,7 +62,8 @@ public struct MarkerConfiguration{
     }
     func copyWith(icon:UIImage?,iconSize:MarkerIconSize? = nil,angle: Float?, anchor: (x: Int, y: Int)?,scaleType:MarkerScaleType? = nil)-> MarkerConfiguration {
         MarkerConfiguration(icon: icon ?? self.icon,iconSize: iconSize ?? self.iconSize,
-                            angle: angle ?? self.angle, anchor: anchor ?? self.anchor,scaleType: scaleType ?? self.scaleType)
+                            angle: angle ?? self.angle, anchor: anchor ?? self.anchor,
+                            scaleType: scaleType ?? self.scaleType)
     }
 }
 extension Marker {
@@ -100,13 +101,13 @@ extension Marker {
                                      coordinate: location,
                                      texture: texture,
                                      iconSize: iconSize,
-                                           scale: MCIconType.SCALE_INVARIANT,
+                                           scale: markerConfiguration.scaleType.getValue(),
                                            iconAnchor: MCVec2F(x: Float(markerConfiguration.anchor!.x), y: Float(markerConfiguration.anchor!.y)))
         }
         return  MCIconFactory.createIcon(id,
                                  coordinate: location,
                                  texture: texture,
                                  iconSize: iconSize,
-                                         scale: MCIconType.FIXED)
+                                 scale: markerConfiguration.scaleType.getValue())
     }
 }

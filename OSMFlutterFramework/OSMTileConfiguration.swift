@@ -61,9 +61,9 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
     // one should be loaded an displayed as well, as well as if the layer is drawn,
     // when the zoom is smaller/larger than the valid range
     func getZoomInfo() -> MCTiled2dMapZoomInfo {
-        MCTiled2dMapZoomInfo(zoomLevelScaleFactor: 0.65,
-                           numDrawPreviousLayers: 10,
-                           adaptScaleToScreen: true,
+        MCTiled2dMapZoomInfo(zoomLevelScaleFactor: Float(configuration.zoomLevelScaleFactor),
+                             numDrawPreviousLayers: Int32(configuration.numDrawPreviousLayers),
+                             adaptScaleToScreen: configuration.adaptScaleToScreen,
                            maskTile: false,
                            underzoom: false,
                            overzoom: false
