@@ -7,21 +7,34 @@
 
 import Foundation
 @_implementationOnly import MapCore
-
-class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
-    func getCoordinateSystemIdentifier() -> String {
-        MCCoordinateSystemIdentifiers.epsg3857()
+public struct OSMMapConfiguration {
+    let zoomLevelScaleFactor:Double
+    let numDrawPreviousLayers:Int
+    let adaptScaleToScreen:Bool
+    public init(zoomLevelScaleFactor: Double = 0.65, numDrawPreviousLayers: Int = 10, adaptScaleToScreen: Bool = true) {
+        self.zoomLevelScaleFactor = zoomLevelScaleFactor
+        self.numDrawPreviousLayers = numDrawPreviousLayers
+        self.adaptScaleToScreen = adaptScaleToScreen
     }
+}
+class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
+   
     
     private var tile:String
     let onMapChanged:OnMapChanged
-    init(tileURL:String="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",onChanged:OnMapChanged) {
+    let configuration:OSMMapConfiguration
+    init(tileURL:String="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",onChanged:OnMapChanged,configuration:OSMMapConfiguration = OSMMapConfiguration()) {
         tile = tileURL
         self.onMapChanged = onChanged
+        self.configuration = configuration
     }
     
     public func setTileURL(tileURL:String){
         tile = tileURL
+    }
+    
+    func getCoordinateSystemIdentifier() -> String {
+        MCCoordinateSystemIdentifiers.epsg3857()
     }
     
     func getTileUrl(_ x: Int32, y: Int32, t: Int32, zoom: Int32) -> String {

@@ -51,9 +51,8 @@ public class OSMView: UIViewController,OnMapChanged {
 
     private  let mapView:MCMapView
      
-    private lazy var osmTiledConfiguration = OSMTiledLayerConfig(onChanged: self)
-    private lazy var rasterLayer = MCTiled2dMapRasterLayerInterface.create(osmTiledConfiguration,
-                                                                    loaders: [MCTextureLoader()])
+    private var osmTiledConfiguration:OSMTiledLayerConfig!
+    private var rasterLayer:MCTiled2dMapRasterLayerInterface!
     private let identifier = MCCoordinateSystemIdentifiers.epsg4326()
 
     private let markerManager:MarkerManager
@@ -71,14 +70,20 @@ public class OSMView: UIViewController,OnMapChanged {
         }
     }
     
+    let mapTileConfiguration:OSMMapConfiguration
     
-    public init(rect:CGRect,location: CLLocationCoordinate2D?,zoomConfig:ZoomConfiguration) {
+    public init(rect:CGRect,location: CLLocationCoordinate2D?,zoomConfig:ZoomConfiguration,mapTileConfiguration:OSMMapConfiguration = OSMMapConfiguration()) {
         self.initLocation = location
         self.zoomConfiguration = zoomConfig
+        self.mapTileConfiguration = mapTileConfiguration
+       
         self.mapView = MCMapView(mapConfig: mapConfig)
         self.markerManager =  MarkerManager(map: mapView)
         self.roadManager =  RoadManager(map: mapView)
         super.init(nibName: nil, bundle: nil)
+        self.osmTiledConfiguration = OSMTiledLayerConfig(onChanged: self,configuration: self.mapTileConfiguration)
+        self.rasterLayer = MCTiled2dMapRasterLayerInterface.create(osmTiledConfiguration,
+                                                                        loaders: [MCTextureLoader()])
         rasterLayer?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
         rasterLayer?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
         view.frame = rect

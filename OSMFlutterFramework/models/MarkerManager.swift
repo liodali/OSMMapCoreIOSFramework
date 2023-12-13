@@ -51,7 +51,8 @@ public class MarkerManager {
         markers.append(nMarker)
     }
     public func updateMarker(oldlocation:CLLocationCoordinate2D,newlocation:CLLocationCoordinate2D,
-                             icon:UIImage?,iconSize:MarkerIconSize,angle:Float?,anchor:(x:Int,y:Int)?){
+                             icon:UIImage?,iconSize:MarkerIconSize?,angle:Float?,anchor:(x:Int,y:Int)?,
+                             scaleType:MarkerScaleType? = nil){
         
         var index = markers.firstIndex { marker in
             marker.location == oldlocation
@@ -59,7 +60,7 @@ public class MarkerManager {
         
         if index != nil  {
             var marker = markers[index!]
-            let config = marker.markerConfiguration.copyWith(icon: icon,iconSize: iconSize, angle: angle, anchor: anchor)
+            let config = marker.markerConfiguration.copyWith(icon: icon,iconSize: iconSize, angle: angle, anchor: anchor,scaleType: scaleType)
             marker.updateMarker(newLocation: newlocation, configuration: config)
             markers[index!] = marker
             self.map.invalidate()
