@@ -50,10 +50,10 @@ public struct MarkerConfiguration{
 
     let angle:Float?
     let icon:UIImage
-    let iconSize:MarkerIconSize
+    let iconSize:MarkerIconSize?
     let anchor:(x:Int,y:Int)?
     let scaleType:MarkerScaleType
-    public init(icon:UIImage,iconSize:MarkerIconSize,angle: Float?, anchor: (x: Int, y: Int)?,
+    public init(icon:UIImage,iconSize:MarkerIconSize?,angle: Float?, anchor: (x: Int, y: Int)?,
                 scaleType:MarkerScaleType = MarkerScaleType.Scale) {
         self.icon = icon
         self.angle = angle
@@ -98,8 +98,13 @@ extension Marker {
     }
     
     func createMapIcon()-> MCIconInfoInterface? {
-        let texture = markerConfiguration.icon.toTexture(angle: markerConfiguration.angle!)
-        let iconSize = MCVec2F(x:Float(markerConfiguration.iconSize.x),y:Float(markerConfiguration.iconSize.y))
+        let texture = markerConfiguration.icon.toTexture(angle: markerConfiguration.angle ?? 0)
+        let iconSize = if let iconSize = markerConfiguration.iconSize {
+            MCVec2F(x:Float(iconSize.x),y:Float(iconSize.y))
+        }else {
+            MCVec2F(x: Float(texture.getImageWidth()), y: Float(texture.getImageHeight()))
+        }
+       // MCVec2F(x:Float(markerConfiguration.iconSize.x),y:Float(markerConfiguration.iconSize.y))
         let location = self.location.toMCCoordEpsg3857()
         if markerConfiguration.anchor != nil {
            return MCIconFactory.createIcon(withAnchor: id,

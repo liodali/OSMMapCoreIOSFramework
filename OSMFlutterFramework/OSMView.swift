@@ -134,7 +134,7 @@ extension OSMView {
     /**
      Responsible set area Limit for camera of MapView
      */
-    public func initOSMMap(tile:CustomTiles?) {
+    public func initOSMMap(tile:CustomTiles? = nil) {
         self.rasterLayer?.setCallbackHandler(rasterCallback)
         if(tile != nil){
             osmTiledConfiguration.setTileURL(tileURL: tile!.toString())
