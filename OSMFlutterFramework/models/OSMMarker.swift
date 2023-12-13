@@ -10,7 +10,7 @@ import MapKit
 @_implementationOnly import MapCore
 
 
-public typealias MarkerIconSize = (x:Int,y:Int)
+public typealias MarkerIconSize = (x:Int, y:Int)
 
 public enum MarkerScaleType {
     case Scale
@@ -50,17 +50,22 @@ public struct MarkerConfiguration{
 
     let angle:Float?
     let icon:UIImage
-    let iconSize:MarkerIconSize?
+    let iconSize:MarkerIconSize
     let anchor:(x:Int,y:Int)?
     let scaleType:MarkerScaleType
-    public init(icon:UIImage,iconSize:MarkerIconSize? = nil,angle: Float?, anchor: (x: Int, y: Int)?,scaleType:MarkerScaleType = MarkerScaleType.Scale) {
+    public init(icon:UIImage,iconSize:MarkerIconSize,angle: Float?, anchor: (x: Int, y: Int)?,
+                scaleType:MarkerScaleType = MarkerScaleType.Scale) {
         self.icon = icon
         self.angle = angle
         self.anchor = anchor
         self.iconSize = iconSize
         self.scaleType = scaleType
     }
-    func copyWith(icon:UIImage?,iconSize:MarkerIconSize? = nil,angle: Float?, anchor: (x: Int, y: Int)?,scaleType:MarkerScaleType? = nil)-> MarkerConfiguration {
+    func copyWith(icon:UIImage?,
+                  iconSize:MarkerIconSize? = nil,
+                  angle: Float?,
+                  anchor: (x: Int, y: Int)?,
+                  scaleType:MarkerScaleType? = nil) -> MarkerConfiguration {
         MarkerConfiguration(icon: icon ?? self.icon,iconSize: iconSize ?? self.iconSize,
                             angle: angle ?? self.angle, anchor: anchor ?? self.anchor,
                             scaleType: scaleType ?? self.scaleType)
@@ -78,7 +83,7 @@ extension Marker {
             self.markerConfiguration = config
         }
         self.location = newLocation
-        let nIconLayerInterface = createMapIcon(sizeIcon: configuration?.iconSize)
+        let nIconLayerInterface = createMapIcon()
         let iconInterface = self.iconLayerInterface?.getIcons().first
         self.iconLayerInterface?.remove(iconInterface)
         self.iconLayerInterface?.add(nIconLayerInterface)
@@ -92,9 +97,9 @@ extension Marker {
         self.iconLayerInterface?.add(nIconLayerInterface)
     }
     
-    func createMapIcon(sizeIcon:(x:Int,y:Int)? = nil)-> MCIconInfoInterface? {
+    func createMapIcon()-> MCIconInfoInterface? {
         let texture = markerConfiguration.icon.toTexture(angle: markerConfiguration.angle!)
-        let iconSize = MCVec2F(x:Float(sizeIcon?.x ?? Int(texture.getImageWidth())),y:Float(sizeIcon?.y ?? Int(texture.getImageHeight())))
+        let iconSize = MCVec2F(x:Float(markerConfiguration.iconSize.x),y:Float(markerConfiguration.iconSize.y))
         let location = self.location.toMCCoordEpsg3857()
         if markerConfiguration.anchor != nil {
            return MCIconFactory.createIcon(withAnchor: id,
