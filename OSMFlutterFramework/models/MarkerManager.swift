@@ -51,21 +51,31 @@ public class MarkerManager {
         markers.append(nMarker)
     }
     public func updateMarker(oldlocation:CLLocationCoordinate2D,newlocation:CLLocationCoordinate2D,
-                             icon:UIImage?,angle:Float?,anchor:(x:Int,y:Int)?){
-        var marker = markers.first { marker in
-          marker.location == oldlocation
+                             icon:UIImage?,iconSize:MarkerIconSize,angle:Float?,anchor:(x:Int,y:Int)?){
+        
+        var index = markers.firstIndex { marker in
+            marker.location == oldlocation
         }
-        if marker != nil {
-            let config = marker!.markerConfiguration.copyWith(icon: icon, angle: angle, anchor: anchor)
-            marker?.updateMarker(newLocation: newlocation, configuration: config)
+        
+        if index != nil  {
+            var marker = markers[index!]
+            let config = marker.markerConfiguration.copyWith(icon: icon,iconSize: iconSize, angle: angle, anchor: anchor)
+            marker.updateMarker(newLocation: newlocation, configuration: config)
+            markers[index!] = marker
+            self.map.invalidate()
         }
+        
         
     }
     public func removeMarker(location:CLLocationCoordinate2D){
-      let marker = markers.first { marker in
+      let index = markers.firstIndex { marker in
           marker.location == location
+      }
+        if index != nil {
+            map.remove(layer: markers[index!].iconLayerInterface?.asLayerInterface())
+            markers.remove(at: index!)
         }
-        map.remove(layer: marker?.iconLayerInterface?.asLayerInterface())
+        
     }
 }
 class IconLayerHander:MCIconLayerCallbackInterface {
