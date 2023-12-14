@@ -66,7 +66,7 @@ struct Poi {
              return MarkerIconPoi(configuration: config,location: $0.location)
          })
         self.markerPois.append(contentsOf: nMarkersPoi)
-        let icons = markerPois.map { $0.icon! }
+        let icons = self.markerPois.map { $0.icon! }
         mcIconLayer?.setIcons(icons)
         mcIconLayer?.invalidate()
     }
