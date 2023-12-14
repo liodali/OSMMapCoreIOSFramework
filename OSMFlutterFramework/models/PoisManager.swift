@@ -30,6 +30,7 @@ public class PoisManager {
             pois[id]?.setIconMarker(icon: icon)
         }else{
             pois[id] = Poi(id: id, icon: icon, markerPois: [],handler: markerHandler)
+            self.map.add(layer: pois[id]?.mcIconLayer?.asLayerInterface())
         }
     }
     public func setMarkersPoi(id:String,markers:[MarkerIconPoi]){
