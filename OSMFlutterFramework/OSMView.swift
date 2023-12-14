@@ -55,9 +55,9 @@ public class OSMView: UIViewController,OnMapChanged {
     private var rasterLayer:MCTiled2dMapRasterLayerInterface!
     private let identifier = MCCoordinateSystemIdentifiers.epsg4326()
 
-    private let markerManager:MarkerManager
-    private let roadManager:RoadManager
-    private let poisManager:PoisManager
+    public let markerManager:MarkerManager
+    public let roadManager:RoadManager
+    public let poisManager:PoisManager
     private let rasterCallback: RasterCallbackInterface = RasterCallbackInterface()
     public var onMapGestureDelegate: OnMapGesture? {
        didSet{
@@ -153,18 +153,6 @@ extension OSMView {
         self.mapView.insert(layer: rasterLayer?.asLayerInterface(), at: 0)
         self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoomConfiguration.initZoom), animated: false)
         self.roadManager.initRoadManager()
-    }
-    /**
-     Responsible to manage Marker for OSMView where you can add/remove/update markers
-     */
-    public func getMarkerManager() -> MarkerManager {
-        self.markerManager
-    }
-    /**
-     Responsible to manage Roads for OSMView where you can add/remove/update poylines
-     */
-    public func getRoadManager() -> RoadManager {
-        self.roadManager
     }
     /**
      Responsible set area Limit for camera of MapView
