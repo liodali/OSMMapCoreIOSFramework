@@ -17,24 +17,21 @@ public class MarkerManager {
     let map: MCMapView
     var markers: [Marker] = []
     var pois: (id: String,angle:Float,layer: MCIconLayerInterface)? = nil
-    public var locationHandlerDelegate:LocationHandler?  {
-        didSet{
-            if let nhandler = locationHandlerDelegate {
-                markerHandler.setHandler(markerHandler: nhandler)
-            }else {
-                markerHandler.removeHandler()
-            }
-         
-      }
-    }
+    
     
     private let markerHandler:IconLayerHander
     init(map: MCMapView) {
         self.map = map
-        markerHandler = IconLayerHander(self.locationHandlerDelegate)
+        markerHandler = IconLayerHander(nil)
     }
     
-    
+    func updateHandler(locationHandlerDelegate:LocationHandler?){
+        if let nhandler = locationHandlerDelegate {
+            markerHandler.setHandler(markerHandler: nhandler)
+        }else {
+            markerHandler.removeHandler()
+        }
+    }
     
     public func addMarker(marker:Marker){
         var nMarker = marker

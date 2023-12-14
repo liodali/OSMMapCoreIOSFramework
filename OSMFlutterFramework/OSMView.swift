@@ -57,7 +57,7 @@ public class OSMView: UIViewController,OnMapChanged {
 
     private let markerManager:MarkerManager
     private let roadManager:RoadManager
-    
+    private let poisManager:PoisManager
     private let rasterCallback: RasterCallbackInterface = RasterCallbackInterface()
     public var onMapGestureDelegate: OnMapGesture? {
        didSet{
@@ -72,6 +72,16 @@ public class OSMView: UIViewController,OnMapChanged {
     
     let mapTileConfiguration:OSMMapConfiguration
     
+    
+   public var locationHandlerDelegate:LocationHandler?  {
+        didSet{
+            markerManager.updateHandler(locationHandlerDelegate: locationHandlerDelegate)
+            poisManager.updateHandler(locationHandlerDelegate: locationHandlerDelegate)
+      }
+    }
+    
+    
+    
     public init(rect:CGRect,location: CLLocationCoordinate2D?,zoomConfig:ZoomConfiguration,mapTileConfiguration:OSMMapConfiguration = OSMMapConfiguration()) {
         self.initLocation = location
         self.zoomConfiguration = zoomConfig
@@ -80,6 +90,7 @@ public class OSMView: UIViewController,OnMapChanged {
         self.mapView = MCMapView(mapConfig: mapConfig)
         self.markerManager =  MarkerManager(map: mapView)
         self.roadManager =  RoadManager(map: mapView)
+        self.poisManager =  PoisManager(map: mapView)
         super.init(nibName: nil, bundle: nil)
         self.osmTiledConfiguration = OSMTiledLayerConfig(onChanged: self,configuration: self.mapTileConfiguration)
         self.rasterLayer = MCTiled2dMapRasterLayerInterface.create(osmTiledConfiguration,
