@@ -37,6 +37,11 @@ public class PoisManager {
             pois[id]?.setMarkers(markerPois: markers)
         }
     }
+    public func clearMarkersPoi(id:String,markers:[MarkerIconPoi]){
+        if let poi = pois[id] {
+            pois[id]?.setMarkers(markerPois: markers)
+        }
+    }
     
 }
 struct Poi {
@@ -53,19 +58,24 @@ struct Poi {
         self.mcIconLayer?.setCallbackHandler(handler)
     }
     
-    public mutating func setMarkers(markerPois: [MarkerIconPoi]) {
+     mutating func setMarkers(markerPois: [MarkerIconPoi]) {
         mcIconLayer?.clear()
         self.markerPois.removeAll()
-        let nMarkersPoi = markerPois.map({
-            let config = $0.configuration.copyWith(icon: icon, angle: nil, anchor: nil)
-            return MarkerIconPoi(configuration: config,location: $0.location)
-        })
+         let nMarkersPoi =  markerPois.map({
+             let config = $0.configuration.copyWith(icon: icon, angle: nil, anchor: nil)
+             return MarkerIconPoi(configuration: config,location: $0.location)
+         })
         self.markerPois.append(contentsOf: nMarkersPoi)
         let icons = markerPois.map { $0.icon! }
         mcIconLayer?.setIcons(icons)
         mcIconLayer?.invalidate()
     }
-    public mutating func setIconMarker(icon: UIImage) {
+    mutating func clearMarkers() {
+       mcIconLayer?.clear()
+       self.markerPois.removeAll()
+       mcIconLayer?.invalidate()
+   }
+     mutating func setIconMarker(icon: UIImage) {
         mcIconLayer?.clear()
         self.markerPois.enumerated().forEach { index,poi in
             let config = poi.configuration.copyWith(icon: icon, angle: nil, anchor: nil)
@@ -77,7 +87,7 @@ struct Poi {
 }
 public struct MarkerIconPoi {
     var configuration: MarkerConfiguration
-    private(set)var icon:MCIconInfoInterface!
+    private(set)var icon:MCIconInfoInterface?
     let location:CLLocationCoordinate2D
     init(configuration: MarkerConfiguration, location: CLLocationCoordinate2D) {
         self.configuration = configuration
