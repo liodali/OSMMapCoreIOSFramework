@@ -179,7 +179,7 @@ extension OSMView {
         var innerZoom =  mapView.camera.getZoom()
         let mcRectCoord = bounds.toMCRectCoord()
         self.mapView.camera.setZoom(innerZoom, animated: false)
-        self.mapView.camera.move(toBoundingBox: mcRectCoord, paddingPc: Float(2), animated: animated, maxZoom: nil)
+        self.mapView.camera.move(toBoundingBox: mcRectCoord, paddingPc: Float(0.1), animated: animated, maxZoom: nil)
     }
     /**
      Responsible  change Tiles of the map

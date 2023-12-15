@@ -49,15 +49,15 @@ public class RoadManager {
                                                coordinates: coords,
                                                style: MCLineStyle(
                                                    color: MCColorStateList(normal: configuration.color.mapCoreColor,
-                                                   highlighted: configuration.color.mapCoreColor),
-                                                   gapColor: MCColorStateList(normal: (configuration.borderColor ?? configuration.color).mapCoreColor,
+                                                   highlighted: (configuration.borderColor ?? configuration.color).mapCoreColor),
+                                                   gapColor: MCColorStateList(normal: (configuration.color).mapCoreColor,
                                                    highlighted: (configuration.borderColor ?? configuration.color).mapCoreColor),
                                                    opacity: 1.0,
                                                    blur: 0,
                                                    widthType: .SCREEN_PIXEL,
                                                    width: configuration.width,
                                                    dashArray: [1,1],
-                                                   lineCap: .BUTT
+                                                   lineCap: .ROUND
                                                )
                            )
         lineLayer?.add(poyline)
