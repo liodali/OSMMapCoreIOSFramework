@@ -82,6 +82,17 @@ public class RoadManager {
             road.id == id
         }
     }
+    public func hildeAll(){
+        lineLayer?.asLayerInterface()?.hide()
+        lineHandler.skipHandler = true
+    }
+    public func showAll(){
+       lineLayer?.asLayerInterface()?.show()
+       lineHandler.skipHandler = false
+    }
+    public func lockHandler(){
+       lineHandler.skipHandler = !lineHandler.skipHandler
+    }
 }
 struct Road {
     let id:String
@@ -98,11 +109,12 @@ public struct RoadConfiguration {
 }
 class LineLayerHander:MCLineLayerCallbackInterface {
     private var poylineHandler: PoylineHandler?
+    var skipHandler: Bool = false
     init(_ poylineHandler: PoylineHandler? = nil) {
         self.poylineHandler = poylineHandler
     }
     func onLineClickConfirmed(_ line: MCLineInfoInterface?) {
-        if let polyline = line {
+        if let polyline = line, !skipHandler {
             let id =  polyline.getIdentifier()
             poylineHandler?.onTap(roadId: id)
         }

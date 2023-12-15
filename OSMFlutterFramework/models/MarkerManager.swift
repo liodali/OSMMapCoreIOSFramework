@@ -16,9 +16,6 @@ public protocol LocationHandler {
 public class MarkerManager {
     let map: MCMapView
     var markers: [Marker] = []
-    var pois: (id: String,angle:Float,layer: MCIconLayerInterface)? = nil
-    
-    
     private let markerHandler:IconLayerHander
     init(map: MCMapView) {
         self.map = map
@@ -75,14 +72,35 @@ public class MarkerManager {
         }
         
     }
+    public func getAllMarkers()->[CLLocationCoordinate2D]{
+        markers.map { marker in
+            marker.location
+        }
+    }
+    public func hildeAll(){
+        markers.forEach { marker in
+            marker.iconLayerInterface?.asLayerInterface()?.hide()
+        }
+        markerHandler.skipHandler = true
+    }
+    public func showAll(){
+        markers.forEach { marker in
+            marker.iconLayerInterface?.asLayerInterface()?.show()
+        }
+        markerHandler.skipHandler = false
+    }
+    public func lockHandler(){
+        markerHandler.skipHandler = !markerHandler.skipHandler
+    }
 }
 class IconLayerHander:MCIconLayerCallbackInterface {
     private var markerHandler: LocationHandler?
+    var skipHandler: Bool = false
     init(_ markerHandler: LocationHandler? = nil) {
         self.markerHandler = markerHandler
     }
     func onClickConfirmed(_ icons: [MCIconInfoInterface]) -> Bool {
-        if let handler = markerHandler {
+        if let handler = markerHandler, !skipHandler {
             handler.onTap(location: icons.first!.getCoordinate().toCLLocation2D())
         }
         return true

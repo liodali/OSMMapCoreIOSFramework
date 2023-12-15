@@ -143,7 +143,7 @@ public class OSMView: UIViewController,OnMapChanged {
 extension OSMView {
     
     /**
-     Responsible set area Limit for camera of MapView
+     Responsible init OSMMap
      */
     public func initOSMMap(tile:CustomTiles? = nil) {
         self.rasterLayer?.setCallbackHandler(rasterCallback)
@@ -174,6 +174,15 @@ extension OSMView {
     }
     /**
      Responsible to move the camera to [location] with zoom,animation
+     */
+    public func moveToByBoundingBox(bounds: BoundingBox,animated:Bool){
+        var innerZoom =  mapView.camera.getZoom()
+        let mcRectCoord = bounds.toMCRectCoord()
+        self.mapView.camera.setZoom(innerZoom, animated: false)
+        self.mapView.camera.move(toBoundingBox: mcRectCoord, paddingPc: Float(2), animated: animated, maxZoom: nil)
+    }
+    /**
+     Responsible  change Tiles of the map
      */
     public func setCustomTile(tile:CustomTiles){
         self.osmTiledConfiguration.setTileURL(tileURL: tile.toString())
@@ -216,7 +225,6 @@ extension OSMView {
         if zoom >= zoomConfiguration.minZoom || zoom <= zoomConfiguration.maxZoom {
             self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoom), animated: true)
         }
-
     }
     public func getBoundingBox()->BoundingBox {
         self.mapView.camera.getBounds().toBoundingBox()

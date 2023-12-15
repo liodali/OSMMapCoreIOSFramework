@@ -43,6 +43,21 @@ public class PoisManager {
             pois[id]?.setMarkers(markerPois: markers)
         }
     }
+    public func hildeAll(){
+        pois.forEach { id,poi in
+            poi.mcIconLayer?.asLayerInterface()?.hide()
+        }
+        markerHandler.skipHandler = true
+    }
+    public func showAll(){
+        pois.forEach { id,poi in
+            poi.mcIconLayer?.asLayerInterface()?.show()
+        }
+        markerHandler.skipHandler = false
+    }
+    public func lockHandler(){
+        markerHandler.skipHandler = !markerHandler.skipHandler
+    }
     
 }
 struct Poi {
