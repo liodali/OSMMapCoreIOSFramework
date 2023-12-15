@@ -106,6 +106,11 @@ public struct RoadConfiguration {
     let width:Float
     let color:UIColor
     let borderColor:UIColor?
+    public init(width: Float, color: UIColor, borderColor: UIColor?) {
+        self.width = width
+        self.color = color
+        self.borderColor = borderColor
+    }
 }
 class LineLayerHander:MCLineLayerCallbackInterface {
     private var poylineHandler: PoylineHandler?

@@ -238,4 +238,7 @@ extension OSMView {
     public func center()->CLLocationCoordinate2D {
         self.mapView.camera.getCenterPosition().toCLLocation2D()
     }
+    public func stopCamera() {
+        self.mapView.camera.freeze(true)
+    }
 }
