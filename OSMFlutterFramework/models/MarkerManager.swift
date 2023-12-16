@@ -34,7 +34,6 @@ public class MarkerManager {
         var nMarker = marker
         let iconLayer = MCIconLayerInterface.create()
         iconLayer?.setLayerClickable(true)
-        let mccoord = marker.location.toMCCoordEpsg3857()
         let icon = marker.createMapIcon()
         iconLayer?.add(icon)
         iconLayer?.setCallbackHandler(markerHandler)

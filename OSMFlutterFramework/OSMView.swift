@@ -79,6 +79,11 @@ public class OSMView: UIViewController,OnMapChanged {
             locationManager.userLocationHandler = userLocationDelegate
         }
     }
+    public var roadTapHandlerDelegate:PoylineHandler?  {
+        didSet {
+            roadManager.polylineHandlerDelegate = roadTapHandlerDelegate
+        }
+    }
     
     
     
