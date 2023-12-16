@@ -11,7 +11,23 @@ import MapKit
 public protocol PoylineHandler {
     func onTap(roadId:String)
 }
+public enum LineCapType {
+    case BUTT
+    case ROUND
+    case SQUARE
+    func getValue()->MCLineCapType{
+          switch self {
+            case .BUTT:
+                MCLineCapType.BUTT
+            case .ROUND:
+                MCLineCapType.ROUND
+                
+            case .SQUARE:
+                MCLineCapType.SQUARE
 
+            }
+    }
+}
 public class RoadManager {
     
     private let mapView:MCMapView
@@ -45,20 +61,39 @@ public class RoadManager {
         let coords = polylines.map { location in
             location.toMCCoord()
         }
+        if configuration.borderWidth != nil && configuration.borderColor != nil {
+            let poylineBorder = MCLineFactory.createLine("\(id)-border",
+                                                   coordinates: coords,
+                                                   style: MCLineStyle(
+                                                    color: MCColorStateList(normal: configuration.borderColor!.mapCoreColor,
+                                                       highlighted: configuration.borderColor!.mapCoreColor),
+                                                       gapColor: MCColorStateList(normal: configuration.borderColor!.mapCoreColor,
+                                                       highlighted: configuration.borderColor!.mapCoreColor),
+                                                       opacity: configuration.opacity,
+                                                       blur: 0,
+                                                       widthType: .SCREEN_PIXEL,
+                                                       width: configuration.width + configuration.borderWidth!,
+                                                       dashArray: [1,1],
+                                                       lineCap: configuration.lineCap
+                                                   )
+            )
+           lineLayer?.add(poylineBorder)
+           roads.append(Road(id: "\(id)-border", lineLayer: poylineBorder))
+
+        }
         let poyline = MCLineFactory.createLine(id,
                                                coordinates: coords,
                                                style: MCLineStyle(
                                                 color: MCColorStateList(normal: configuration.color.mapCoreColor,
-                                                   highlighted: UIColor(white: 0.0, alpha: 0.0).mapCoreColor),
-                                                   gapColor: MCColorStateList(normal: (configuration.borderColor ?? configuration.color).mapCoreColor,
-                                                   highlighted: UIColor(white: 0.0, alpha: 0.0).mapCoreColor),
-                                                   // (configuration.borderColor ?? configuration.color).mapCoreColor),
-                                                   opacity: 1.0,
+                                                   highlighted: configuration.color.mapCoreColor),
+                                                   gapColor: MCColorStateList(normal: configuration.color.mapCoreColor,
+                                                   highlighted: configuration.color.mapCoreColor),
+                                                   opacity: configuration.opacity,
                                                    blur: 0,
                                                    widthType: .SCREEN_PIXEL,
                                                    width: configuration.width,
                                                    dashArray: [1,1],
-                                                   lineCap: .ROUND
+                                                   lineCap: configuration.lineCap
                                                )
                            )
         lineLayer?.add(poyline)
@@ -71,6 +106,9 @@ public class RoadManager {
             lineLayer?.remove(road?.lineLayer)
             roads.removeAll { road in
                 road.id == id
+            }
+            roads.removeAll { road in
+                road.id == "\(id)-border"
             }
         }
     }
@@ -107,10 +145,16 @@ public struct RoadConfiguration {
     let width:Float
     let color:UIColor
     let borderColor:UIColor?
-    public init(width: Float, color: UIColor, borderColor: UIColor?) {
+    let borderWidth:Float?
+    let opacity:Float
+    let lineCap:MCLineCapType
+                public init(width: Float, color: UIColor,borderWidth:Float? = nil, borderColor: UIColor? = nil,opacity:Float = 1.0,lineCap:LineCapType = LineCapType.ROUND) {
         self.width = width
         self.color = color
+        self.borderWidth = borderWidth
         self.borderColor = borderColor
+        self.opacity = opacity
+        self.lineCap = lineCap.getValue()
     }
 }
 class LineLayerHander:MCLineLayerCallbackInterface {
@@ -122,7 +166,11 @@ class LineLayerHander:MCLineLayerCallbackInterface {
     func onLineClickConfirmed(_ line: MCLineInfoInterface?) {
         if let polyline = line, !skipHandler {
             let id =  polyline.getIdentifier()
-            poylineHandler?.onTap(roadId: id)
+            var polylineID = id
+            if id.contains("-border") {
+                polylineID = id.split(separator: "-").first?.description ?? id
+            }
+            poylineHandler?.onTap(roadId: polylineID)
         }
     }
     func setHandler(poylineHandler: PoylineHandler){

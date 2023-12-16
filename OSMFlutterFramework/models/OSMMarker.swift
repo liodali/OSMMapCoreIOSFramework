@@ -75,9 +75,6 @@ extension Marker {
     mutating func setLayer(iconLayerInterface:MCIconLayerInterface) {
         self.iconLayerInterface = iconLayerInterface
     }
-    mutating func updateLayerMarker(iconLayerInterface:MCIconLayerInterface) {
-        self.iconLayerInterface = iconLayerInterface
-    }
     mutating func updateMarker(newLocation:CLLocationCoordinate2D,configuration: MarkerConfiguration?) {
         if let config = configuration {
             self.markerConfiguration = config

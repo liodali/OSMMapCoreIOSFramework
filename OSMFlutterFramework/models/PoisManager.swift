@@ -18,7 +18,7 @@ public class PoisManager {
         self.map = map
         markerHandler = IconLayerHander(nil)
     }
-    func updateHandler(locationHandlerDelegate:LocationHandler?){
+    func updateHandler(locationHandlerDelegate:MapMarkerHandler?){
         if let nhandler = locationHandlerDelegate {
             markerHandler.setHandler(markerHandler: nhandler)
         }else {
@@ -26,7 +26,7 @@ public class PoisManager {
         }
     }
     public func setOrCreateIconPoi(id:String,icon:UIImage){
-        if let poi = pois[id] {
+        if pois[id] != nil {
             pois[id]?.setIconMarker(icon: icon)
         }else{
             pois[id] = Poi(id: id, icon: icon, markerPois: [],handler: markerHandler)
@@ -34,12 +34,12 @@ public class PoisManager {
         }
     }
     public func setMarkersPoi(id:String,markers:[MarkerIconPoi]){
-        if let poi = pois[id] {
+        if pois[id] != nil {
             pois[id]?.setMarkers(markerPois: markers)
         }
     }
     public func clearMarkersPoi(id:String,markers:[MarkerIconPoi]){
-        if let poi = pois[id] {
+        if pois[id] != nil {
             pois[id]?.setMarkers(markerPois: markers)
         }
     }

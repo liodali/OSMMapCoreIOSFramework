@@ -9,7 +9,7 @@ import Foundation
 import MapKit
 @_implementationOnly import MapCore
 
-public protocol LocationHandler {
+public protocol MapMarkerHandler {
     func onTap(location:CLLocationCoordinate2D)
 }
 
@@ -22,7 +22,7 @@ public class MarkerManager {
         markerHandler = IconLayerHander(nil)
     }
     
-    func updateHandler(locationHandlerDelegate:LocationHandler?){
+    func updateHandler(locationHandlerDelegate:MapMarkerHandler?){
         if let nhandler = locationHandlerDelegate {
             markerHandler.setHandler(markerHandler: nhandler)
         }else {
@@ -40,7 +40,7 @@ public class MarkerManager {
         iconLayer?.setCallbackHandler(markerHandler)
         nMarker.setLayer(iconLayerInterface: iconLayer!)
         //iconLayer?.setCallbackHandler(handler)
-        map.add(layer: iconLayer?.asLayerInterface())
+        map.add(layer: nMarker.iconLayerInterface?.asLayerInterface())
         markers.append(nMarker)
     }
     public func updateMarker(oldlocation:CLLocationCoordinate2D,newlocation:CLLocationCoordinate2D,
@@ -94,9 +94,9 @@ public class MarkerManager {
     }
 }
 class IconLayerHander:MCIconLayerCallbackInterface {
-    private var markerHandler: LocationHandler?
+    private var markerHandler: MapMarkerHandler?
     var skipHandler: Bool = false
-    init(_ markerHandler: LocationHandler? = nil) {
+    init(_ markerHandler: MapMarkerHandler? = nil) {
         self.markerHandler = markerHandler
     }
     func onClickConfirmed(_ icons: [MCIconInfoInterface]) -> Bool {
@@ -105,7 +105,7 @@ class IconLayerHander:MCIconLayerCallbackInterface {
         }
         return true
     }
-    func setHandler(markerHandler: LocationHandler){
+    func setHandler(markerHandler: MapMarkerHandler){
         self.markerHandler = markerHandler
     }
     func removeHandler(){

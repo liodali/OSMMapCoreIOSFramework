@@ -12,6 +12,7 @@
 		9005CBA22B1DC37400724B22 /* CustomTiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005CBA12B1DC37400724B22 /* CustomTiles.swift */; };
 		9005CBAD2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005CBAC2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift */; };
 		9005CBC32B1DE0B500724B22 /* OSMFlutterFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; };
+		902B9F7B2B2D9DC800F86D12 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902B9F7A2B2D9DC800F86D12 /* LocationManager.swift */; };
 		90326E1E2B1D014800293AEA /* MapCore in Frameworks */ = {isa = PBXBuildFile; productRef = 90326E1D2B1D014800293AEA /* MapCore */; };
 		90326E202B1D014800293AEA /* MapCoreSharedModule in Frameworks */ = {isa = PBXBuildFile; productRef = 90326E1F2B1D014800293AEA /* MapCoreSharedModule */; };
 		90326E222B1D014800293AEA /* MapCoreSharedModuleCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 90326E212B1D014800293AEA /* MapCoreSharedModuleCpp */; };
@@ -41,6 +42,7 @@
 		9005CBA12B1DC37400724B22 /* CustomTiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTiles.swift; sourceTree = "<group>"; };
 		9005CBAA2B1DD43C00724B22 /* OSMFlutterFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OSMFlutterFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9005CBAC2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMFlutterFrameworkTests.swift; sourceTree = "<group>"; };
+		902B9F7A2B2D9DC800F86D12 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		906C284D2B2A3F65008F013E /* PoisManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoisManager.swift; sourceTree = "<group>"; };
 		90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OSMFlutterFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90B8B8392B1281BF0021DA8F /* OSMFlutterFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSMFlutterFramework.h; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				90ED38352B1E24220012F419 /* OSMMarker.swift */,
 				90CC6CEE2B2864240015A11C /* RoadManager.swift */,
 				906C284D2B2A3F65008F013E /* PoisManager.swift */,
+				902B9F7A2B2D9DC800F86D12 /* LocationManager.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 				906C284E2B2A3F65008F013E /* PoisManager.swift in Sources */,
 				9005B1C52B1A76E000F20F5D /* extensions.swift in Sources */,
 				9005CBA22B1DC37400724B22 /* CustomTiles.swift in Sources */,
+				902B9F7B2B2D9DC800F86D12 /* LocationManager.swift in Sources */,
 				90B8B8472B1281EC0021DA8F /* BoundingBox.swift in Sources */,
 				90ED38362B1E24220012F419 /* OSMMarker.swift in Sources */,
 				90B8B8462B1281EC0021DA8F /* OSMView.swift in Sources */,
@@ -473,6 +477,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J5JLB26KF5;
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = J5JLB26KF5;
@@ -483,7 +488,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -514,6 +519,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J5JLB26KF5;
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = J5JLB26KF5;
@@ -524,7 +530,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
