@@ -41,10 +41,7 @@ private class RasterCallbackInterface : MCTiled2dMapRasterLayerCallbackInterface
     
 }
 public class OSMView: UIViewController,OnMapChanged {
-    
-    
-    
-    
+      
     private  let initLocation:CLLocationCoordinate2D?
     private  let zoomConfiguration:ZoomConfiguration
     private  let mapConfig = MCMapConfig(mapCoordinateSystem: MCCoordinateSystemFactory.getEpsg3857System())
@@ -58,26 +55,29 @@ public class OSMView: UIViewController,OnMapChanged {
     public let markerManager:MarkerManager
     public let roadManager:RoadManager
     public let poisManager:PoisManager
+    public let locationManager:LocationManager
     private let rasterCallback: RasterCallbackInterface = RasterCallbackInterface()
     public var onMapGestureDelegate: OnMapGesture? {
        didSet{
             rasterCallback.onMapGesture = onMapGestureDelegate
         }
     }
-    public var onMapMove: OnMapMoved? {
-       didSet(onMove){
-            self.onMapMove = onMove
-        }
-    }
+    public var onMapMove: OnMapMoved?
     
     let mapTileConfiguration:OSMMapConfiguration
     
     
-   public var locationHandlerDelegate:LocationHandler?  {
+   public var mapHandlerDelegate:MapMarkerHandler?  {
         didSet{
-            markerManager.updateHandler(locationHandlerDelegate: locationHandlerDelegate)
-            poisManager.updateHandler(locationHandlerDelegate: locationHandlerDelegate)
+            markerManager.updateHandler(locationHandlerDelegate: mapHandlerDelegate)
+            poisManager.updateHandler(locationHandlerDelegate: mapHandlerDelegate)
       }
+    }
+    
+    public var userLocationDelegate:OSMUserLocationHandler?  {
+        didSet {
+            locationManager.userLocationHandler = userLocationDelegate
+        }
     }
     
     
@@ -91,6 +91,7 @@ public class OSMView: UIViewController,OnMapChanged {
         self.markerManager =  MarkerManager(map: mapView)
         self.roadManager =  RoadManager(map: mapView)
         self.poisManager =  PoisManager(map: mapView)
+        self.locationManager =  LocationManager(map: mapView, userLocationIcons: nil)
         super.init(nibName: nil, bundle: nil)
         self.osmTiledConfiguration = OSMTiledLayerConfig(onChanged: self,configuration: self.mapTileConfiguration)
         self.rasterLayer = MCTiled2dMapRasterLayerInterface.create(osmTiledConfiguration,
