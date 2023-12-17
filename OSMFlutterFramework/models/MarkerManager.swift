@@ -47,7 +47,7 @@ public class MarkerManager {
                              angle:Float? = nil,anchor:(x:Int,y:Int)? = nil,
                              scaleType:MarkerScaleType? = nil){
         
-        var index = markers.firstIndex { marker in
+        let index = markers.firstIndex { marker in
             marker.location == oldlocation
         }
         

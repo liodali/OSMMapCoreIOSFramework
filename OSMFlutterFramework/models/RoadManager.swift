@@ -45,15 +45,19 @@ public class RoadManager {
     private let polylineLayerHandler:LineLayerHander
     private var roads:[Road] = []
     private let lineLayer = MCLineLayerInterface.create()
+    private let lineBorderLayer = MCLineLayerInterface.create()
     init(map:MCMapView){
         self.mapView = map
         polylineLayerHandler = LineLayerHander()
     }
     
     func initRoadManager(){
-        self.mapView.insert(layer: lineLayer?.asLayerInterface(), at: 1)
+        self.mapView.insert(layer: lineBorderLayer?.asLayerInterface(), at: 1)
+        self.mapView.insert(layer: lineLayer?.asLayerInterface(), at: 2)
         lineLayer?.setLayerClickable(true)
         lineLayer?.setCallbackHandler(polylineLayerHandler)
+        lineBorderLayer?.setLayerClickable(false)
+        lineBorderLayer?.setCallbackHandler(nil)
     }
     
     public func addRoad(id:String,polylines:[CLLocationCoordinate2D],configuration:RoadConfiguration){
@@ -78,9 +82,7 @@ public class RoadManager {
                                                        lineCap: configuration.lineCap
                                                    )
             )
-           lineLayer?.add(poylineBorder)
-           roads.append(Road(id: "\(id)-border", lineLayer: poylineBorder))
-
+           lineBorderLayer?.add(poylineBorder)
         }
         let poyline = MCLineFactory.createLine(id,
                                                coordinates: coords,
@@ -108,9 +110,13 @@ public class RoadManager {
             roads.removeAll { road in
                 road.id == id
             }
-            roads.removeAll { road in
-                road.id == "\(id)-border"
+            if lineBorderLayer != nil && !lineBorderLayer!.getLines().isEmpty {
+              let lineBorder = lineBorderLayer?.getLines().first { borderLine in
+                    borderLine.getIdentifier() == "\(id)-border"
+                }
+                lineBorderLayer?.remove(lineBorder)
             }
+                
         }
     }
     public func removeAllRoads(){
@@ -167,11 +173,7 @@ class LineLayerHander:MCLineLayerCallbackInterface {
     func onLineClickConfirmed(_ line: MCLineInfoInterface?) {
         if let polyline = line, !skipHandler {
             let id =  polyline.getIdentifier()
-            var polylineID = id
-            if id.contains("-border") {
-                polylineID = id.split(separator: "-").first?.description ?? id
-            }
-            poylineHandler?.onTap(roadId: polylineID)
+            poylineHandler?.onTap(roadId: id)
         }
     }
     func setHandler(poylineHandler: PoylineHandler){
