@@ -42,9 +42,12 @@ public class MarkerManager {
         map.add(layer: nMarker.iconLayerInterface?.asLayerInterface())
         markers.append(nMarker)
     }
-    public func updateMarker(oldlocation:CLLocationCoordinate2D,newlocation:CLLocationCoordinate2D,
-                             icon:UIImage?,iconSize:MarkerIconSize? = nil,
-                             angle:Float? = nil,anchor:(x:Int,y:Int)? = nil,
+    public func updateMarker(oldlocation:CLLocationCoordinate2D,
+                             newlocation:CLLocationCoordinate2D,
+                             icon:UIImage?,
+                             iconSize:MarkerIconSize? = nil,
+                             angle:Float? = nil,
+                             anchor:(x:Int,y:Int)? = nil,
                              scaleType:MarkerScaleType? = nil){
         
         let index = markers.firstIndex { marker in
@@ -58,8 +61,22 @@ public class MarkerManager {
             markers[index!] = marker
             self.map.invalidate()
         }
+    }
+    public func updatrMarkerIcon(location:CLLocationCoordinate2D,
+                             icon:UIImage?,
+                             iconSize:MarkerIconSize? = nil){
         
+        let index = markers.firstIndex { marker in
+            marker.location == location
+        }
         
+        if index != nil  {
+            var marker = markers[index!]
+            let config = marker.markerConfiguration.copyWith(icon: icon,iconSize: iconSize)
+            marker.updateIconMarker(configuration: config)
+            markers[index!] = marker
+            self.map.invalidate()
+        }
     }
     public func removeMarker(location:CLLocationCoordinate2D){
       let index = markers.firstIndex { marker in
