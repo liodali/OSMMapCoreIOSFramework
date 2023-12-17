@@ -25,11 +25,11 @@ public class PoisManager {
             markerHandler.removeHandler()
         }
     }
-    public func setOrCreateIconPoi(id:String,icon:UIImage){
+    public func setOrCreateIconPoi(id:String,icon:UIImage,iconSize:MarkerIconSize?){
         if pois[id] != nil {
-            pois[id]?.setIconMarker(icon: icon)
+            pois[id]?.setIconMarker(icon: icon,size: iconSize)
         }else{
-            pois[id] = Poi(id: id, icon: icon, markerPois: [],handler: markerHandler)
+            pois[id] = Poi(id: id, icon: icon,iconSize: iconSize, markerPois: [],handler: markerHandler)
             self.map.add(layer: pois[id]?.mcIconLayer?.asLayerInterface())
         }
     }
@@ -64,10 +64,10 @@ struct Poi {
     let id:String
     var markerPois:[MarkerIconPoi] = []
     let mcIconLayer:MCIconLayerInterface?
-    let icon:UIImage
-    public init(id:String,icon:UIImage,markerPois: [MarkerIconPoi],handler:IconLayerHander) {
+    let markerIcon:(icon:UIImage,size:MarkerIconSize?)
+    public init(id:String,icon:UIImage,iconSize:MarkerIconSize?,markerPois: [MarkerIconPoi],handler:IconLayerHander) {
         self.id = id
-        self.icon = icon
+        self.markerIcon = (icon,iconSize)
         self.markerPois = markerPois
         self.mcIconLayer = MCIconLayerInterface.create()
         self.mcIconLayer?.setLayerClickable(true)
@@ -78,7 +78,7 @@ struct Poi {
         mcIconLayer?.clear()
         self.markerPois.removeAll()
          let nMarkersPoi =  markerPois.map({
-             let config = $0.configuration.copyWith(icon: icon, angle: nil, anchor: nil)
+             let config = $0.configuration.copyWith(icon: markerIcon.icon,iconSize: markerIcon.size, angle: nil, anchor: nil)
              return MarkerIconPoi(configuration: config,location: $0.location)
          })
         self.markerPois.append(contentsOf: nMarkersPoi)
@@ -91,10 +91,10 @@ struct Poi {
        self.markerPois.removeAll()
        mcIconLayer?.invalidate()
    }
-     mutating func setIconMarker(icon: UIImage) {
+     mutating func setIconMarker(icon: UIImage,size:MarkerIconSize?) {
         mcIconLayer?.clear()
         self.markerPois.enumerated().forEach { index,poi in
-            let config = poi.configuration.copyWith(icon: icon, angle: nil, anchor: nil)
+            let config = poi.configuration.copyWith(icon: icon,iconSize: size, angle: nil, anchor: nil)
             self.markerPois[index].updateIcon(configuration: config)
             mcIconLayer?.add(self.markerPois[index].icon)
         }
@@ -110,7 +110,7 @@ public struct MarkerIconPoi {
         self.location = location
         self.icon = self.createMapIcon()
     }
-    public init(angle: Float?, anchor: (x: Int, y: Int)?, location: CLLocationCoordinate2D) {
+    public init( location: CLLocationCoordinate2D,angle: Float?, anchor: (x: Int, y: Int)?) {
         self.configuration = MarkerConfiguration(icon: UIImage(), iconSize: nil, angle: angle, anchor: anchor)
         self.location = location
     }
@@ -121,7 +121,6 @@ public struct MarkerIconPoi {
         }else {
             MCVec2F(x: Float(texture.getImageWidth()), y: Float(texture.getImageHeight()))
         }
-       // MCVec2F(x:Float(markerConfiguration.iconSize.x),y:Float(markerConfiguration.iconSize.y))
         let mcCoord  = self.location.toMCCoordEpsg3857()
         if configuration.anchor != nil {
             return MCIconFactory.createIcon(withAnchor: location.id(),
