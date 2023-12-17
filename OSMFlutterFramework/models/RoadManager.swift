@@ -61,7 +61,8 @@ public class RoadManager {
         let coords = polylines.map { location in
             location.toMCCoord()
         }
-        if configuration.borderWidth != nil && configuration.borderColor != nil {
+        if configuration.borderWidth != nil && configuration.borderWidth! > 0 && configuration.borderColor != nil
+            && configuration.borderColor != configuration.color {
             let poylineBorder = MCLineFactory.createLine("\(id)-border",
                                                    coordinates: coords,
                                                    style: MCLineStyle(

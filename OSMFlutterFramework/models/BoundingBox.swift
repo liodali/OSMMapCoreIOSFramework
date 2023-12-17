@@ -82,4 +82,7 @@ extension BoundingBox {
             topLeft: topLeft,
             bottomRight: bottomRight)
     }
+    public func toMap() -> [String:Double] {
+        ["north":north,"south":south,"east":east,"west":west]
+    }
 }

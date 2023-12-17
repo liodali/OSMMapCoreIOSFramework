@@ -182,9 +182,7 @@ extension OSMView {
      Responsible to move the camera to [location] with zoom,animation
      */
     public func moveToByBoundingBox(bounds: BoundingBox,animated:Bool){
-        var innerZoom =  mapView.camera.getZoom()
         let mcRectCoord = bounds.toMCRectCoord()
-        self.mapView.camera.setZoom(innerZoom, animated: false)
         self.mapView.camera.move(toBoundingBox: mcRectCoord, paddingPc: Float(0.1), animated: animated, maxZoom: nil)
     }
     /**
@@ -246,5 +244,15 @@ extension OSMView {
     }
     public func stopCamera() {
         self.mapView.camera.freeze(true)
+    }
+    public func hideAllLayer() {
+        self.roadManager.hildeAll()
+        self.markerManager.hildeAll()
+        self.poisManager.hildeAll()
+    }
+    public func shoyAllLayer() {
+        self.roadManager.showAll()
+        self.markerManager.showAll()
+        self.poisManager.showAll()
     }
 }
