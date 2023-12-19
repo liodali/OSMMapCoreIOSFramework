@@ -11,6 +11,7 @@ import MapKit
 
 
 public typealias MarkerIconSize = (x:Int, y:Int)
+public typealias MarkerAnchor = (x:Double, y:Double)
 
 public enum MarkerScaleType {
     case Scale
@@ -51,9 +52,9 @@ public struct MarkerConfiguration{
     let angle:Float?
     let icon:UIImage
     let iconSize:MarkerIconSize?
-    let anchor:(x:Int,y:Int)?
+    let anchor:MarkerAnchor?
     let scaleType:MarkerScaleType
-    public init(icon:UIImage,iconSize:MarkerIconSize?,angle: Float?, anchor: (x: Int, y: Int)?,
+    public init(icon:UIImage,iconSize:MarkerIconSize?,angle: Float?, anchor: MarkerAnchor?,
                 scaleType:MarkerScaleType = MarkerScaleType.Scale) {
         self.icon = icon
         self.angle = angle
@@ -64,7 +65,7 @@ public struct MarkerConfiguration{
     func copyWith(icon:UIImage? = nil,
                   iconSize:MarkerIconSize? = nil,
                   angle: Float? = nil,
-                  anchor: (x: Int, y: Int)? = nil,
+                  anchor: (x: Double, y: Double)? = nil,
                   scaleType:MarkerScaleType? = nil) -> MarkerConfiguration {
         MarkerConfiguration(icon: icon ?? self.icon,iconSize: iconSize ?? self.iconSize,
                             angle: angle ?? self.angle, anchor: anchor ?? self.anchor,

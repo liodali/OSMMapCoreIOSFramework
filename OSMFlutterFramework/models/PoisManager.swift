@@ -110,7 +110,7 @@ public struct MarkerIconPoi {
         self.location = location
         self.icon = self.createMapIcon()
     }
-    public init( location: CLLocationCoordinate2D,angle: Float?, anchor: (x: Int, y: Int)?) {
+    public init( location: CLLocationCoordinate2D,angle: Float?, anchor: MarkerAnchor?) {
         self.configuration = MarkerConfiguration(icon: UIImage(), iconSize: nil, angle: angle, anchor: anchor)
         self.location = location
     }

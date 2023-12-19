@@ -47,7 +47,7 @@ public class MarkerManager {
                              icon:UIImage?,
                              iconSize:MarkerIconSize? = nil,
                              angle:Float? = nil,
-                             anchor:(x:Int,y:Int)? = nil,
+                             anchor:MarkerAnchor? = nil,
                              scaleType:MarkerScaleType? = nil){
         
         let index = markers.firstIndex { marker in
