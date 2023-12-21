@@ -245,12 +245,12 @@ extension OSMView {
     public func stopCamera() {
         self.mapView.camera.freeze(true)
     }
-    public func hideAllLayer() {
+    public func hideAllLayers() {
         self.roadManager.hildeAll()
         self.markerManager.hildeAll()
         self.poisManager.hildeAll()
     }
-    public func shoyAllLayer() {
+    public func showAllLayers() {
         self.roadManager.showAll()
         self.markerManager.showAll()
         self.poisManager.showAll()
