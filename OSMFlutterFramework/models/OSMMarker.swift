@@ -47,6 +47,9 @@ public struct Marker : Equatable{
         lhs.location == rhs.location
     }
 }
+/**
+ this class used to configure Marker from icon,size icon,anchor, scaleType
+ */
 public struct MarkerConfiguration{
 
     let angle:Float?

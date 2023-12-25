@@ -9,6 +9,9 @@ import Foundation
 import CoreLocation
 @_implementationOnly import MapCore
 import MapKit
+
+
+
 public enum LocationPermission {
     case Granted
     case NotGranted
@@ -93,15 +96,18 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
                 if iconLayer != nil && iconLayer!.getIcons().isEmpty {
                     userMarker = Marker(location: locations.last!.coordinate, 
                                         markerConfiguration: MarkerConfiguration(
-                                            icon: userLocationIcons.userIcon, iconSize: nil, angle: nil, anchor: nil
+                                            icon: userLocationIcons.userIcon.icon, iconSize: userLocationIcons.userIcon.iconSize, angle: nil, anchor: userLocationIcons.userIcon.anchor
                                         )
                     )
                     iconLayer?.add(userMarker?.createMapIcon()!)
                 }
                 let angle = manager.heading?.trueHeading
                 if (angle != nil && angle != 0) {
-                    userMarker?.updateIconMarker(configuration: userMarker!.markerConfiguration.copyWith(icon: userLocationIcons.directionIcon,
-                                                                                                         angle: Float(angle!), anchor: nil))
+                    let configuration = userMarker!.markerConfiguration.copyWith(icon: userLocationIcons.directionIcon?.icon,
+                                                                                 iconSize: userLocationIcons.directionIcon?.iconSize,
+                                                                                 angle: Float(angle!), anchor:
+                                                                                userLocationIcons.directionIcon?.anchor)
+                    userMarker?.updateIconMarker(configuration: configuration)
                 }
                 iconLayer?.getIcons().first?.setCoordinate(mccoord)
             }
@@ -133,18 +139,20 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
             
         }
     }
-     static func pinIcon() -> UIImage {
-         return (UIImage(systemName: "mappin") ?? UIImage()).withTintColor(.red)
+     static func pinIcon() -> MarkerConfiguration {
+         let icon = (UIImage(systemName: "mappin") ?? UIImage()).withTintColor(.red)
+         return MarkerConfiguration(icon: icon, iconSize: nil, angle: nil, anchor: nil)
        }
-     static func directionIcon() -> UIImage {
-           return (UIImage(systemName: "location.north.fill") ?? UIImage()).withTintColor(.black)
+     static func directionIcon() -> MarkerConfiguration {
+         let icon = (UIImage(systemName: "location.north.fill") ?? UIImage()).withTintColor(.black)
+        return MarkerConfiguration(icon: icon, iconSize: nil, angle: nil, anchor: nil)
        }
 
 }
 public struct UserLocationConfiguration {
-    let userIcon:UIImage
-    let directionIcon:UIImage?
-    public init(userIcon: UIImage , directionIcon: UIImage?) {
+    let userIcon:MarkerConfiguration
+    let directionIcon:MarkerConfiguration?
+    public init(userIcon: MarkerConfiguration , directionIcon: MarkerConfiguration?) {
         self.userIcon = userIcon
         self.directionIcon = directionIcon
     }
