@@ -29,6 +29,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     private var userLocationIcons:UserLocationConfiguration
     private let iconLayer = MCIconLayerInterface.create()
     private var userMarker:Marker?
+    private var controlMapFromOutSide = false
     init(map: MCMapView,userLocationIcons:UserLocationConfiguration?) {
         self.map = map
         self.locationManager = CLLocationManager()
@@ -68,16 +69,18 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         requestLocation()
     }
-    public func toggleTracking() {
+    public func toggleTracking(controlMapFromOutSide:Bool = false) {
         isTracking = !isTracking
         if !isTracking {
             stopLocation()
             iconLayer?.clear()
             iconLayer?.invalidate()
             userMarker = nil
+            self.controlMapFromOutSide = controlMapFromOutSide
         }else {
             locationManager.startUpdatingLocation()
             locationManager.startUpdatingHeading()
+            self.controlMapFromOutSide = false
         }
     }
     public func isTrackingEnabled()-> Bool {
@@ -91,7 +94,9 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if locations.last != nil && locations.last?.coordinate != nil && !isSingleRetrieve {
             let mccoord = locations.last!.coordinate.toMCCoordEpsg3857()
-            self.map.camera.move(toCenterPosition: mccoord, animated: true)
+            if (!controlMapFromOutSide){
+                self.map.camera.move(toCenterPosition: mccoord, animated: true)
+            }
             if isTracking {
                 if iconLayer != nil && iconLayer!.getIcons().isEmpty {
                     userMarker = Marker(location: locations.last!.coordinate, 
