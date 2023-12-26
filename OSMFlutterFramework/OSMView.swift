@@ -16,10 +16,12 @@ public protocol OnMapGesture {
 public protocol OnMapMoved {
     func onMove(center:CLLocationCoordinate2D,bounds:BoundingBox,zoom:Double)
     func onRotate(angle:Double)
+    func onMapInteraction()
 }
 protocol OnMapChanged {
     func onBoundsChanged(bounds:BoundingBox,zoom:Double)
     func onRotationChanged(angle:Double)
+    func onMapInteraction()
 }
 private class RasterCallbackInterface : MCTiled2dMapRasterLayerCallbackInterface{
     var onMapGesture:OnMapGesture?
@@ -60,21 +62,20 @@ private class MapCameraListener:MCMapCamera2dListenerInterface {
     }
     
     public func onMapInteraction() {
-        
+        mapChanged?.onMapInteraction()
     }
 }
 public class OSMView: UIViewController,OnMapChanged {
+    
+    
    
-    
-    
-    
-      
+
     private  let initLocation:CLLocationCoordinate2D?
     private  let zoomConfiguration:ZoomConfiguration
     private  let mapConfig = MCMapConfig(mapCoordinateSystem: MCCoordinateSystemFactory.getEpsg3857System())
 
     private  let mapView:MCMapView
-     
+    private  let mapTileConfiguration:OSMMapConfiguration
     private var osmTiledConfiguration:OSMTiledLayerConfig!
     private var rasterLayer:MCTiled2dMapRasterLayerInterface!
     private let identifier = MCCoordinateSystemIdentifiers.epsg4326()
@@ -92,9 +93,7 @@ public class OSMView: UIViewController,OnMapChanged {
     }
     public var onMapMove: OnMapMoved?
     
-    let mapTileConfiguration:OSMMapConfiguration
-    
-    
+   
    public var mapHandlerDelegate:MapMarkerHandler?  {
         didSet{
             markerManager.updateHandler(locationHandlerDelegate: mapHandlerDelegate)
@@ -141,17 +140,16 @@ public class OSMView: UIViewController,OnMapChanged {
     }
   
     func onBoundsChanged(bounds: BoundingBox, zoom: Double) {
-        if onMapMove != nil {
-            let center = center()
-            onMapMove?.onMove(center: center, bounds: bounds,zoom: zoom)
-        }
+        let center = center()
+        onMapMove?.onMove(center: center, bounds: bounds,zoom: zoom)
+        
     }
     
     func onRotationChanged(angle: Double) {
-        if onMapMove != nil {
-            let center = center()
-            
-        }
+        onMapMove?.onRotate(angle: angle)
+    }
+    func onMapInteraction() {
+        onMapMove?.onMapInteraction()
     }
     /*
      public override func viewDidAppear(_ animated: Bool) {
