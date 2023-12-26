@@ -21,8 +21,11 @@ func ==(lhs: MCCoord, rhs: MCCoord) -> Bool {
     return lhs.x == rhs.x && lhs.y == rhs.y
 }
 extension MCRectCoord {
-     func toBoundingBox()-> BoundingBox{
-        return BoundingBox(north: topLeft.x,west: topLeft.y,east: bottomRight.y, south: bottomRight.x)
+     func toBoundingBox()-> BoundingBox {
+         let topLeft4326 = topLeft.toCLLocation2D()
+         let bottomRight4326 = bottomRight.toCLLocation2D()
+         return BoundingBox(north: topLeft4326.longitude,west: topLeft4326.latitude,
+                            east: bottomRight4326.latitude, south: bottomRight4326.longitude)
     }
 }
 extension CLLocationCoordinate2D {
@@ -46,7 +49,8 @@ extension MCCoord {
         let exp = (Double.pi / 180) * preLatitude3857
 
         let latitude = (atan(pow(e, exp)) / (Double.pi / 360)) - 90
-        return CLLocationCoordinate2D(latitude: latitude, longitude: (x * 180) / 20037508.34 )
+        let longitude = (x * 180) / 20037508.34
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 }
 
