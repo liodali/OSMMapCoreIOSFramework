@@ -283,6 +283,10 @@ extension OSMView {
     }
     public func stopCamera() {
         self.mapView.camera.freeze(true)
+        Task {
+            try await Task.sleep(nanoseconds: 150_000_000)
+            self.mapView.camera.freeze(false)
+        }
     }
     public func hideAllLayers() {
         self.roadManager.hildeAll()
