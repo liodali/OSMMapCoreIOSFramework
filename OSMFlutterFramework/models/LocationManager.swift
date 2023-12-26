@@ -145,7 +145,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
 
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error.localizedDescription)
-        if  let handler = userLocationHandler {
+        if  userLocationHandler != nil {
             
         }
     }

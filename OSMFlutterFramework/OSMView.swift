@@ -46,6 +46,7 @@ private class RasterCallbackInterface : MCTiled2dMapRasterLayerCallbackInterface
 }
 private class MapCameraListener:MCMapCamera2dListenerInterface {
     private(set) var mapChanged:OnMapChanged?
+    private var lastBounding:MCRectCoord? = nil
     init(mapChanged: OnMapChanged?) {
         self.mapChanged = mapChanged
     }
@@ -53,8 +54,11 @@ private class MapCameraListener:MCMapCamera2dListenerInterface {
         self.mapChanged = mapChanged
     }
     public func onVisibleBoundsChanged(_ visibleBounds: MCRectCoord, zoom: Double) {
-        let bounds = visibleBounds.toBoundingBox()
-        mapChanged?.onBoundsChanged(bounds: bounds, zoom: zoom)
+        if lastBounding == nil || !(lastBounding == visibleBounds) {
+            let bounds = visibleBounds.toBoundingBox()
+            mapChanged?.onBoundsChanged(bounds: bounds, zoom: zoom)
+            lastBounding = visibleBounds
+        }
     }
     
     public func onRotationChanged(_ angle: Float) {
