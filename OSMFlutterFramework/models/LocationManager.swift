@@ -49,7 +49,6 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
            locationManager.requestWhenInUseAuthorization() // Request permission
            // Start location updates
            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-           requestLocation()
            isSingleRetrieve = true
     }
     func requestLocation() {
@@ -67,7 +66,6 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization() // Request permission
         // Start location updates
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        requestLocation()
     }
     public func toggleTracking(controlMapFromOutSide:Bool = false) {
         isTracking = !isTracking
@@ -78,8 +76,12 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
             userMarker = nil
             self.controlMapFromOutSide = controlMapFromOutSide
         }else {
-            locationManager.startUpdatingLocation()
-            locationManager.startUpdatingHeading()
+            if CLLocationManager.authorizationStatus() == .notDetermined {
+                        locationManager.requestWhenInUseAuthorization()
+            }else {
+                locationManager.startUpdatingLocation()
+                locationManager.startUpdatingHeading()
+            }
             self.controlMapFromOutSide = false
         }
     }
@@ -127,7 +129,10 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
 
         if status == CLAuthorizationStatus.authorizedWhenInUse || status == CLAuthorizationStatus.authorizedAlways  {
-            manager.requestLocation()
+            if isTracking {
+                locationManager.startUpdatingLocation()
+                locationManager.startUpdatingHeading()
+            }
             if  let handler = userLocationHandler {
                 handler.handlePermission(state: LocationPermission.Granted)
             }
