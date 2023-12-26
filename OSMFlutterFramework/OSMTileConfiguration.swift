@@ -21,11 +21,9 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
    
     
     private var tile:String
-    let onMapChanged:OnMapChanged
     let configuration:OSMMapConfiguration
-    init(tileURL:String="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",onChanged:OnMapChanged,configuration:OSMMapConfiguration = OSMMapConfiguration()) {
+    init(tileURL:String="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",configuration:OSMMapConfiguration = OSMMapConfiguration()) {
         tile = tileURL
-        self.onMapChanged = onChanged
         self.configuration = configuration
     }
     
@@ -41,7 +39,6 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
         print(tile.replacingOccurrences(of: "{z}", with: "\(zoom)")
             .replacingOccurrences(of: "{y}", with: "\(y)")
             .replacingOccurrences(of: "{x}", with: "\(x)"))
-        self.onMapChanged.onChanged()
         return tile.replacingOccurrences(of: "{z}", with: "\(zoom)")
             .replacingOccurrences(of: "{y}", with: "\(y)")
             .replacingOccurrences(of: "{x}", with: "\(x)")

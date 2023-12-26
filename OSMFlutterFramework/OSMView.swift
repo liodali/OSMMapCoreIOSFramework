@@ -14,10 +14,12 @@ public protocol OnMapGesture {
     func onLongTap(location:CLLocationCoordinate2D)
 }
 public protocol OnMapMoved {
-    func onMove(center:CLLocationCoordinate2D,bounds:BoundingBox)
+    func onMove(center:CLLocationCoordinate2D,bounds:BoundingBox,zoom:Double)
+    func onRotate(angle:Double)
 }
 protocol OnMapChanged {
-    func onChanged()
+    func onBoundsChanged(bounds:BoundingBox,zoom:Double)
+    func onRotationChanged(angle:Double)
 }
 private class RasterCallbackInterface : MCTiled2dMapRasterLayerCallbackInterface{
     var onMapGesture:OnMapGesture?
@@ -40,7 +42,32 @@ private class RasterCallbackInterface : MCTiled2dMapRasterLayerCallbackInterface
     
     
 }
+private class MapCameraListener:MCMapCamera2dListenerInterface {
+    private(set) var mapChanged:OnMapChanged?
+    init(mapChanged: OnMapChanged?) {
+        self.mapChanged = mapChanged
+    }
+    func setMapChanged(mapChanged: OnMapChanged?){
+        self.mapChanged = mapChanged
+    }
+    public func onVisibleBoundsChanged(_ visibleBounds: MCRectCoord, zoom: Double) {
+        let bounds = visibleBounds.toBoundingBox()
+        mapChanged?.onBoundsChanged(bounds: bounds, zoom: zoom)
+    }
+    
+    public func onRotationChanged(_ angle: Float) {
+        mapChanged?.onRotationChanged(angle: Double(angle))
+    }
+    
+    public func onMapInteraction() {
+        
+    }
+}
 public class OSMView: UIViewController,OnMapChanged {
+   
+    
+    
+    
       
     private  let initLocation:CLLocationCoordinate2D?
     private  let zoomConfiguration:ZoomConfiguration
@@ -57,6 +84,7 @@ public class OSMView: UIViewController,OnMapChanged {
     public let poisManager:PoisManager
     public let locationManager:LocationManager
     private let rasterCallback: RasterCallbackInterface = RasterCallbackInterface()
+    private let mapCameraListener:MapCameraListener = MapCameraListener(mapChanged: nil)
     public var onMapGestureDelegate: OnMapGesture? {
        didSet{
             rasterCallback.onMapGesture = onMapGestureDelegate
@@ -98,25 +126,33 @@ public class OSMView: UIViewController,OnMapChanged {
         self.poisManager =  PoisManager(map: mapView)
         self.locationManager =  LocationManager(map: mapView, userLocationIcons: nil)
         super.init(nibName: nil, bundle: nil)
-        self.osmTiledConfiguration = OSMTiledLayerConfig(onChanged: self,configuration: self.mapTileConfiguration)
+        self.mapCameraListener.setMapChanged(mapChanged: self)
+        self.osmTiledConfiguration = OSMTiledLayerConfig(configuration: self.mapTileConfiguration)
         self.rasterLayer = MCTiled2dMapRasterLayerInterface.create(osmTiledConfiguration,
                                                                         loaders: [MCTextureLoader()])
         rasterLayer?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
         rasterLayer?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
         view.frame = rect
         self.mapView.backgroundColor = .gray.withAlphaComponent(CGFloat(200))
+        self.mapView.camera.addListener(mapCameraListener)
     }
     public override func loadView() {
         view = self.mapView
     }
-    func onChanged() {
+  
+    func onBoundsChanged(bounds: BoundingBox, zoom: Double) {
         if onMapMove != nil {
             let center = center()
-            let boundingBox = getBoundingBox()
-            onMapMove?.onMove(center: center, bounds: boundingBox)
+            onMapMove?.onMove(center: center, bounds: bounds,zoom: zoom)
         }
     }
     
+    func onRotationChanged(angle: Double) {
+        if onMapMove != nil {
+            let center = center()
+            
+        }
+    }
     /*
      public override func viewDidAppear(_ animated: Bool) {
         if initLocation != nil {
@@ -143,6 +179,9 @@ public class OSMView: UIViewController,OnMapChanged {
            level.zoom == zoom
        }?.zoomLevelIdentifier ?? Int32(zoomConfiguration.maxZoom)
     }
+    
+    
+  
     
 }
 
