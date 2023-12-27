@@ -74,7 +74,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
             iconLayer?.clear()
             iconLayer?.invalidate()
             userMarker = nil
-            self.controlMapFromOutSide = controlMapFromOutSide
+            self.controlMapFromOutSide = false
         }else {
             if CLLocationManager.authorizationStatus() == .notDetermined {
                         locationManager.requestWhenInUseAuthorization()
@@ -82,7 +82,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
                 locationManager.startUpdatingLocation()
                 locationManager.startUpdatingHeading()
             }
-            self.controlMapFromOutSide = false
+            self.controlMapFromOutSide = controlMapFromOutSide
         }
     }
     public func isTrackingEnabled()-> Bool {
