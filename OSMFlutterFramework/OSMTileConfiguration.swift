@@ -90,7 +90,7 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
 
     // List of valid zoom-levels and their target zoom-value, the tile size in
     // the layers coordinate system, the number of tiles on that level and the
-    // zoom identifier used for the tile-url (see getTileUrl above)
+    // zoom identifier used for the tile-url (see getTileUrl above) 21536.731457737689
     func getZoomLevelInfos() -> [MCTiled2dMapZoomLevelInfo] {
         [
             .init(zoom: 559082264.029, tileWidthLayerSystemUnits: 40_075_016, numTilesX: 1, numTilesY: 1, numTilesT: 1, zoomLevelIdentifier: 0, bounds: getBounds()),
@@ -115,5 +115,27 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
             .init(zoom: 1066.36479193, tileWidthLayerSystemUnits: 76.437, numTilesX: 524_288, numTilesY: 524_288, numTilesT: 1, zoomLevelIdentifier: 19, bounds: getBounds()),
             .init(zoom: 533.18239597, tileWidthLayerSystemUnits: 38.2185, numTilesX: 1_048_576, numTilesY: 1_048_576, numTilesT: 1, zoomLevelIdentifier: 20, bounds: getBounds()),
         ]
+    }
+}
+extension OSMTiledLayerConfig {
+    func getZoomIdentifierFromZoom(zoom:Double) -> Int32? {
+        print(zoom)
+       var listZooms = getZoomLevelInfos()
+        listZooms.sort { lvl1,lvl2 in
+            lvl1.zoomLevelIdentifier < lvl2.zoomLevelIdentifier
+        }
+        let listdentifierZoom = listZooms
+            .filter { level in
+                return zoom >= level.zoom
+        }.map { level in
+                level.zoomLevelIdentifier
+            }
+        
+       let identifierZoom = listdentifierZoom.min()
+        if identifierZoom != nil {
+            return identifierZoom!
+        }
+        return nil // Int32(zoomConfiguration.maxZoom)
+        
     }
 }

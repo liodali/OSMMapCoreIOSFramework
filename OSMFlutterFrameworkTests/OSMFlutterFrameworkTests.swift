@@ -41,6 +41,13 @@ final class OSMFlutterFrameworkTests: XCTestCase {
         XCTAssertTrue(boundingbox.toBoundingEpsg3857() == BoundingBox(north: -20037508.34,west: 20037508.34,
                                                                       east: -20037508.34, south: 20037508.34))
     }
+    
+    func testZoomLevel() throws {
+        let zoomLevel = 21536.731457737689
+        let mapConfig = OSMTiledLayerConfig(tileURL: "",configuration: OSMMapConfiguration())
+        let zoom = mapConfig.getZoomIdentifierFromZoom(zoom: zoomLevel)
+        XCTAssertTrue(zoom == 15)
+    }
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
