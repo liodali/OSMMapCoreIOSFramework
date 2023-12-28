@@ -17,9 +17,12 @@ public class MarkerManager {
     let map: MCMapView
     var markers: [Marker] = []
     private let markerHandler:IconLayerHander
+    private let iconLayerInterface:MCIconLayerInterface? =  MCIconLayerInterface.create()
     init(map: MCMapView) {
         self.map = map
         markerHandler = IconLayerHander(nil)
+        iconLayerInterface?.setLayerClickable(true)
+        iconLayerInterface?.setCallbackHandler(markerHandler)
     }
     
     func updateHandler(locationHandlerDelegate:MapMarkerHandler?){
@@ -32,14 +35,12 @@ public class MarkerManager {
     
     public func addMarker(marker:Marker){
         var nMarker = marker
-        let iconLayer = MCIconLayerInterface.create()
-        iconLayer?.setLayerClickable(true)
+
         let icon = marker.createMapIcon()
-        iconLayer?.add(icon)
-        iconLayer?.setCallbackHandler(markerHandler)
-        nMarker.setLayer(iconLayerInterface: iconLayer!)
+        iconLayerInterface?.add(icon)
+        nMarker.setLayer(iconLayerInterface: iconLayerInterface!)
         //iconLayer?.setCallbackHandler(handler)
-        map.add(layer: nMarker.iconLayerInterface?.asLayerInterface())
+        map.add(layer: iconLayerInterface?.asLayerInterface())
         markers.append(nMarker)
     }
     public func updateMarker(oldlocation:CLLocationCoordinate2D,
@@ -94,15 +95,11 @@ public class MarkerManager {
         }
     }
     public func hildeAll(){
-        markers.forEach { marker in
-            marker.iconLayerInterface?.asLayerInterface()?.hide()
-        }
+        iconLayerInterface?.asLayerInterface()?.hide()
         markerHandler.skipHandler = true
     }
     public func showAll(){
-        markers.forEach { marker in
-            marker.iconLayerInterface?.asLayerInterface()?.show()
-        }
+        iconLayerInterface?.asLayerInterface()?.show()
         markerHandler.skipHandler = false
     }
     public func lockHandler(){
@@ -117,7 +114,13 @@ class IconLayerHander:MCIconLayerCallbackInterface {
     }
     func onClickConfirmed(_ icons: [MCIconInfoInterface]) -> Bool {
         if let handler = markerHandler, !skipHandler {
-            handler.onTap(location: icons.first!.getCoordinate().toCLLocation2D())
+            if icons.count == 0 {
+                handler.onTap(location: icons.first!.getCoordinate().toCLLocation2D())
+            }else {
+                icons.forEach { icon in
+                    handler.onTap(location: icon.getCoordinate().toCLLocation2D())
+                }
+            }
         }
         return true
     }

@@ -85,7 +85,7 @@ extension Marker {
         }
         self.location = newLocation
         let nIconLayerInterface = createMapIcon()
-        let iconInterface = self.iconLayerInterface?.getIcons().first
+        let iconInterface = searchforIconInterface()
         self.iconLayerInterface?.remove(iconInterface)
         self.iconLayerInterface?.add(nIconLayerInterface)
         
@@ -94,10 +94,17 @@ extension Marker {
     mutating func updateIconMarker(configuration: MarkerConfiguration) {
         self.markerConfiguration = configuration
         let nIconLayerInterface = createMapIcon()
-        let iconInterface = self.iconLayerInterface?.getIcons().first
+        let iconInterface = searchforIconInterface()
         self.iconLayerInterface?.remove(iconInterface)
         self.iconLayerInterface?.add(nIconLayerInterface)
     }
+    
+    func searchforIconInterface() -> MCIconInfoInterface? {
+        self.iconLayerInterface?.getIcons().first { icon in
+            icon.getCoordinate().clLocationCoordinate != nil && icon.getCoordinate().clLocationCoordinate! == location
+        }
+    }
+    
     
     func createMapIcon()-> MCIconInfoInterface? {
         let texture = markerConfiguration.icon.toTexture(angle: markerConfiguration.angle ?? 0)

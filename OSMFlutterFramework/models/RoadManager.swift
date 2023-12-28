@@ -130,10 +130,12 @@ public class RoadManager {
     }
     public func hildeAll(){
         lineLayer?.asLayerInterface()?.hide()
+        lineBorderLayer?.asLayerInterface()?.hide()
         lineHandler.skipHandler = true
     }
     public func showAll(){
        lineLayer?.asLayerInterface()?.show()
+       lineBorderLayer?.asLayerInterface()?.show()
        lineHandler.skipHandler = false
     }
     public func lockHandler(){
