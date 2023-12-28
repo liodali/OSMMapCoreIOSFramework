@@ -25,6 +25,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     private let map: MCMapView
     var userLocationHandler:OSMUserLocationHandler?
     private var isSingleRetrieve = false
+    private var enableLocation = false
     private var isTracking = false
     private var userLocationIcons:UserLocationConfiguration
     private let iconLayer = MCIconLayerInterface.create()
@@ -66,6 +67,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization() // Request permission
         // Start location updates
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        enableLocation = true
     }
     public func toggleTracking(controlMapFromOutSide:Bool = false) {
         isTracking = !isTracking
@@ -75,6 +77,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
             iconLayer?.invalidate()
             userMarker = nil
             self.controlMapFromOutSide = false
+            enableLocation = false
         }else {
             if CLLocationManager.authorizationStatus() == .notDetermined {
                         locationManager.requestWhenInUseAuthorization()
@@ -132,6 +135,9 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
             if isTracking {
                 locationManager.startUpdatingLocation()
                 locationManager.startUpdatingHeading()
+            }
+            if isSingleRetrieve || enableLocation {
+                locationManager.requestLocation()
             }
             if  let handler = userLocationHandler {
                 handler.handlePermission(state: LocationPermission.Granted)
