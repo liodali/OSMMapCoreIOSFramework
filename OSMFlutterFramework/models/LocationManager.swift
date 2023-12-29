@@ -47,24 +47,35 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         self.userLocationIcons = userLocationIcons
     }
     public func requestSingleLocation() {
-           locationManager.requestWhenInUseAuthorization() // Request permission
+           checkLocationAuthorization()
            // Start location updates
            locationManager.desiredAccuracy = kCLLocationAccuracyBest
            isSingleRetrieve = true
     }
     func requestLocation() {
         if #available(iOS 14.0, *) {
-            if(locationManager.authorizationStatus == CLAuthorizationStatus.authorizedWhenInUse ) {
+            if(locationManager.authorizationStatus == CLAuthorizationStatus.authorizedWhenInUse 
+               || locationManager.authorizationStatus == CLAuthorizationStatus.authorizedAlways ) {
                 locationManager.requestLocation()
             }
         } else {
-            if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ) {
+            if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse
+               || CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways ) {
                 locationManager.requestLocation()
             }
         }
     }
+    
+    func checkLocationAuthorization() {
+        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways {
+            locationManager.requestLocation()
+        }else {
+            locationManager.requestWhenInUseAuthorization() // Request permission
+        }
+    }
+  
     public func requestEnableLocation() {
-        locationManager.requestWhenInUseAuthorization() // Request permission
+        checkLocationAuthorization()// Request permission
         // Start location updates
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         enableLocation = true
@@ -73,11 +84,6 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         isTracking = !isTracking
         if !isTracking {
             stopLocation()
-            iconLayer?.clear()
-            iconLayer?.invalidate()
-            userMarker = nil
-            self.controlMapFromOutSide = false
-            enableLocation = false
         }else {
             if CLLocationManager.authorizationStatus() == .notDetermined {
                         locationManager.requestWhenInUseAuthorization()
@@ -95,6 +101,12 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
         locationManager.stopUpdatingHeading()
         isSingleRetrieve = false
+        isTracking = false
+        iconLayer?.clear()
+        iconLayer?.invalidate()
+        userMarker = nil
+        self.controlMapFromOutSide = false
+        enableLocation = false
     }
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if locations.last != nil && locations.last?.coordinate != nil && !isSingleRetrieve {
@@ -125,9 +137,6 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         if let handler = userLocationHandler, locations.last != nil && locations.last?.coordinate != nil {
             handler.locationChanged(userLocation: locations.last!.coordinate)
         }
-        if isSingleRetrieve {
-            stopLocation()
-        }
     }
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
 
@@ -137,7 +146,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
                 locationManager.startUpdatingHeading()
             }
             if isSingleRetrieve || enableLocation {
-                locationManager.requestLocation()
+                requestLocation()
             }
             if  let handler = userLocationHandler {
                 handler.handlePermission(state: LocationPermission.Granted)
