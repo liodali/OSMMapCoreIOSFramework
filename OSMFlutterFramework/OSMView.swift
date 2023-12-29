@@ -195,6 +195,7 @@ extension OSMView {
         self.mapView.insert(layer: rasterLayer?.asLayerInterface(), at: 0)
         self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoomConfiguration.initZoom), animated: false)
         self.roadManager.initRoadManager()
+        self.markerManager.initRoadManager()
     }
     /**
      Responsible set area Limit for camera of MapView
@@ -226,6 +227,7 @@ extension OSMView {
      */
     public func setCustomTile(tile:CustomTiles){
         self.osmTiledConfiguration.setTileURL(tileURL: tile.toString())
+        self.mapView.invalidate()
     }
    
     /**

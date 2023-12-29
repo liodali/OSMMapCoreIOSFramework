@@ -13,12 +13,22 @@ import MapKit
 public func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
     return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
 }
-
+/**
+  this function illustraction subscation between two location with precison of 0.0000001
+ */
+public func -(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+    return lhs.latitude - rhs.latitude <= 0.0000001 && lhs.longitude - rhs.longitude <= 0.0000001
+}
 func ==(lhs: MCRectCoord, rhs: MCRectCoord) -> Bool {
     return lhs.topLeft == rhs.topLeft && lhs.bottomRight == rhs.bottomRight
 }
 func ==(lhs: MCCoord, rhs: MCCoord) -> Bool {
     return lhs.x == rhs.x && lhs.y == rhs.y
+}
+func isEqualTo1eX(value: Float) -> Bool {
+    let log10Value = log10(value)
+    let exponent = Int(log10Value)
+    return value == Float(truncating: pow(10, exponent) as NSNumber) && exponent >= 2 && exponent <= 8  // Adjust the range as needed
 }
 extension MCRectCoord {
      func toBoundingBox()-> BoundingBox {
@@ -33,13 +43,21 @@ extension CLLocationCoordinate2D {
         MCCoord(systemIdentifier: MCCoordinateSystemIdentifiers.epsg3857(),  x: (longitude * 20037508.34) / 180,
                 y: ((log(tan(((90 + latitude) * Double.pi) / 360)) / (Double.pi / 180)) * 20037508.34) / 180, z: 10.0)
     }
-    
+    /**
+      this function check if current Location is equal to [rhs:CLLocationCoordinate2D] with precision, note that precision should be between [1e2 .. 1e8]
+     */
+    public func isEqual(rhs: CLLocationCoordinate2D,precision:Double = 1e6)throws -> Bool{
+        guard isEqualTo1eX(value: Float(precision)) else {
+            throw NSError(domain: "precision is wrong value should be value like 1e4,5,6", code: 400)
+        }
+        return self.latitude - rhs.latitude <= precision && self.longitude - rhs.longitude <= precision
+    }
     func toMCCoord() -> MCCoord {
         MCCoord (systemIdentifier: MCCoordinateSystemIdentifiers.epsg4326(),x: longitude,
-                y: latitude,z: 10.0)
+                 y: latitude,z: 10.0)
     }
     func id()->String {
-        "\(latitude*longitude)"
+        "\(latitude),\(longitude)"
     }
 }
 extension MCCoord {

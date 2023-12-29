@@ -117,7 +117,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
                                                                                  iconSize: userLocationIcons.directionIcon?.iconSize,
                                                                                  angle: Float(angle!), anchor:
                                                                                 userLocationIcons.directionIcon?.anchor)
-                    userMarker?.updateIconMarker(configuration: configuration)
+                    userMarker?.updateMarker(newLocation:nil, configuration: configuration)
                 }
                 iconLayer?.getIcons().first?.setCoordinate(mccoord)
             }

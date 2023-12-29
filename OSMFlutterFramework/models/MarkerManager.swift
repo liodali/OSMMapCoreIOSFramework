@@ -17,12 +17,17 @@ public class MarkerManager {
     let map: MCMapView
     var markers: [Marker] = []
     private let markerHandler:IconLayerHander
-    private let iconLayerInterface:MCIconLayerInterface? =  MCIconLayerInterface.create()
+    private let iconLayerInterface =  MCIconLayerInterface.create()
     init(map: MCMapView) {
         self.map = map
         markerHandler = IconLayerHander(nil)
+       
+    }
+    func initRoadManager(){
+        self.map.add(layer: iconLayerInterface?.asLayerInterface())
         iconLayerInterface?.setLayerClickable(true)
         iconLayerInterface?.setCallbackHandler(markerHandler)
+        
     }
     
     func updateHandler(locationHandlerDelegate:MapMarkerHandler?){
@@ -35,12 +40,9 @@ public class MarkerManager {
     
     public func addMarker(marker:Marker){
         var nMarker = marker
-
-        let icon = marker.createMapIcon()
+        let icon = nMarker.createMapIcon()
         iconLayerInterface?.add(icon)
-        nMarker.setLayer(iconLayerInterface: iconLayerInterface!)
-        //iconLayer?.setCallbackHandler(handler)
-        map.add(layer: iconLayerInterface?.asLayerInterface())
+        nMarker.setIconIndex(index: iconLayerInterface!.getIcons().count - 1)
         markers.append(nMarker)
     }
     public func updateMarker(oldlocation:CLLocationCoordinate2D,
@@ -59,33 +61,27 @@ public class MarkerManager {
             var marker = markers[index!]
             let config = marker.markerConfiguration.copyWith(icon: icon,iconSize: iconSize, angle: angle, anchor: anchor,scaleType: scaleType)
             marker.updateMarker(newLocation: newlocation, configuration: config)
+            let mcIcon = self.iconLayerInterface!.getIcons()[marker.getIconIndex()!]
+            self.iconLayerInterface?.remove(mcIcon)
+            self.iconLayerInterface?.add(marker.createMapIcon())
+            marker.setIconIndex(index: iconLayerInterface!.getIcons().count - 1)
             markers[index!] = marker
             self.map.invalidate()
         }
     }
-    public func updatrMarkerIcon(location:CLLocationCoordinate2D,
-                             icon:UIImage?,
-                             iconSize:MarkerIconSize? = nil){
-        
-        let index = markers.firstIndex { marker in
-            marker.location == location
-        }
-        
-        if index != nil  {
-            var marker = markers[index!]
-            let config = marker.markerConfiguration.copyWith(icon: icon,iconSize: iconSize)
-            marker.updateIconMarker(configuration: config)
-            markers[index!] = marker
-            self.map.invalidate()
-        }
-    }
+    
     public func removeMarker(location:CLLocationCoordinate2D){
-      let index = markers.firstIndex { marker in
-          marker.location == location
-      }
-        if index != nil {
-            map.remove(layer: markers[index!].iconLayerInterface?.asLayerInterface())
-            markers.remove(at: index!)
+        do {
+            let index = markers.firstIndex { marker in
+                let isEq = try? marker.location.isEqual(rhs: location)
+                return marker.location == location || (isEq != nil && isEq!)
+            }
+              if index != nil {
+                  let mcIcon = self.iconLayerInterface!.getIcons()[markers[index!].getIconIndex()!]
+                  self.iconLayerInterface?.remove(mcIcon)
+                  self.iconLayerInterface?.invalidate()
+                  markers.remove(at: index!)
+              }
         }
         
     }

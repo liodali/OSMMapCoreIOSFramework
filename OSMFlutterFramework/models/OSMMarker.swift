@@ -36,7 +36,7 @@ public struct Marker : Equatable{
     let id:String
     private(set) var location:CLLocationCoordinate2D
     private(set) var markerConfiguration:MarkerConfiguration
-    private(set) var iconLayerInterface:MCIconLayerInterface? = nil
+    private var mcIconIndex:Int? = nil
     public init(location: CLLocationCoordinate2D,markerConfiguration:MarkerConfiguration) {
         self.id = location.id()
         self.location = location
@@ -76,37 +76,25 @@ public struct MarkerConfiguration{
     }
 }
 extension Marker {
-    mutating func setLayer(iconLayerInterface:MCIconLayerInterface) {
-        self.iconLayerInterface = iconLayerInterface
-    }
-    mutating func updateMarker(newLocation:CLLocationCoordinate2D,configuration: MarkerConfiguration?) {
+    
+    mutating func updateMarker(newLocation:CLLocationCoordinate2D?,configuration: MarkerConfiguration?) {
         if let config = configuration {
             self.markerConfiguration = config
         }
-        self.location = newLocation
-        let nIconLayerInterface = createMapIcon()
-        let iconInterface = searchforIconInterface()
-        self.iconLayerInterface?.remove(iconInterface)
-        self.iconLayerInterface?.add(nIconLayerInterface)
-        
-    }
-    
-    mutating func updateIconMarker(configuration: MarkerConfiguration) {
-        self.markerConfiguration = configuration
-        let nIconLayerInterface = createMapIcon()
-        let iconInterface = searchforIconInterface()
-        self.iconLayerInterface?.remove(iconInterface)
-        self.iconLayerInterface?.add(nIconLayerInterface)
-    }
-    
-    func searchforIconInterface() -> MCIconInfoInterface? {
-        self.iconLayerInterface?.getIcons().first { icon in
-            icon.getCoordinate().clLocationCoordinate != nil && icon.getCoordinate().clLocationCoordinate! == location
+        if let nLocation = newLocation {
+            self.location = nLocation
         }
+       
+    }
+    func getIconIndex() -> Int? {
+        self.mcIconIndex
+    }
+    mutating func setIconIndex(index:Int) {
+        self.mcIconIndex = index
     }
     
     
-    func createMapIcon()-> MCIconInfoInterface? {
+   mutating func createMapIcon()-> MCIconInfoInterface? {
         let texture = markerConfiguration.icon.toTexture(angle: markerConfiguration.angle ?? 0)
         let iconSize = if let iconSize = markerConfiguration.iconSize {
             MCVec2F(x:Float(iconSize.x),y:Float(iconSize.y))
@@ -123,10 +111,10 @@ extension Marker {
                                            scale: markerConfiguration.scaleType.getValue(),
                                            iconAnchor: MCVec2F(x: Float(markerConfiguration.anchor!.x), y: Float(markerConfiguration.anchor!.y)))
         }
-        return  MCIconFactory.createIcon(id,
-                                 coordinate: location,
-                                 texture: texture,
-                                 iconSize: iconSize,
-                                 scale: markerConfiguration.scaleType.getValue())
+        return MCIconFactory.createIcon(id,
+                                        coordinate: location,
+                                        texture: texture,
+                                        iconSize: iconSize,
+                                        scale: markerConfiguration.scaleType.getValue())
     }
 }
