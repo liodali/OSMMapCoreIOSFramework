@@ -227,6 +227,12 @@ extension OSMView {
      */
     public func setCustomTile(tile:CustomTiles){
         self.osmTiledConfiguration.setTileURL(tileURL: tile.toString())
+        let nRaster = MCTiled2dMapRasterLayerInterface.create(osmTiledConfiguration,
+                                                              loaders: [MCTextureLoader()])
+        nRaster?.setCallbackHandler(rasterCallback)
+        self.mapView.insert(layer: nRaster?.asLayerInterface(), at: 0)
+        self.mapView.remove(layer: self.rasterLayer?.asLayerInterface())
+        self.rasterLayer = nRaster
         self.mapView.invalidate()
     }
    

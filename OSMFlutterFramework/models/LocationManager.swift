@@ -67,7 +67,8 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func checkLocationAuthorization() {
-        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways {
+        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways
+            || CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse {
             locationManager.requestLocation()
         }else {
             locationManager.requestWhenInUseAuthorization() // Request permission
