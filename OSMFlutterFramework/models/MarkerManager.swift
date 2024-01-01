@@ -53,20 +53,23 @@ public class MarkerManager {
                              anchor:MarkerAnchor? = nil,
                              scaleType:MarkerScaleType? = nil){
         
-        let index = markers.firstIndex { marker in
-            marker.location == oldlocation
-        }
-        
-        if index != nil  {
-            var marker = markers[index!]
-            let config = marker.markerConfiguration.copyWith(icon: icon,iconSize: iconSize, angle: angle, anchor: anchor,scaleType: scaleType)
-            marker.updateMarker(newLocation: newlocation, configuration: config)
-            let mcIcon = self.iconLayerInterface!.getIcons()[marker.getIconIndex()!]
-            self.iconLayerInterface?.remove(mcIcon)
-            self.iconLayerInterface?.add(marker.createMapIcon())
-            marker.setIconIndex(index: iconLayerInterface!.getIcons().count - 1)
-            markers[index!] = marker
-            self.map.invalidate()
+        do {
+            let index = markers.firstIndex { marker in
+                let isEq = try? marker.location.isEqual(rhs: oldlocation)
+                return marker.location == oldlocation || (isEq != nil && isEq!)
+            }
+            
+            if index != nil  {
+                var marker = markers[index!]
+                let config = marker.markerConfiguration.copyWith(icon: icon,iconSize: iconSize, angle: angle, anchor: anchor,scaleType: scaleType)
+                marker.updateMarker(newLocation: newlocation, configuration: config)
+                let mcIcon = self.iconLayerInterface!.getIcons()[marker.getIconIndex()!]
+                self.iconLayerInterface?.remove(mcIcon)
+                self.iconLayerInterface?.add(marker.createMapIcon())
+                marker.setIconIndex(index: iconLayerInterface!.getIcons().count - 1)
+                markers[index!] = marker
+                self.map.invalidate()
+            }
         }
     }
     
