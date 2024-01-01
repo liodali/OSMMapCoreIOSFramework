@@ -138,6 +138,9 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         if let handler = userLocationHandler, locations.last != nil && locations.last?.coordinate != nil {
             handler.locationChanged(userLocation: locations.last!.coordinate)
         }
+        if isSingleRetrieve {
+            isSingleRetrieve = false
+        }
     }
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
 
