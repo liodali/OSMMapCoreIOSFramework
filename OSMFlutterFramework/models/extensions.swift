@@ -56,7 +56,7 @@ extension CLLocationCoordinate2D {
         }else {
             precision
         }
-        return self.latitude - rhs.latitude <= precision && self.longitude - rhs.longitude <= precision
+        return abs(latitude - rhs.latitude) <= precision && abs(longitude - rhs.longitude) <= precision
     }
     func toMCCoord() -> MCCoord {
         MCCoord (systemIdentifier: MCCoordinateSystemIdentifiers.epsg4326(),x: longitude,
