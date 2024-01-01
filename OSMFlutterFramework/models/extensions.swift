@@ -50,6 +50,12 @@ extension CLLocationCoordinate2D {
         guard isEqualTo1eX(value: Float(precision)) else {
             throw NSError(domain: "precision is wrong value should be value like 1e4,5,6", code: 400)
         }
+        let exponent = Int(log10(precision))
+        let nPrecision = if precision.sign == FloatingPointSign.plus {
+            1 / precision
+        }else {
+            precision
+        }
         return self.latitude - rhs.latitude <= precision && self.longitude - rhs.longitude <= precision
     }
     func toMCCoord() -> MCCoord {
