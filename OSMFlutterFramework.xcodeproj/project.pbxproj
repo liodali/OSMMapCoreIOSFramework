@@ -25,6 +25,7 @@
 		90B8B8472B1281EC0021DA8F /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8432B1281EC0021DA8F /* BoundingBox.swift */; };
 		90B8B8482B1281EC0021DA8F /* ZoomConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8442B1281EC0021DA8F /* ZoomConfiguration.swift */; };
 		90CC6CEF2B2864240015A11C /* RoadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CC6CEE2B2864240015A11C /* RoadManager.swift */; };
+		90EA02682B52000500618BD5 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EA02672B52000500618BD5 /* Shape.swift */; };
 		90ED38362B1E24220012F419 /* OSMMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90ED38352B1E24220012F419 /* OSMMarker.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		90B8B8432B1281EC0021DA8F /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
 		90B8B8442B1281EC0021DA8F /* ZoomConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomConfiguration.swift; sourceTree = "<group>"; };
 		90CC6CEE2B2864240015A11C /* RoadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadManager.swift; sourceTree = "<group>"; };
+		90EA02672B52000500618BD5 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		90ED38352B1E24220012F419 /* OSMMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMMarker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,6 +134,7 @@
 				902B9F7A2B2D9DC800F86D12 /* LocationManager.swift */,
 				9073977E2B438A8800080CB8 /* ShapeManager.swift */,
 				907397802B438ADE00080CB8 /* BaseManager.swift */,
+				90EA02672B52000500618BD5 /* Shape.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -277,6 +280,7 @@
 				906C284E2B2A3F65008F013E /* PoisManager.swift in Sources */,
 				9005B1C52B1A76E000F20F5D /* extensions.swift in Sources */,
 				9005CBA22B1DC37400724B22 /* CustomTiles.swift in Sources */,
+				90EA02682B52000500618BD5 /* Shape.swift in Sources */,
 				902B9F7B2B2D9DC800F86D12 /* LocationManager.swift in Sources */,
 				907397812B438ADE00080CB8 /* BaseManager.swift in Sources */,
 				90B8B8472B1281EC0021DA8F /* BoundingBox.swift in Sources */,
