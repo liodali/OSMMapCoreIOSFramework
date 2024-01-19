@@ -3,3 +3,6 @@ build/**
 **/*.zip
 .fleet/**
 DerivedData/**
+.DS_Store
+./OSMFlutterFramework.xcodeproj/project.xcworkspace/xcuserdata/dalihamza.xcuserdatad/UserInterfaceState.xcuserstate
+*.sh
