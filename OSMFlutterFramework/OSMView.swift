@@ -88,6 +88,7 @@ public class OSMView: UIViewController,OnMapChanged {
     public let roadManager:RoadManager
     public let poisManager:PoisManager
     public let locationManager:LocationManager
+    public let shapeManager:ShapeManager
     private let rasterCallback: RasterCallbackInterface = RasterCallbackInterface()
     private let mapCameraListener:MapCameraListener = MapCameraListener(mapChanged: nil)
     public var onMapGestureDelegate: OnMapGesture? {
@@ -127,6 +128,7 @@ public class OSMView: UIViewController,OnMapChanged {
         self.markerManager =  MarkerManager(map: mapView)
         self.roadManager =  RoadManager(map: mapView)
         self.poisManager =  PoisManager(map: mapView)
+        self.shapeManager = ShapeManager(map: mapView)
         self.locationManager =  LocationManager(map: mapView, userLocationIcons: nil)
         super.init(nibName: nil, bundle: nil)
         self.mapCameraListener.setMapChanged(mapChanged: self)
@@ -185,7 +187,7 @@ public class OSMView: UIViewController,OnMapChanged {
 extension OSMView {
     
     /**
-     Responsible init OSMMap
+     Responsible init OSMMap,its mandetory to call this method to initialize properly the map
      */
     public func initOSMMap(tile:CustomTiles? = nil) {
         self.rasterLayer?.setCallbackHandler(rasterCallback)
@@ -196,6 +198,7 @@ extension OSMView {
         self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoomConfiguration.initZoom), animated: false)
         self.roadManager.initRoadManager()
         self.markerManager.initRoadManager()
+        self.shapeManager.initShapeManager()
     }
     /**
      Responsible set area Limit for camera of MapView
