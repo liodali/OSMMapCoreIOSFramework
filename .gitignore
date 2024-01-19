@@ -4,3 +4,4 @@ build/**
 .fleet/**
 DerivedData/**
 .DS_Store
+**/UserInterfaceState.xcuserstate
