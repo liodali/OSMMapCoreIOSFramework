@@ -8,44 +8,63 @@
 import Foundation
 @_implementationOnly import MapCore
 import MapKit
+
 public class ShapeManager:BaseManager,Manager {
    
-    
-     override init(map: MCMapView) {
+    final let polygonLayer:MCPolygonLayerInterface? = MCPolygonLayerInterface.create()
+    private let shapeBorderLayer = MCLineLayerInterface.create()
+    override init(map: MCMapView) {
         super.init(map: map)
     }
-    
-    public func drawRectShape(center:CLLocationCoordinate2D,radius:Double,configuration:ShapeConfiguration){
-        
+    func initShapeManager(){
+        self.map.insert(layer: shapeBorderLayer?.asLayerInterface(), at: 1)
+        self.map.insert(layer: polygonLayer?.asLayerInterface(), at: 2)
+        polygonLayer?.setLayerClickable(false)
+        shapeBorderLayer?.setLayerClickable(false)
+    }
+    public func drawShape(key:String,shape:PShape){
+          if  shape.style.borderWidth > 0 {
+              let polygonBorder =  (shape as! Shape).createBorderShape(id: key)
+              shapeBorderLayer?.add(polygonBorder)
+        }
+        let polygon = (shape as! Shape).createShape(id: key, hasBorder:false)
+        polygonLayer?.add(polygon)
     }
     
-    public func drawCircleShape(center:CLLocationCoordinate2D,radius:Double,configuration:ShapeConfiguration){
-        
-    }
-    
-    public func deleteShape(center:CLLocationCoordinate2D){
-        
+    public func deleteShape(ckey:String){
+      let poly = polygonLayer?.getPolygons().first { polygon in
+            polygon.identifier == ckey
+        }
+        if let shape = poly {
+            let polyBorder = shapeBorderLayer?.getLines().first { polygon in
+                  polygon.getIdentifier() == "\(ckey)-border"
+            }
+            polygonLayer?.remove(shape)
+            if let shapeBorder = polyBorder {
+                shapeBorderLayer?.remove(shapeBorder)
+            }
+        }
     }
     
     public  func hideAll() {
-        <#code#>
+        polygonLayer?.asLayerInterface()?.hide()
     }
     
     public  func hide(location: CLLocationCoordinate2D) {
-        <#code#>
+        
     }
     
     public  func show(location: CLLocationCoordinate2D) {
-        <#code#>
+        polygonLayer?.asLayerInterface()?.show()
     }
     
     public  func showAll() {
-        <#code#>
+        
     }
     
     
 }
-public struct ShapeConfiguration {
+public struct ShapeStyleConfiguration {
     let filledColor:UIColor
     let borderColor:UIColor
     let borderWidth:Double

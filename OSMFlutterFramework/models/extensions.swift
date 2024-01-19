@@ -9,7 +9,8 @@ import Foundation
 import MapKit
 @_implementationOnly import MapCore
 
-
+let RADIUS_EARTH = 6378137.0
+let deg2rad = Double.pi / 180.0
 public func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
     return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
 }
@@ -65,6 +66,33 @@ extension CLLocationCoordinate2D {
     func id()->String {
         "\(latitude),\(longitude)"
     }
+    public func distance(other:CLLocationCoordinate2D) -> Double {
+        
+        let lat1 = deg2rad * latitude
+        let lat2 = deg2rad * other.latitude
+        let lon1 = deg2rad * longitude
+        let lon2 = deg2rad * other.longitude
+        let powLats = pow(sin((lat2 - lat1) / 2), 2)
+        let powLons = pow(sin((lon2 - lon1) / 2), 2)
+        return RADIUS_EARTH * 2 * asin(min(1, sqrt(powLats + cos(lat1) * cos(lat2) * powLons)))
+    }
+    public func destinationPoint(distanceInMeter: Double , bearingInDegree: Double) -> CLLocationCoordinate2D {
+        let dist = distanceInMeter / RADIUS_EARTH
+        let brng = deg2rad * bearingInDegree
+        
+        let lat1 = deg2rad * latitude
+        let lon1 = deg2rad * longitude
+        
+        let lat2 = asin(sin(lat1) * cos(dist) + cos(lat1) * sin(dist) * cos(brng))
+        let coslat1lat2 =  cos(dist) - sin(lat1) * sin(lat2)
+        let lon2 = lon1 + atan2(sin(brng) * sin(dist) * cos(lat1), coslat1lat2)
+        
+        let lat2deg = lat2 / deg2rad
+        let lon2deg = lon2 / deg2rad
+        
+        return CLLocationCoordinate2D(latitude: lat2deg, longitude: lon2deg)
+    }
+    
 }
 extension MCCoord {
     func toCLLocation2D() -> CLLocationCoordinate2D {
