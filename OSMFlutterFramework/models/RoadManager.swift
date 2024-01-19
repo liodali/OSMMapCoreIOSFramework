@@ -157,7 +157,8 @@ public struct RoadConfiguration {
     let borderWidth:Float?
     let opacity:Float
     let lineCap:MCLineCapType
-                public init(width: Float, color: UIColor,borderWidth:Float? = nil, borderColor: UIColor? = nil,opacity:Float = 1.0,lineCap:LineCapType = LineCapType.ROUND) {
+                public init(width: Float, color: UIColor,borderWidth:Float? = nil, borderColor: UIColor? = nil,
+                            opacity:Float = 1.0,lineCap:LineCapType = LineCapType.ROUND) {
         self.width = width
         self.color = color
         self.borderWidth = borderWidth

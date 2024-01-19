@@ -17,6 +17,8 @@
 		90326E202B1D014800293AEA /* MapCoreSharedModule in Frameworks */ = {isa = PBXBuildFile; productRef = 90326E1F2B1D014800293AEA /* MapCoreSharedModule */; };
 		90326E222B1D014800293AEA /* MapCoreSharedModuleCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 90326E212B1D014800293AEA /* MapCoreSharedModuleCpp */; };
 		906C284E2B2A3F65008F013E /* PoisManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C284D2B2A3F65008F013E /* PoisManager.swift */; };
+		9073977F2B438A8800080CB8 /* ShapeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9073977E2B438A8800080CB8 /* ShapeManager.swift */; };
+		907397812B438ADE00080CB8 /* BaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907397802B438ADE00080CB8 /* BaseManager.swift */; };
 		90B8B83A2B1281BF0021DA8F /* OSMFlutterFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 90B8B8392B1281BF0021DA8F /* OSMFlutterFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		90B8B8452B1281EC0021DA8F /* OSMTileConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8402B1281EC0021DA8F /* OSMTileConfiguration.swift */; };
 		90B8B8462B1281EC0021DA8F /* OSMView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8412B1281EC0021DA8F /* OSMView.swift */; };
@@ -44,6 +46,8 @@
 		9005CBAC2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMFlutterFrameworkTests.swift; sourceTree = "<group>"; };
 		902B9F7A2B2D9DC800F86D12 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		906C284D2B2A3F65008F013E /* PoisManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoisManager.swift; sourceTree = "<group>"; };
+		9073977E2B438A8800080CB8 /* ShapeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeManager.swift; sourceTree = "<group>"; };
+		907397802B438ADE00080CB8 /* BaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseManager.swift; sourceTree = "<group>"; };
 		90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OSMFlutterFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90B8B8392B1281BF0021DA8F /* OSMFlutterFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSMFlutterFramework.h; sourceTree = "<group>"; };
 		90B8B8402B1281EC0021DA8F /* OSMTileConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSMTileConfiguration.swift; sourceTree = "<group>"; };
@@ -126,6 +130,8 @@
 				90CC6CEE2B2864240015A11C /* RoadManager.swift */,
 				906C284D2B2A3F65008F013E /* PoisManager.swift */,
 				902B9F7A2B2D9DC800F86D12 /* LocationManager.swift */,
+				9073977E2B438A8800080CB8 /* ShapeManager.swift */,
+				907397802B438ADE00080CB8 /* BaseManager.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -272,11 +278,13 @@
 				9005B1C52B1A76E000F20F5D /* extensions.swift in Sources */,
 				9005CBA22B1DC37400724B22 /* CustomTiles.swift in Sources */,
 				902B9F7B2B2D9DC800F86D12 /* LocationManager.swift in Sources */,
+				907397812B438ADE00080CB8 /* BaseManager.swift in Sources */,
 				90B8B8472B1281EC0021DA8F /* BoundingBox.swift in Sources */,
 				90ED38362B1E24220012F419 /* OSMMarker.swift in Sources */,
 				90B8B8462B1281EC0021DA8F /* OSMView.swift in Sources */,
 				9005B1C72B1A997E00F20F5D /* MarkerManager.swift in Sources */,
 				90B8B8452B1281EC0021DA8F /* OSMTileConfiguration.swift in Sources */,
+				9073977F2B438A8800080CB8 /* ShapeManager.swift in Sources */,
 				90CC6CEF2B2864240015A11C /* RoadManager.swift in Sources */,
 				90B8B8482B1281EC0021DA8F /* ZoomConfiguration.swift in Sources */,
 			);

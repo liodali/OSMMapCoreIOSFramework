@@ -12,10 +12,10 @@ import MapKit
 
 public class BoundingBox: Equatable {
    
-    public   let north:Double
-    public   let west:Double
-    public   let east:Double
-    public   let south:Double
+    public let north:Double
+    public let west:Double
+    public let east:Double
+    public let south:Double
     
     public  init(north: Double = 85.0, west: Double = -180.0, east: Double = 180.0, south: Double = -85.0) {
         self.north = north
@@ -32,6 +32,21 @@ public class BoundingBox: Equatable {
     
     public static func == (lhs: BoundingBox, rhs: BoundingBox) -> Bool {
         lhs.north == rhs.north && lhs.south == rhs.south && lhs.east == rhs.east && lhs.west == rhs.west
+    }
+    
+    func centerLatitude()-> Double {
+        (north + south) / 2.0
+    }
+    func centerLongitude()-> Double {
+      var lon =  (west + east) / 2.0
+        if east < west {
+            lon += 180.0
+        }
+        return min(max(lon,-180.0), 180.0)
+    }
+    
+    public func center() -> CLLocationCoordinate2D {
+        CLLocationCoordinate2D(latitude: centerLatitude(), longitude: centerLongitude())
     }
    
 }
