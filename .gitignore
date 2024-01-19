@@ -4,4 +4,4 @@ build/**
 .fleet/**
 DerivedData/**
 .DS_Store
-**/UserInterfaceState.xcuserstate
+OSMFlutterFramework.xcodeproj/project.xcworkspace/xcuserdata/dalihamza.xcuserdatad/UserInterfaceState.xcuserstate
