@@ -23,7 +23,7 @@ public class MarkerManager {
         markerHandler = IconLayerHander(nil)
        
     }
-    func initRoadManager(){
+    func initMarkerManager(){
         self.map.add(layer: iconLayerInterface?.asLayerInterface())
         iconLayerInterface?.setLayerClickable(true)
         iconLayerInterface?.setCallbackHandler(markerHandler)

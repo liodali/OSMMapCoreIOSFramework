@@ -197,7 +197,7 @@ extension OSMView {
         self.mapView.insert(layer: rasterLayer?.asLayerInterface(), at: 0)
         self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoomConfiguration.initZoom), animated: false)
         self.roadManager.initRoadManager()
-        self.markerManager.initRoadManager()
+        self.markerManager.initMarkerManager()
         self.shapeManager.initShapeManager()
     }
     /**

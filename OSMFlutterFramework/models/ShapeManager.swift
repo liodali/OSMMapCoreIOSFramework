@@ -8,17 +8,22 @@
 import Foundation
 @_implementationOnly import MapCore
 import MapKit
-
+enum ShapeTypes {
+    case Rect
+    case Circle
+}
 public class ShapeManager:BaseManager,Manager {
    
     final let polygonLayer:MCPolygonLayerInterface? = MCPolygonLayerInterface.create()
     private let shapeBorderLayer = MCLineLayerInterface.create()
+    private var shapes = [String:ShapeTypes]()
     override init(map: MCMapView) {
         super.init(map: map)
     }
     func initShapeManager(){
         self.map.insert(layer: shapeBorderLayer?.asLayerInterface(), at: 1)
-        self.map.insert(layer: polygonLayer?.asLayerInterface(), at: 2)
+        //self.map.insert(layer: polygonLayer?.asLayerInterface(), at: 1)
+        self.map.insert(layer: polygonLayer?.asLayerInterface(), above: shapeBorderLayer?.asLayerInterface())
         polygonLayer?.setLayerClickable(false)
         shapeBorderLayer?.setLayerClickable(false)
     }
@@ -27,7 +32,13 @@ public class ShapeManager:BaseManager,Manager {
               let polygonBorder =  (shape as! Shape).createBorderShape(id: key)
               shapeBorderLayer?.add(polygonBorder)
         }
-        let polygon = (shape as! Shape).createShape(id: key, hasBorder:false)
+        var polygon = (shape as! Shape).createShape(id: key, hasBorder:false)
+        if shape is RectShapeOSM {
+            shapes.updateValue(ShapeTypes.Rect, forKey: key)
+        }else {
+            shapes.updateValue(ShapeTypes.Circle, forKey: key)
+
+        }
         polygonLayer?.add(polygon)
     }
     
@@ -46,6 +57,35 @@ public class ShapeManager:BaseManager,Manager {
         }
     }
     
+    public func deleteAllShapes(){
+        shapeBorderLayer?.clear()
+        polygonLayer?.clear()
+    }
+    public func deleteAllCircles(){
+        deleteAllCustom(shapeTypes: ShapeTypes.Circle)
+    }
+    public func deleteAllRect(){
+        deleteAllCustom(shapeTypes: ShapeTypes.Rect)
+    }
+    func deleteAllCustom(shapeTypes:ShapeTypes){
+        let shapes =  shapes.filter { shape in
+            shape.value == shapeTypes
+        }
+        let shapesKeys = shapes.keys
+        let lines = shapeBorderLayer?.getLines().filter { border in
+            shapesKeys.contains(border.getIdentifier().split(separator: "-").first!.base)
+        }
+        lines?.forEach { lineBorder in
+            shapeBorderLayer?.remove(lineBorder)
+        }
+        let polygons = polygonLayer?.getPolygons().filter { polygon in
+            shapesKeys.contains(polygon.identifier)
+        }
+        polygons?.forEach { shape in
+            polygonLayer?.remove(shape)
+        }
+        
+    }
     public  func hideAll() {
         polygonLayer?.asLayerInterface()?.hide()
     }

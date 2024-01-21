@@ -126,7 +126,7 @@ public class RectShapeOSM:Shape {
                                             opacity: 1.0,
                                             blur: 0,
                                             widthType: .SCREEN_PIXEL,
-                                           width:  Float(style.borderWidth),
+                                            width:  Float(style.borderWidth),
                                             dashArray: [1,1],
                                             lineCap: MCLineCapType.ROUND
                                         )
