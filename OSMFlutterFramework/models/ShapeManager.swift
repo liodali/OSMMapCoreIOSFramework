@@ -8,7 +8,7 @@
 import Foundation
 @_implementationOnly import MapCore
 import MapKit
-enum ShapeTypes {
+public enum ShapeTypes {
     case Rect
     case Circle
 }
