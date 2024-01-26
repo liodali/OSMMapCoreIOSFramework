@@ -73,8 +73,11 @@ public class ShapeManager:BaseManager,Manager {
         }
         let shapesKeys = shapes.keys
         let lines = shapeBorderLayer?.getLines().filter { border in
-            let key = String(border.getIdentifier().split(separator: "-").first!)
-            return shapesKeys.contains(key)
+            let key = border.getIdentifier()
+            
+            return  shapesKeys.first{ shK in
+                key.contains(shK)
+            } != nil //shapesKeys.contains(key)
         }
         lines?.forEach { lineBorder in
             shapeBorderLayer?.remove(lineBorder)
