@@ -106,6 +106,10 @@ public class MarkerManager {
     }
 }
 class IconLayerHander:MCIconLayerCallbackInterface {
+    func onLongPress(_ icons: [MCIconInfoInterface]) -> Bool {
+        return true
+    }
+    
     private var markerHandler: MapMarkerHandler?
     var skipHandler: Bool = false
     init(_ markerHandler: MapMarkerHandler? = nil) {

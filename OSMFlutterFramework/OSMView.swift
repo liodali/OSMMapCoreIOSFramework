@@ -223,7 +223,7 @@ extension OSMView {
      */
     public func moveToByBoundingBox(bounds: BoundingBox,animated:Bool){
         let mcRectCoord = bounds.toMCRectCoord()
-        self.mapView.camera.move(toBoundingBox: mcRectCoord, paddingPc: Float(0.1), animated: animated, maxZoom: nil)
+        self.mapView.camera.move(toBoundingBox: mcRectCoord, paddingPc: Float(0.1), animated: animated, minZoom: nil, maxZoom: nil)
     }
     /**
      Responsible  change Tiles of the map

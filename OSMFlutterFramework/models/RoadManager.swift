@@ -72,15 +72,18 @@ public class RoadManager {
                                                    style: MCLineStyle(
                                                     color: MCColorStateList(normal: configuration.borderColor!.mapCoreColor,
                                                        highlighted: configuration.borderColor!.mapCoreColor),
-                                                       gapColor: MCColorStateList(normal: configuration.borderColor!.mapCoreColor,
-                                                       highlighted: configuration.borderColor!.mapCoreColor),
-                                                       opacity: configuration.opacity,
-                                                       blur: 0,
-                                                       widthType: .SCREEN_PIXEL,
-                                                       width: configuration.width + configuration.borderWidth!,
-                                                       dashArray: [1,1],
-                                                       lineCap: configuration.lineCap
-                                                   )
+                                                    gapColor: MCColorStateList(normal: configuration.borderColor!.mapCoreColor,
+                                                    highlighted: configuration.borderColor!.mapCoreColor),
+                                                    opacity: configuration.opacity,
+                                                    blur: 0,
+                                                    widthType: .SCREEN_PIXEL,
+                                                    width: configuration.width + configuration.borderWidth!,
+                                                    dashArray: [1,1],
+                                                    lineCap: configuration.lineCap,
+                                                    offset:0.0,
+                                                    dotted: false,
+                                                    dottedSkew: Float(0)
+                                        )
             )
            lineBorderLayer?.add(poylineBorder)
         }
@@ -89,15 +92,18 @@ public class RoadManager {
                                                style: MCLineStyle(
                                                 color: MCColorStateList(normal: configuration.color.mapCoreColor,
                                                    highlighted: configuration.color.mapCoreColor),
-                                                   gapColor: MCColorStateList(normal: configuration.color.mapCoreColor,
-                                                   highlighted: configuration.color.mapCoreColor),
-                                                   opacity: configuration.opacity,
-                                                   blur: 0,
-                                                   widthType: .SCREEN_PIXEL,
-                                                   width: configuration.width,
-                                                   dashArray: [1,1],
-                                                   lineCap: configuration.lineCap
-                                               )
+                                                gapColor: MCColorStateList(normal: configuration.color.mapCoreColor,
+                                                highlighted: configuration.color.mapCoreColor),
+                                                opacity: configuration.opacity,
+                                                blur: 0,
+                                                widthType: .SCREEN_PIXEL,
+                                                width: configuration.width,
+                                                dashArray: [1,1],
+                                                lineCap: configuration.lineCap,
+                                                offset:0.0,
+                                                dotted: false,
+                                                dottedSkew: Float(0)
+                                        )
                            )
         lineLayer?.add(poyline)
         roads.append(Road(id: id, lineLayer: poyline))

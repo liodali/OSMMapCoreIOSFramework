@@ -127,14 +127,14 @@ public struct MarkerIconPoi {
                                      coordinate: mcCoord,
                                      texture: texture,
                                      iconSize: iconSize,
-                                           scale: configuration.scaleType.getValue(),
+                                            scale: configuration.scaleType.getValue(), blendMode: .NORMAL,
                                            iconAnchor: MCVec2F(x: Float(configuration.anchor!.x), y: Float(configuration.anchor!.y)))
         }
         return  MCIconFactory.createIcon(location.id(),
                                  coordinate: mcCoord,
                                  texture: texture,
                                  iconSize: iconSize,
-                                 scale: configuration.scaleType.getValue())
+                                         scale: configuration.scaleType.getValue(), blendMode: .NORMAL)
     }
     mutating func updateIcon(configuration: MarkerConfiguration){
         self.configuration = configuration
