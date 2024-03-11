@@ -27,14 +27,17 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     private var isSingleRetrieve = false
     private var enableLocation = false
     private var isTracking = false
-    private var userLocationIcons:UserLocationConfiguration
+    private var updateIcon = false
+    private(set) var userLocationIconConfiguration:UserLocationConfiguration
     private let iconLayer = MCIconLayerInterface.create()
     private var userMarker:Marker?
+    private var userMCCoord:MCCoord?
     private var controlMapFromOutSide = false
+    private var iconUserMarkerMap:MCIconInfoInterface? = nil
     init(map: MCMapView,userLocationIcons:UserLocationConfiguration?) {
         self.map = map
         self.locationManager = CLLocationManager()
-        self.userLocationIcons = userLocationIcons ?? UserLocationConfiguration(
+        self.userLocationIconConfiguration = userLocationIcons ?? UserLocationConfiguration(
             userIcon: LocationManager.pinIcon(),
             directionIcon: LocationManager.directionIcon()
         )
@@ -44,7 +47,11 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         self.map.insert(layer: iconLayer?.asLayerInterface(), at: 3)
     }
     public func setUserLocationIcons(userLocationIcons:UserLocationConfiguration) {
-        self.userLocationIcons = userLocationIcons
+        self.userLocationIconConfiguration = userLocationIcons
+        if userMarker != nil {
+            userMarker?.updateMarker(newLocation: nil, configuration: userLocationIconConfiguration.userIcon)
+        }
+        updateIcon = true
     }
     public func requestSingleLocation() {
            checkLocationAuthorization()
@@ -109,30 +116,46 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         self.controlMapFromOutSide = false
         enableLocation = false
     }
+    public func moveToUserLocation(animated:Bool = true){
+        self.map.camera.move(toCenterPosition: userMCCoord!, animated: animated)
+    }
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if locations.last != nil && locations.last?.coordinate != nil && !isSingleRetrieve {
-            let mccoord = locations.last!.coordinate.toMCCoordEpsg3857()
+            userMCCoord = locations.last!.coordinate.mcCoord
             if (!controlMapFromOutSide){
-                self.map.camera.move(toCenterPosition: mccoord, animated: true)
+                self.map.camera.move(toCenterPosition: userMCCoord!, animated: true)
             }
             if isTracking {
                 if iconLayer != nil && iconLayer!.getIcons().isEmpty {
                     userMarker = Marker(location: locations.last!.coordinate, 
                                         markerConfiguration: MarkerConfiguration(
-                                            icon: userLocationIcons.userIcon.icon, iconSize: userLocationIcons.userIcon.iconSize, angle: nil, anchor: userLocationIcons.userIcon.anchor
+                                            icon: userLocationIconConfiguration.userIcon.icon,
+                                            iconSize: userLocationIconConfiguration.userIcon.iconSize,
+                                            angle: nil,
+                                            anchor: userLocationIconConfiguration.userIcon.anchor
                                         )
                     )
-                    iconLayer?.add(userMarker?.createMapIcon()!)
+                    addUserMakerToMap()
+                }
+                if updateIcon {
+                    iconLayer?.remove(iconUserMarkerMap)
+                    updateIcon = false
                 }
                 let angle = manager.heading?.trueHeading
                 if (angle != nil && angle != 0) {
-                    let configuration = userMarker!.markerConfiguration.copyWith(icon: userLocationIcons.directionIcon?.icon,
-                                                                                 iconSize: userLocationIcons.directionIcon?.iconSize,
-                                                                                 angle: Float(angle!), anchor:
-                                                                                userLocationIcons.directionIcon?.anchor)
+                    iconLayer?.remove(iconUserMarkerMap)
+                    let configuration = userMarker!.markerConfiguration.copyWith(
+                        icon: userLocationIconConfiguration.directionIcon?.icon,
+                        iconSize: userLocationIconConfiguration.directionIcon?.iconSize,
+                        angle: Float(angle!),
+                        anchor: userLocationIconConfiguration.directionIcon?.anchor
+                    )
                     userMarker?.updateMarker(newLocation:nil, configuration: configuration)
+                    addUserMakerToMap()
                 }
-                iconLayer?.getIcons().first?.setCoordinate(mccoord)
+                iconLayer?.getIcons().first?.setCoordinate(userMCCoord!)
+                iconLayer?.invalidate()
+                map.invalidate()
             }
         }
         if let handler = userLocationHandler, locations.last != nil && locations.last?.coordinate != nil {
@@ -176,6 +199,11 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
          let icon = (UIImage(systemName: "location.north.fill") ?? UIImage()).withTintColor(.black)
         return MarkerConfiguration(icon: icon, iconSize: nil, angle: nil, anchor: nil)
        }
+    
+    private func addUserMakerToMap() {
+        iconUserMarkerMap = userMarker?.createMapIcon(mccoord: userMCCoord)!
+        iconLayer?.add(iconUserMarkerMap)
+    }
 
 }
 public struct UserLocationConfiguration {
