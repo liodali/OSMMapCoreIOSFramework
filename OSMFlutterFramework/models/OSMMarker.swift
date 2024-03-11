@@ -94,7 +94,7 @@ extension Marker {
     }
     
     
-   mutating func createMapIcon()-> MCIconInfoInterface? {
+    mutating func createMapIcon(mccoord:MCCoord? = nil)-> MCIconInfoInterface? {
         let texture = markerConfiguration.icon.toTexture(angle: markerConfiguration.angle ?? 0)
         let iconSize = if let iconSize = markerConfiguration.iconSize {
             MCVec2F(x:Float(iconSize.x),y:Float(iconSize.y))
@@ -102,7 +102,7 @@ extension Marker {
             MCVec2F(x: Float(texture.getImageWidth()), y: Float(texture.getImageHeight()))
         }
        // MCVec2F(x:Float(markerConfiguration.iconSize.x),y:Float(markerConfiguration.iconSize.y))
-        let location = self.location.toMCCoordEpsg3857()
+        let location = mccoord ?? self.location.mcCoord //.toMCCoordEpsg3857()
         if markerConfiguration.anchor != nil {
            return MCIconFactory.createIcon(withAnchor: id,
                                      coordinate: location,

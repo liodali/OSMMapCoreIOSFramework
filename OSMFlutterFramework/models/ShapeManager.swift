@@ -32,7 +32,7 @@ public class ShapeManager:BaseManager,Manager {
               let polygonBorder =  (shape as! Shape).createBorderShape(id: key)
               shapeBorderLayer?.add(polygonBorder)
         }
-        var polygon = (shape as! Shape).createShape(id: key, hasBorder:false)
+        let polygon = (shape as! Shape).createShape(id: key, hasBorder:false)
         if shape is RectShapeOSM {
             shapes.updateValue(ShapeTypes.Rect, forKey: key)
         }else {
@@ -95,7 +95,7 @@ public class ShapeManager:BaseManager,Manager {
     }
     
     public  func hide(location: CLLocationCoordinate2D) {
-        
+        polygonLayer?.asLayerInterface()?.hide()
     }
     
     public  func show(location: CLLocationCoordinate2D) {
@@ -103,7 +103,7 @@ public class ShapeManager:BaseManager,Manager {
     }
     
     public  func showAll() {
-        
+        polygonLayer?.asLayerInterface()?.show()
     }
     
     

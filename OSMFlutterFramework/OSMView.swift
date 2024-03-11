@@ -169,13 +169,12 @@ public class OSMView: UIViewController,OnMapChanged {
         fatalError("init(coder:) has not been implemented")
     }
     func getZoomFromZoomIdentifier(zoom:Int) -> Double {
-        if zoom < zoomConfiguration.minZoom && zoom > zoomConfiguration.maxZoom {
-            return 139770566.007
+        if zoom < zoomConfiguration.minZoom {
+            return OSMTiledLayerConfig.zoomIdentifierLevel[zoomConfiguration.minZoom]!
+        } else if zoom > zoomConfiguration.maxZoom {
+            return  OSMTiledLayerConfig.zoomIdentifierLevel[zoomConfiguration.maxZoom]!
         }
-       return osmTiledConfiguration.getZoomLevelInfos().first { level in
-            level.zoomLevelIdentifier == zoom
-            
-        }?.zoom ?? 139770566.007
+       return OSMTiledLayerConfig.zoomIdentifierLevel[zoom] ?? 139770566.007
     }
     
     
@@ -246,35 +245,37 @@ extension OSMView {
         let zoom =  self.mapView.camera.getZoom()
         return osmTiledConfiguration.getZoomIdentifierFromZoom(zoom: zoom) ?? Int32(zoomConfiguration.maxZoom)
     }
-    public func zoomIn(step:Int?) {
+    public func zoomIn(step:Int?,animated:Bool = true) {
         let currentZoom = zoom()
         if( currentZoom == zoomConfiguration.maxZoom){
             return
         }
         let stepZoom = step ?? zoomConfiguration.step
         let nextZoom = if Int(currentZoom) + stepZoom > zoomConfiguration.maxZoom {
-            zoomConfiguration.maxZoom
+            getZoomFromZoomIdentifier(zoom: zoomConfiguration.maxZoom)
         }else{
-            Int(currentZoom) + stepZoom
+            getZoomFromZoomIdentifier(zoom: Int(currentZoom) + stepZoom)
         }
-        self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: nextZoom), animated: true)
+        self.mapView.camera.setZoom(nextZoom, animated: animated)
     }
-    public func zoomOut(step:Int?) {
+    public func zoomOut(step:Int?,animated:Bool = true) {
         let currentZoom = zoom()
         if( currentZoom == zoomConfiguration.minZoom){
             return
         }
         let stepZoom = step ?? zoomConfiguration.step
-        let nextZoom = if Int(currentZoom) - stepZoom < zoomConfiguration.minZoom {
-            zoomConfiguration.minZoom
+       
+        let nextZoom:Double = if Int(currentZoom) + stepZoom > zoomConfiguration.maxZoom {
+            getZoomFromZoomIdentifier(zoom: zoomConfiguration.maxZoom)
         }else{
-            Int(currentZoom) - stepZoom
+            getZoomFromZoomIdentifier(zoom: Int(currentZoom) - stepZoom)
         }
-        self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: nextZoom), animated: true)
+        self.mapView.camera.setZoom(nextZoom, animated: animated)
     }
-    public func setZoom(zoom:Int) {
-        if zoom >= zoomConfiguration.minZoom || zoom <= zoomConfiguration.maxZoom {
-            self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoom), animated: true)
+    public func setZoom(zoom:Int,animated:Bool = true) {
+        if zoom >= zoomConfiguration.minZoom && zoom <= zoomConfiguration.maxZoom {
+            let nzoomLevel = getZoomFromZoomIdentifier(zoom: zoom)
+            self.mapView.camera.setZoom(nzoomLevel, animated: animated)
         }
     }
     public func getBoundingBox()->BoundingBox {
@@ -283,8 +284,8 @@ extension OSMView {
     public func enableRotation(enable:Bool) {
         self.mapView.camera.setRotationEnabled(enable)
     }
-    public func setRotation(angle:Double) {
-        self.mapView.camera.setRotation(Float(angle), animated: true)
+    public func setRotation(angle:Double,animated:Bool = true) {
+        self.mapView.camera.setRotation(Float(angle), animated: animated)
     }
     public func center()->CLLocationCoordinate2D {
         self.mapView.camera.getCenterPosition().toCLLocation2D()

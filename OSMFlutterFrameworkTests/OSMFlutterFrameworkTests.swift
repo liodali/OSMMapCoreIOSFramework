@@ -48,6 +48,11 @@ final class OSMFlutterFrameworkTests: XCTestCase {
         let zoom = mapConfig.getZoomIdentifierFromZoom(zoom: zoomLevel)
         XCTAssertTrue(zoom == 15)
     }
+    func testZoomIdentifierLevel() throws {
+        let zoomLevel = 17061.8366708
+        let zLvel = OSMTiledLayerConfig.zoomIdentifierLevel[15]
+        XCTAssertTrue(zLvel == zoomLevel)
+    }
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.

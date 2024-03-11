@@ -41,8 +41,14 @@ extension MCRectCoord {
 }
 extension CLLocationCoordinate2D {
      func toMCCoordEpsg3857()-> MCCoord {
-        MCCoord(systemIdentifier: MCCoordinateSystemIdentifiers.epsg3857(),  x: (longitude * 20037508.34) / 180,
-                y: ((log(tan(((90 + latitude) * Double.pi) / 360)) / (Double.pi / 180)) * 20037508.34) / 180, z: 10.0)
+      let x = (longitude * 20037508.34) / 180
+      let preY = (log(tan(((90 + latitude) * Double.pi) / 360)) / (Double.pi / 180))
+      let y = (preY * 20037508.34) / 180
+      return MCCoord(systemIdentifier: MCCoordinateSystemIdentifiers.epsg3857(),
+                     x: x,
+                     y: y,
+                     z: 0.0
+          )
     }
     /**
       this function check if current Location is equal to [rhs:CLLocationCoordinate2D] with precision, note that precision should be between [1e2 .. 1e8]
@@ -61,7 +67,7 @@ extension CLLocationCoordinate2D {
     }
     func toMCCoord() -> MCCoord {
         MCCoord (systemIdentifier: MCCoordinateSystemIdentifiers.epsg4326(),x: longitude,
-                 y: latitude,z: 10.0)
+                 y: latitude,z: 0.0)
     }
     func id()->String {
         "\(latitude),\(longitude)"

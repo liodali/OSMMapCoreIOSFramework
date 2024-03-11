@@ -19,15 +19,31 @@ public struct OSMMapConfiguration {
 }
 class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
    
-    
-    func getCoordinateSystemIdentifier() -> Int32 {
-        MCCoordinateSystemIdentifiers.epsg3857()
-    }
-    
-   
-    
     private var tile:String
     let configuration:OSMMapConfiguration
+    static let zoomIdentifierLevel = [
+        0:559082264.029,
+        1:279541132.015,
+        2:139770566.007,
+        3:69885283.0036,
+        4:34942641.5018,
+        5:17471320.7509,
+        6:8735660.37545,
+        7:4367830.18773,
+        8:2183915.09386,
+        9:1091957.54693,
+       10:545978.773466,
+       11:272989.386733,
+       12:136494.693366,
+       13:68247.3466832,
+       14:34123.6733416,
+       15:17061.8366708,
+       16:8530.91833540,
+       17:4265.45916770,
+       18:2132.72958385,
+       19:1066.36479193,
+       20:533.18239597,
+    ]
     init(tileURL:String="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",configuration:OSMMapConfiguration = OSMMapConfiguration()) {
         tile = tileURL
         self.configuration = configuration
@@ -57,6 +73,11 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
     func getExtent() -> [NSNumber]? {
         []
     }
+    func getCoordinateSystemIdentifier() -> Int32 {
+        MCCoordinateSystemIdentifiers.epsg3857()
+    }
+    
+   
     
   
     // Defines both an additional scale factor for the tiles (and if they are scaled

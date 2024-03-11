@@ -117,7 +117,7 @@ public class RectShapeOSM:Shape {
         )
         borders.append(borders.first!)
         let bordersMCCoords = borders.map { coord in
-            coord.toMCCoordEpsg3857()
+            coord.mcCoord //.toMCCoordEpsg3857()
         }
         return MCLineFactory.createLine("\(id)-border",
                                         coordinates: bordersMCCoords,
@@ -158,7 +158,7 @@ extension RectShapeOSM {
 extension Array where Element==CLLocationCoordinate2D {
     func toMCPolygonCoord()->MCPolygonCoord{
         let coords = self.map { cllocation in
-            cllocation.toMCCoordEpsg3857()
+            cllocation.mcCoord //.toMCCoordEpsg3857()
         }
         return MCPolygonCoord(positions: coords, holes: [])
        

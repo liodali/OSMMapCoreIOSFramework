@@ -121,7 +121,7 @@ public struct MarkerIconPoi {
         }else {
             MCVec2F(x: Float(texture.getImageWidth()), y: Float(texture.getImageHeight()))
         }
-        let mcCoord  = self.location.toMCCoordEpsg3857()
+        let mcCoord  = self.location.mcCoord //.toMCCoordEpsg3857()
         if configuration.anchor != nil {
             return MCIconFactory.createIcon(withAnchor: location.id(),
                                      coordinate: mcCoord,
