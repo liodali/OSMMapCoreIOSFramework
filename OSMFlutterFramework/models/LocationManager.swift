@@ -117,7 +117,10 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         enableLocation = false
     }
     public func moveToUserLocation(animated:Bool = true){
-        self.map.camera.move(toCenterPosition: userMCCoord!, animated: animated)
+        if let userMCCoord = userMCCoord {
+            self.map.camera.move(toCenterPosition: userMCCoord, animated: animated)
+        }
+        
     }
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if locations.last != nil && locations.last?.coordinate != nil && !isSingleRetrieve {
@@ -159,6 +162,9 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
             }
         }
         if let handler = userLocationHandler, locations.last != nil && locations.last?.coordinate != nil {
+            if userMCCoord == nil || userMCCoord != locations.last!.coordinate.mcCoord {
+                userMCCoord = locations.last!.coordinate.mcCoord
+            }
             handler.locationChanged(userLocation: locations.last!.coordinate)
         }
         if isSingleRetrieve {
