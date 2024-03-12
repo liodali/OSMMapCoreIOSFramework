@@ -78,12 +78,12 @@ public class OSMView: UIViewController,OnMapChanged {
     private  let zoomConfiguration:ZoomConfiguration
     private  let mapConfig = MCMapConfig(mapCoordinateSystem: MCCoordinateSystemFactory.getEpsg3857System())
 
-    private  let mapView:MCMapView
-    private  let mapTileConfiguration:OSMMapConfiguration
+    private let mapView:MCMapView
+    private let mapTileConfiguration:OSMMapConfiguration
     private var osmTiledConfiguration:OSMTiledLayerConfig!
     private var rasterLayer:MCTiled2dMapRasterLayerInterface!
     private let identifier = MCCoordinateSystemIdentifiers.epsg4326()
-
+    
     public let markerManager:MarkerManager
     public let roadManager:RoadManager
     public let poisManager:PoisManager
@@ -119,7 +119,8 @@ public class OSMView: UIViewController,OnMapChanged {
     
     
     
-    public init(rect:CGRect,location: CLLocationCoordinate2D?,zoomConfig:ZoomConfiguration,mapTileConfiguration:OSMMapConfiguration = OSMMapConfiguration()) {
+    public init(rect:CGRect,location: CLLocationCoordinate2D?,zoomConfig:ZoomConfiguration,
+                mapTileConfiguration:OSMMapConfiguration = OSMMapConfiguration(),tile:CustomTiles? = nil) {
         self.initLocation = location
         self.zoomConfiguration = zoomConfig
         self.mapTileConfiguration = mapTileConfiguration
@@ -140,11 +141,14 @@ public class OSMView: UIViewController,OnMapChanged {
         view.frame = rect
         self.mapView.backgroundColor = .gray.withAlphaComponent(CGFloat(200))
         self.mapView.camera.addListener(mapCameraListener)
+        setupRasterLayer(tile: tile)
+        self.roadManager.initRoadManager()
+        self.markerManager.initMarkerManager()
+        self.shapeManager.initShapeManager()
     }
     public override func loadView() {
         view = self.mapView
     }
-  
     func onBoundsChanged(bounds: BoundingBox, zoom: Double) {
         let center = center()
         onMapMove?.onMove(center: center, bounds: bounds,zoom: zoom)
@@ -168,17 +172,32 @@ public class OSMView: UIViewController,OnMapChanged {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
     func getZoomFromZoomIdentifier(zoom:Int) -> Double {
+       var zLevelId = zoom
         if zoom < zoomConfiguration.minZoom {
-            return OSMTiledLayerConfig.zoomIdentifierLevel[zoomConfiguration.minZoom]!
+            zLevelId = zoomConfiguration.minZoom
         } else if zoom > zoomConfiguration.maxZoom {
-            return  OSMTiledLayerConfig.zoomIdentifierLevel[zoomConfiguration.maxZoom]!
+            zLevelId =  zoomConfiguration.maxZoom
         }
-       return OSMTiledLayerConfig.zoomIdentifierLevel[zoom] ?? 139770566.007
+        let zoomId = zoomIdentifierLevel[zLevelId] /*osmTiledConfiguration.getZoomLevelInfos().first { zoomInfo in
+            print("\(zoomInfo.zoomLevelIdentifier),\(zLevelId)")
+            return zoomInfo.zoomLevelIdentifier == zLevelId
+        }?.zoom*/
+        print("zoom level id \(zoom)")
+        print("zoom \(String(describing: zoomId))")
+        return  zoomId ?? 139770566.007
     }
     
     
-    
+    func setupRasterLayer(tile:CustomTiles? = nil){
+        self.rasterLayer?.setCallbackHandler(rasterCallback)
+        if(tile != nil){
+            osmTiledConfiguration.setTileURL(tileURL: tile!.toString())
+        }
+        self.mapView.insert(layer: rasterLayer?.asLayerInterface(), at: 0)
+    }
   
     
 }
@@ -186,18 +205,12 @@ public class OSMView: UIViewController,OnMapChanged {
 extension OSMView {
     
     /**
-     Responsible init OSMMap,its mandetory to call this method to initialize properly the map
+     Responsible to init OSMMap
      */
-    public func initOSMMap(tile:CustomTiles? = nil) {
-        self.rasterLayer?.setCallbackHandler(rasterCallback)
-        if(tile != nil){
-            osmTiledConfiguration.setTileURL(tileURL: tile!.toString())
+    public func initialisationMapWithInitLocation() {
+        if let location = initLocation {
+            moveTo(location: location, zoom: zoomConfiguration.initZoom, animated: false)
         }
-        self.mapView.insert(layer: rasterLayer?.asLayerInterface(), at: 0)
-        self.mapView.camera.setZoom(getZoomFromZoomIdentifier(zoom: zoomConfiguration.initZoom), animated: false)
-        self.roadManager.initRoadManager()
-        self.markerManager.initMarkerManager()
-        self.shapeManager.initShapeManager()
     }
     /**
      Responsible set area Limit for camera of MapView
@@ -214,15 +227,15 @@ extension OSMView {
         if let izoom = zoom {
             innerZoom = getZoomFromZoomIdentifier(zoom: izoom)
         }
-        self.mapView.camera.setZoom(innerZoom, animated: false)
-        self.mapView.camera.move(toCenterPositionZoom: location.mcCoord,zoom:innerZoom, animated: animated)
+        self.mapView.camera.setZoom(innerZoom, animated: animated)
+        self.mapView.camera.move(toCenterPosition: location.mcCoord, animated: animated)
     }
     /**
      Responsible to move the camera to [location] with zoom,animation
      */
     public func moveToByBoundingBox(bounds: BoundingBox,animated:Bool){
         let mcRectCoord = bounds.toMCRectCoord()
-        self.mapView.camera.move(toBoundingBox: mcRectCoord, paddingPc: Float(0.1), animated: animated, minZoom: nil, maxZoom: nil)
+        self.mapView.camera.move(toBoundingBox: mcRectCoord, paddingPc: Float(0.1), animated: animated, /*minZoom: nil,*/ maxZoom: nil)
     }
     /**
      Responsible  change Tiles of the map
@@ -241,9 +254,9 @@ extension OSMView {
     /**
      this responsible to manage Marker for OSMView where you can add/remove/update markers
      */
-    public func zoom()-> Int32 {
+    public func zoom()-> Int {
         let zoom =  self.mapView.camera.getZoom()
-        return osmTiledConfiguration.getZoomIdentifierFromZoom(zoom: zoom) ?? Int32(zoomConfiguration.maxZoom)
+        return osmTiledConfiguration.getZoomIdentifierFromZoom(zoom: zoom) ?? Int(zoomConfiguration.maxZoom)
     }
     public func zoomIn(step:Int?,animated:Bool = true) {
         let currentZoom = zoom()
@@ -251,10 +264,10 @@ extension OSMView {
             return
         }
         let stepZoom = step ?? zoomConfiguration.step
-        let nextZoom = if Int(currentZoom) + stepZoom > zoomConfiguration.maxZoom {
+        let nextZoom = if currentZoom + stepZoom > zoomConfiguration.maxZoom {
             getZoomFromZoomIdentifier(zoom: zoomConfiguration.maxZoom)
         }else{
-            getZoomFromZoomIdentifier(zoom: Int(currentZoom) + stepZoom)
+            getZoomFromZoomIdentifier(zoom: currentZoom + stepZoom)
         }
         self.mapView.camera.setZoom(nextZoom, animated: animated)
     }
@@ -265,10 +278,10 @@ extension OSMView {
         }
         let stepZoom = step ?? zoomConfiguration.step
        
-        let nextZoom:Double = if Int(currentZoom) + stepZoom > zoomConfiguration.maxZoom {
+        let nextZoom:Double = if currentZoom - stepZoom > zoomConfiguration.maxZoom {
             getZoomFromZoomIdentifier(zoom: zoomConfiguration.maxZoom)
         }else{
-            getZoomFromZoomIdentifier(zoom: Int(currentZoom) - stepZoom)
+            getZoomFromZoomIdentifier(zoom: currentZoom - stepZoom)
         }
         self.mapView.camera.setZoom(nextZoom, animated: animated)
     }
@@ -308,3 +321,4 @@ extension OSMView {
         self.poisManager.showAll()
     }
 }
+

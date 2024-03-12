@@ -108,13 +108,14 @@ extension Marker {
                                      coordinate: location,
                                      texture: texture,
                                      iconSize: iconSize,
-                                           scale: markerConfiguration.scaleType.getValue(), blendMode: .NORMAL,
+                                           scale: markerConfiguration.scaleType.getValue(), /*blendMode: .NORMAL,*/
                                            iconAnchor: MCVec2F(x: Float(markerConfiguration.anchor!.x), y: Float(markerConfiguration.anchor!.y)))
         }
         return MCIconFactory.createIcon(id,
                                         coordinate: location,
                                         texture: texture,
                                         iconSize: iconSize,
-                                        scale: markerConfiguration.scaleType.getValue(), blendMode: .NORMAL)
+                                        scale: markerConfiguration.scaleType.getValue()
+                                        /*, blendMode: .NORMAL*/)
     }
 }
