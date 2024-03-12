@@ -105,3 +105,6 @@ echo -e "\n"
 echo $(pwd)
 mkdir -p $dir_project/build/pod
 cp -r OSMFlutterFramework.zip $dir_project/build/pod/OSMFlutterFramework-$version.zip
+
+date
+echo "build finish $1"

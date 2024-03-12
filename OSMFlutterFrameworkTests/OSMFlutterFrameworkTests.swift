@@ -50,7 +50,7 @@ final class OSMFlutterFrameworkTests: XCTestCase {
     }
     func testZoomIdentifierLevel() throws {
         let zoomLevel = 17061.8366708
-        let zLvel = OSMTiledLayerConfig.zoomIdentifierLevel[15]
+        let zLvel = zoomIdentifierLevel[15]
         XCTAssertTrue(zLvel == zoomLevel)
     }
 
