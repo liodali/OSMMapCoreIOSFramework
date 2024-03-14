@@ -51,9 +51,9 @@ public class RoadManager {
         polylineLayerHandler = LineLayerHander()
     }
     
-    func initRoadManager(){
-        self.mapView.insert(layer: lineBorderLayer?.asLayerInterface(), at: 1)
-        self.mapView.insert(layer: lineLayer?.asLayerInterface(), at: 2)
+    func initRoadManager(above:MCLayerInterface?){
+        self.mapView.insert(layer: lineBorderLayer?.asLayerInterface(), above: above)
+        self.mapView.insert(layer: lineLayer?.asLayerInterface(), above: lineBorderLayer?.asLayerInterface())
         lineLayer?.setLayerClickable(true)
         lineLayer?.setCallbackHandler(polylineLayerHandler)
         lineBorderLayer?.setLayerClickable(false)

@@ -21,7 +21,7 @@ public class ShapeManager:BaseManager,Manager {
         super.init(map: map)
     }
     func initShapeManager(){
-        self.map.insert(layer: shapeBorderLayer?.asLayerInterface(), at: 1)
+        self.map.add(layer: shapeBorderLayer?.asLayerInterface())
         //self.map.insert(layer: polygonLayer?.asLayerInterface(), at: 1)
         self.map.insert(layer: polygonLayer?.asLayerInterface(), above: shapeBorderLayer?.asLayerInterface())
         polygonLayer?.setLayerClickable(false)

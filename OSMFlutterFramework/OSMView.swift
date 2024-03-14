@@ -142,9 +142,9 @@ public class OSMView: UIViewController,OnMapChanged {
         self.mapView.backgroundColor = .gray.withAlphaComponent(CGFloat(200))
         self.mapView.camera.addListener(mapCameraListener)
         setupRasterLayer(tile: tile)
-        self.roadManager.initRoadManager()
-        self.markerManager.initMarkerManager()
+        self.roadManager.initRoadManager(above: rasterLayer?.asLayerInterface())
         self.shapeManager.initShapeManager()
+        self.markerManager.initMarkerManager()
     }
     public override func loadView() {
         view = self.mapView
