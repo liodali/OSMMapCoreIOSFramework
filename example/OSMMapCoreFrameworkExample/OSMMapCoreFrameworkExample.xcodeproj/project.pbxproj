@@ -11,7 +11,24 @@
 		904407312BA90CF80017B6FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904407302BA90CF80017B6FE /* ContentView.swift */; };
 		904407332BA90CFA0017B6FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 904407322BA90CFA0017B6FE /* Assets.xcassets */; };
 		904407362BA90CFA0017B6FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 904407352BA90CFA0017B6FE /* Preview Assets.xcassets */; };
+		904407592BA91E1E0017B6FE /* MapCoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904407582BA91E1E0017B6FE /* MapCoreView.swift */; };
+		9044075B2BA920130017B6FE /* OSMFlutterFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */; };
+		9044075C2BA920130017B6FE /* OSMFlutterFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9044075D2BA920130017B6FE /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9044075C2BA920130017B6FE /* OSMFlutterFramework.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9044072B2BA90CF80017B6FE /* OSMMapCoreFrameworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OSMMapCoreFrameworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -19,6 +36,10 @@
 		904407302BA90CF80017B6FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		904407322BA90CFA0017B6FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		904407352BA90CFA0017B6FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		904407532BA912070017B6FE /* OSMFlutterFramework.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OSMFlutterFramework.xcframework; path = ../../DerivedData/OSMFlutterFramework/Build/Products/OSMFlutterFramework.xcframework; sourceTree = "<group>"; };
+		904407572BA912300017B6FE /* OSMMapCoreFrameworkExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OSMMapCoreFrameworkExample.entitlements; sourceTree = "<group>"; };
+		904407582BA91E1E0017B6FE /* MapCoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapCoreView.swift; sourceTree = "<group>"; };
+		9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OSMFlutterFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9044075B2BA920130017B6FE /* OSMFlutterFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,6 +59,7 @@
 			children = (
 				9044072D2BA90CF80017B6FE /* OSMMapCoreFrameworkExample */,
 				9044072C2BA90CF80017B6FE /* Products */,
+				9044073C2BA90EFD0017B6FE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -51,6 +74,8 @@
 		9044072D2BA90CF80017B6FE /* OSMMapCoreFrameworkExample */ = {
 			isa = PBXGroup;
 			children = (
+				904407582BA91E1E0017B6FE /* MapCoreView.swift */,
+				904407572BA912300017B6FE /* OSMMapCoreFrameworkExample.entitlements */,
 				9044072E2BA90CF80017B6FE /* OSMMapCoreFrameworkExampleApp.swift */,
 				904407302BA90CF80017B6FE /* ContentView.swift */,
 				904407322BA90CFA0017B6FE /* Assets.xcassets */,
@@ -67,6 +92,15 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		9044073C2BA90EFD0017B6FE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */,
+				904407532BA912070017B6FE /* OSMFlutterFramework.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -77,6 +111,7 @@
 				904407272BA90CF80017B6FE /* Sources */,
 				904407282BA90CF80017B6FE /* Frameworks */,
 				904407292BA90CF80017B6FE /* Resources */,
+				9044075D2BA920130017B6FE /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -137,6 +172,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				904407592BA91E1E0017B6FE /* MapCoreView.swift in Sources */,
 				904407312BA90CF80017B6FE /* ContentView.swift in Sources */,
 				9044072F2BA90CF80017B6FE /* OSMMapCoreFrameworkExampleApp.swift in Sources */,
 			);
@@ -269,6 +305,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OSMMapCoreFrameworkExample/OSMMapCoreFrameworkExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"OSMMapCoreFrameworkExample/Preview Content\"";
@@ -287,6 +324,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = hamza.dali.OSMMapCoreFrameworkExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -298,6 +339,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OSMMapCoreFrameworkExample/OSMMapCoreFrameworkExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"OSMMapCoreFrameworkExample/Preview Content\"";
@@ -316,6 +358,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = hamza.dali.OSMMapCoreFrameworkExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:example"
+      name = "example">
+      <Group
+         location = "group:OSMMapCoreFrameworkExample"
+         name = "OSMMapCoreFrameworkExample">
+         <FileRef
+            location = "group:OSMMapCoreFrameworkExample.xcodeproj">
+         </FileRef>
+         <Group
+            location = "group:OSMMapCoreFrameworkExample"
+            name = "OSMMapCoreFrameworkExample">
+            <FileRef
+               location = "group:MapCoreView.swift">
+            </FileRef>
+            <Group
+               location = "group:Assets.xcassets"
+               name = "Assets.xcassets">
+               <Group
+                  location = "group:AppIcon.appiconset"
+                  name = "AppIcon.appiconset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+               </Group>
+               <Group
+                  location = "group:AccentColor.colorset"
+                  name = "AccentColor.colorset">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+               </Group>
+               <FileRef
+                  location = "group:Contents.json">
+               </FileRef>
+            </Group>
+            <Group
+               location = "group:Preview Content"
+               name = "Preview Content">
+               <Group
+                  location = "group:Preview Assets.xcassets"
+                  name = "Preview Assets.xcassets">
+                  <FileRef
+                     location = "group:Contents.json">
+                  </FileRef>
+               </Group>
+            </Group>
+            <FileRef
+               location = "group:OSMMapCoreFrameworkExample.entitlements">
+            </FileRef>
+            <FileRef
+               location = "group:OSMMapCoreFrameworkExampleApp.swift">
+            </FileRef>
+            <FileRef
+               location = "group:ContentView.swift">
+            </FileRef>
+         </Group>
+      </Group>
+   </Group>
+   <Group
+      location = "group:OSMFlutterFramework"
+      name = "OSMFlutterFramework">
+      <FileRef
+         location = "group:OSMFlutterFramework.h">
+      </FileRef>
+      <FileRef
+         location = "group:OSMTileConfiguration.swift">
+      </FileRef>
+      <Group
+         location = "group:models"
+         name = "models">
+         <FileRef
+            location = "group:OSMMarker.swift">
+         </FileRef>
+         <FileRef
+            location = "group:BoundingBox.swift">
+         </FileRef>
+         <FileRef
+            location = "group:MarkerManager.swift">
+         </FileRef>
+         <FileRef
+            location = "group:ZoomConfiguration.swift">
+         </FileRef>
+         <FileRef
+            location = "group:RoadManager.swift">
+         </FileRef>
+         <FileRef
+            location = "group:extensions.swift">
+         </FileRef>
+         <FileRef
+            location = "group:ShapeManager.swift">
+         </FileRef>
+         <FileRef
+            location = "group:Shape.swift">
+         </FileRef>
+         <FileRef
+            location = "group:PoisManager.swift">
+         </FileRef>
+         <FileRef
+            location = "group:BaseManager.swift">
+         </FileRef>
+         <FileRef
+            location = "group:LocationManager.swift">
+         </FileRef>
+         <FileRef
+            location = "group:CustomTiles.swift">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:OSMView.swift">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "group:OSMFlutterFramework.podspec">
+   </FileRef>
+   <FileRef
+      location = "group:OSMFlutterFramework.xcodeproj">
+   </FileRef>
+   <Group
+      location = "group:OSMFlutterFrameworkTests"
+      name = "OSMFlutterFrameworkTests">
+      <FileRef
+         location = "group:OSMFlutterFrameworkTests.swift">
+      </FileRef>
+   </Group>
+</Workspace>
