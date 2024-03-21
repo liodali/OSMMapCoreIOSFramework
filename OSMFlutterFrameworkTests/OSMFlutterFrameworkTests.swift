@@ -7,7 +7,7 @@
 
 import XCTest
 @testable import OSMFlutterFramework
-
+import MapKit
 final class OSMFlutterFrameworkTests: XCTestCase {
 
     override func setUpWithError() throws {
@@ -17,7 +17,18 @@ final class OSMFlutterFrameworkTests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
+    func testConvertMCCoordCLLocationCoordination() throws {
+        let mccoordConverted = convertEPSG3857To4326(x: 942421.0495557635, y: 6010109.745834013)
+        let p = CLLocationCoordinate2D(latitude: 47.41519494893657, longitude: 8.465912330097497)
+        XCTAssertTrue(p.latitude == mccoordConverted.lat && p.longitude == mccoordConverted.lng)
+    }
+    
+    func testCLLocationCoordinate2DIsEqual() throws {
+        let p = CLLocationCoordinate2D(latitude: 47.415194, longitude: 8.465912)
+        let p2 = CLLocationCoordinate2D(latitude: 47.41519494893657, longitude: 8.465912330097497)
+        XCTAssertTrue(((try? p.isEqual(rhs: p2, precision: 1e6)) != nil))
+    }
+    
     func testCustomTile() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
