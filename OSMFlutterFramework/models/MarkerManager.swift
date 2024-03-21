@@ -117,7 +117,7 @@ class IconLayerHander:MCIconLayerCallbackInterface {
     }
     func onClickConfirmed(_ icons: [MCIconInfoInterface]) -> Bool {
         if let handler = markerHandler, !skipHandler {
-            if icons.count == 0 {
+            if icons.count == 1 {
                 handler.onTap(location: icons.first!.getCoordinate().toCLLocation2D())
             }else {
                 icons.forEach { icon in
