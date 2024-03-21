@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
     s.name    = 'OSMFlutterFramework'
-	s.version = '0.4.3'
+	s.version = '0.4.4'
 
     s.summary           = 'Open source OSM Map use MapCore SDK'
     s.description       = 'Open source OSM Map use MapCore SDK to provide more simple APIs'
@@ -21,6 +21,8 @@ Pod::Spec.new do |s|
     s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386 arm64'}
 
     s.requires_arc = true
+    
+    s.exclude_files = ['example/**']
 
     s.vendored_frameworks = 'OSMFlutterFramework.xcframework'
     s.module_name = 'OSMFlutterFramework'
