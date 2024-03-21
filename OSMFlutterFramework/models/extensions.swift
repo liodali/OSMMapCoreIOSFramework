@@ -63,7 +63,7 @@ extension CLLocationCoordinate2D {
         }else {
             precision
         }
-        return abs(latitude - rhs.latitude) <= precision && abs(longitude - rhs.longitude) <= precision
+        return abs(latitude - rhs.latitude) <= nPrecision && abs(longitude - rhs.longitude) <= nPrecision
     }
     func toMCCoord() -> MCCoord {
         MCCoord (systemIdentifier: MCCoordinateSystemIdentifiers.epsg4326(),x: longitude,
@@ -100,15 +100,42 @@ extension CLLocationCoordinate2D {
     }
     
 }
-extension MCCoord {
-    func toCLLocation2D() -> CLLocationCoordinate2D {
-        let e = 2.7182818284
-        let preLatitude3857 = y / (20037508.34 / 180)
-        let exp = (Double.pi / 180) * preLatitude3857
+/**
+ * convertEPSG3857To4326
+ *
+ * this method used to convert x,y from MCCoord to Latitude,longitude of epsg 4326 fron epsg 3857
+ */
+func convertEPSG3857To4326(x:Double,y:Double)->(lat:Double,lng:Double){
+    let e = 20037508.34
+    let exp =   y * (Double.pi / e)
 
-        let latitude = (atan(pow(e, exp)) / (Double.pi / 360)) - 90
-        let longitude = (x * 180) / 20037508.34
-        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    let latitude = atan(pow(M_E, exp)) * 360 / Double.pi  - 90
+    let longitude = (x * 180) / e
+    return (lat:latitude,lng:longitude)
+}
+
+extension MCCoord {
+    /**
+     * toCLLocation2D
+     *
+     * this method for purpose  to convert MCCoord to CLLocationCoordinate2D where we used the clLocationCoordinate of MCCoord
+     * and we did manual conversion when guard fail we will use [convertEPSG3857To4326] for manual conversion
+     */
+    func toCLLocation2D() -> CLLocationCoordinate2D {
+        
+        guard let  convertCLLocation = self.clLocationCoordinate else {
+            if self.systemIdentifier != MCCoordinateSystemIdentifiers.epsg4326() {
+                let convert =   convertEPSG3857To4326(x: x, y: y)
+                let latitude = convert.lat
+                let longitude = convert.lng
+                return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+               
+            }
+            return CLLocationCoordinate2D(latitude: self.y, longitude: self.x)
+            
+        }
+        return convertCLLocation
+        
     }
 }
 
