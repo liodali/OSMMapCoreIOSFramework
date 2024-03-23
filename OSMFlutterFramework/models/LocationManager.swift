@@ -222,8 +222,8 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
 
 }
 public struct UserLocationConfiguration {
-    private(set) var userIcon:MarkerConfiguration
-    private(set) var directionIcon:MarkerConfiguration?
+    public private(set) var userIcon:MarkerConfiguration
+    public private(set) var directionIcon:MarkerConfiguration?
     public init(userIcon: MarkerConfiguration , directionIcon: MarkerConfiguration?) {
         self.userIcon = userIcon
         self.directionIcon = directionIcon
