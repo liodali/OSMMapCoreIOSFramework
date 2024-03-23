@@ -222,10 +222,14 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
 
 }
 public struct UserLocationConfiguration {
-    let userIcon:MarkerConfiguration
-    let directionIcon:MarkerConfiguration?
+    private(set) var userIcon:MarkerConfiguration
+    private(set) var directionIcon:MarkerConfiguration?
     public init(userIcon: MarkerConfiguration , directionIcon: MarkerConfiguration?) {
         self.userIcon = userIcon
         self.directionIcon = directionIcon
+    }
+    
+    public func copyWith(userIcon: MarkerConfiguration? = nil, directionIcon: MarkerConfiguration? = nil) -> UserLocationConfiguration{
+        return UserLocationConfiguration(userIcon: userIcon ?? self.userIcon, directionIcon: directionIcon ?? self.directionIcon)
     }
 }

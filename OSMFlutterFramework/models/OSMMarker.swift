@@ -65,10 +65,10 @@ public struct MarkerConfiguration{
         self.iconSize = iconSize
         self.scaleType = scaleType
     }
-    func copyWith(icon:UIImage? = nil,
+    public func copyWith(icon:UIImage? = nil,
                   iconSize:MarkerIconSize? = nil,
                   angle: Float? = nil,
-                  anchor: (x: Double, y: Double)? = nil,
+                  anchor: MarkerAnchor? = nil,
                   scaleType:MarkerScaleType? = nil) -> MarkerConfiguration {
         MarkerConfiguration(icon: icon ?? self.icon,iconSize: iconSize ?? self.iconSize,
                             angle: angle ?? self.angle, anchor: anchor ?? self.anchor,
