@@ -28,11 +28,12 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     private var enableLocation = false
     private var isTracking = false
     private var updateIcon = false
-    private(set) var userLocationIconConfiguration:UserLocationConfiguration
+    public private(set) var userLocationIconConfiguration:UserLocationConfiguration
     private let iconLayer = MCIconLayerInterface.create()
     private var userMarker:Marker?
     private var userMCCoord:MCCoord?
     private var controlMapFromOutSide = false
+    private var useDirectionMarker = false
     private var iconUserMarkerMap:MCIconInfoInterface? = nil
     init(map: MCMapView,userLocationIcons:UserLocationConfiguration?) {
         self.map = map
@@ -88,7 +89,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         enableLocation = true
     }
-    public func toggleTracking(controlMapFromOutSide:Bool = false) {
+    public func toggleTracking(controlMapFromOutSide:Bool = false,useDirectionMarker:Bool = false) {
         isTracking = !isTracking
         if !isTracking {
             stopLocation()
@@ -100,6 +101,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
                 locationManager.startUpdatingHeading()
             }
             self.controlMapFromOutSide = controlMapFromOutSide
+            self.useDirectionMarker = useDirectionMarker
         }
     }
     public func isTrackingEnabled()-> Bool {
@@ -115,6 +117,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         userMarker = nil
         self.controlMapFromOutSide = false
         enableLocation = false
+        self.useDirectionMarker = false
     }
     public func moveToUserLocation(animated:Bool = true){
         if let userMCCoord = userMCCoord {
@@ -128,12 +131,24 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
             if (!controlMapFromOutSide){
                 self.map.camera.move(toCenterPosition: userMCCoord!, animated: true)
             }
+            if let handler = userLocationHandler, locations.last != nil && locations.last?.coordinate != nil {
+                if userMCCoord == nil || userMCCoord != locations.last!.coordinate.mcCoord {
+                    userMCCoord = locations.last!.coordinate.mcCoord
+                }
+                handler.locationChanged(userLocation: locations.last!.coordinate)
+            }
             if isTracking {
                 if iconLayer != nil && iconLayer!.getIcons().isEmpty {
-                    userMarker = Marker(location: locations.last!.coordinate, 
+                    let iconMarker = if (useDirectionMarker && userLocationIconConfiguration.directionIcon != nil) {
+                        userLocationIconConfiguration.directionIcon!
+                    }  else  {
+                        userLocationIconConfiguration.userIcon
+                    }
+                    
+                    userMarker = Marker(location: locations.last!.coordinate,
                                         markerConfiguration: MarkerConfiguration(
-                                            icon: userLocationIconConfiguration.userIcon.icon,
-                                            iconSize: userLocationIconConfiguration.userIcon.iconSize,
+                                            icon: iconMarker.icon,
+                                            iconSize: iconMarker.iconSize,
                                             angle: nil,
                                             anchor: userLocationIconConfiguration.userIcon.anchor
                                         )
@@ -146,7 +161,6 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
                 }
                 let angle = manager.heading?.trueHeading
                 if (angle != nil && angle != 0) {
-                    iconLayer?.remove(iconUserMarkerMap)
                     let configuration = userMarker!.markerConfiguration.copyWith(
                         icon: userLocationIconConfiguration.directionIcon?.icon,
                         iconSize: userLocationIconConfiguration.directionIcon?.iconSize,
@@ -161,12 +175,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
                 map.invalidate()
             }
         }
-        if let handler = userLocationHandler, locations.last != nil && locations.last?.coordinate != nil {
-            if userMCCoord == nil || userMCCoord != locations.last!.coordinate.mcCoord {
-                userMCCoord = locations.last!.coordinate.mcCoord
-            }
-            handler.locationChanged(userLocation: locations.last!.coordinate)
-        }
+       
         if isSingleRetrieve {
             isSingleRetrieve = false
         }
