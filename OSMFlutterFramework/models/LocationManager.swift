@@ -126,17 +126,19 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         
     }
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        if let handler = userLocationHandler, locations.last != nil && locations.last?.coordinate != nil {
+            if userMCCoord == nil || userMCCoord != locations.last!.coordinate.mcCoord {
+                userMCCoord = locations.last!.coordinate.mcCoord
+            }
+            handler.locationChanged(userLocation: locations.last!.coordinate)
+        }
         if locations.last != nil && locations.last?.coordinate != nil && !isSingleRetrieve {
             userMCCoord = locations.last!.coordinate.mcCoord
             if (!controlMapFromOutSide){
                 self.map.camera.move(toCenterPosition: userMCCoord!, animated: true)
             }
-            if let handler = userLocationHandler, locations.last != nil && locations.last?.coordinate != nil {
-                if userMCCoord == nil || userMCCoord != locations.last!.coordinate.mcCoord {
-                    userMCCoord = locations.last!.coordinate.mcCoord
-                }
-                handler.locationChanged(userLocation: locations.last!.coordinate)
-            }
+            
             if isTracking {
                 if iconLayer != nil && iconLayer!.getIcons().isEmpty {
                     let iconMarker = if (useDirectionMarker && userLocationIconConfiguration.directionIcon != nil) {
