@@ -34,6 +34,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
     private var userMCCoord:MCCoord?
     private var controlMapFromOutSide = false
     private var useDirectionMarker = false
+    private var disableMarkerRotation = false
     private var iconUserMarkerMap:MCIconInfoInterface? = nil
     init(map: MCMapView,userLocationIcons:UserLocationConfiguration?) {
         self.map = map
@@ -89,7 +90,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         enableLocation = true
     }
-    public func toggleTracking(controlMapFromOutSide:Bool = false,useDirectionMarker:Bool = false) {
+    public func toggleTracking(controlMapFromOutSide:Bool = false,useDirectionMarker:Bool = false,disableMarkerRotation:Bool = false) {
         isTracking = !isTracking
         if !isTracking {
             stopLocation()
@@ -102,6 +103,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
             }
             self.controlMapFromOutSide = controlMapFromOutSide
             self.useDirectionMarker = useDirectionMarker
+            self.disableMarkerRotation = disableMarkerRotation
         }
     }
     public func isTrackingEnabled()-> Bool {
@@ -116,6 +118,7 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         iconLayer?.invalidate()
         userMarker = nil
         self.controlMapFromOutSide = false
+        self.disableMarkerRotation = false
         enableLocation = false
         self.useDirectionMarker = false
     }
@@ -162,7 +165,8 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
                     updateIcon = false
                 }
                 let angle = manager.heading?.trueHeading
-                if (angle != nil && angle != 0) {
+                if (angle != nil && angle != 0 && !disableMarkerRotation) {
+                    iconLayer?.remove(iconUserMarkerMap)
                     let configuration = userMarker!.markerConfiguration.copyWith(
                         icon: userLocationIconConfiguration.directionIcon?.icon,
                         iconSize: userLocationIconConfiguration.directionIcon?.iconSize,
