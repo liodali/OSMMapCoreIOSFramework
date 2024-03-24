@@ -200,8 +200,8 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [unowned self] in
             map.shapeManager.deleteShape(ckey: "rect")
-            //map.locationManager.requestEnableLocation()
-            //map.locationManager.toggleTracking(controlMapFromOutSide: true)
+            map.locationManager.requestEnableLocation()
+            map.locationManager.toggleTracking(controlMapFromOutSide: true,disableMarkerRotation: false)
             //map.zoomIn(step: 5)
         }
         //map.locationManager.requestEnableLocation()
