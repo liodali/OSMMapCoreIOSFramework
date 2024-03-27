@@ -310,6 +310,13 @@ extension OSMView {
             self.mapView.camera.freeze(false)
         }
     }
+    /**
+       setLocationManagerDelegate used to set delegate of LocationManager where you can your own CLLocationManagerDelegate
+        to have custom behavior
+     */
+    public func setLocationManagerDelegate(locationDelegate:CLLocationManagerDelegate?) {
+        self.locationManager.setCLLocationManager(locationDelegate: locationDelegate)
+    }
     public func hideAllLayers() {
         self.roadManager.hildeAll()
         self.markerManager.hildeAll()
