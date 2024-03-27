@@ -71,8 +71,8 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
     }
     
     
-    func locationChanged(userLocation: CLLocationCoordinate2D) {
-        print("\(userLocation)")
+    func locationChanged(userLocation: CLLocationCoordinate2D,heading:Double) {
+        print("\(userLocation),\(heading)")
         self.map.moveTo(location: userLocation, zoom: nil, animated: true)
     }
     
@@ -201,7 +201,8 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
         DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [unowned self] in
             map.shapeManager.deleteShape(ckey: "rect")
             map.locationManager.requestEnableLocation()
-            map.locationManager.toggleTracking(controlMapFromOutSide: true,disableMarkerRotation: false)
+            map.locationManager.toggleTracking(configuration: TrackConfiguration(
+                moveMap: false,controlUserMarker: false))
             //map.zoomIn(step: 5)
         }
         //map.locationManager.requestEnableLocation()
