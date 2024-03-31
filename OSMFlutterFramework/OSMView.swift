@@ -126,7 +126,7 @@ public class OSMView: UIView,OnMapChanged {
         self.mapTileConfiguration = mapTileConfiguration
        
         self.mapView = MCMapView(mapConfig: mapConfig)
-        self.mapView.frame = rect
+        //self.mapView.frame = rect
         self.markerManager =  MarkerManager(map: mapView)
         self.roadManager =  RoadManager(map: mapView)
         self.poisManager =  PoisManager(map: mapView)
@@ -149,6 +149,12 @@ public class OSMView: UIView,OnMapChanged {
         self.shapeManager.initShapeManager()
         self.markerManager.initMarkerManager()
         self.setZoom(zoom: 1)
+    }
+    public override func layoutSubviews() {
+        if frame.width != 0 && frame.height != 0 {
+            self.mapView.frame = frame
+        }
+        super.layoutSubviews()
     }
     /*public override func loadView() {
         view = self.mapView
