@@ -69,7 +69,7 @@ private class MapCameraListener:MCMapCamera2dListenerInterface {
         mapChanged?.onMapInteraction()
     }
 }
-public class OSMView: UIViewController,OnMapChanged {
+public class OSMView: UIView,OnMapChanged {
     
     
    
@@ -126,20 +126,23 @@ public class OSMView: UIViewController,OnMapChanged {
         self.mapTileConfiguration = mapTileConfiguration
        
         self.mapView = MCMapView(mapConfig: mapConfig)
+        self.mapView.frame = rect
         self.markerManager =  MarkerManager(map: mapView)
         self.roadManager =  RoadManager(map: mapView)
         self.poisManager =  PoisManager(map: mapView)
         self.shapeManager = ShapeManager(map: mapView)
         self.locationManager =  LocationManager(map: mapView, userLocationIcons: nil)
-        super.init(nibName: nil, bundle: nil)
+        super.init(frame: rect)
+        self.mapView.backgroundColor = .gray.withAlphaComponent(CGFloat(200))
+        self.addSubview(self.mapView)
         self.mapCameraListener.setMapChanged(mapChanged: self)
         self.osmTiledConfiguration = OSMTiledLayerConfig(configuration: self.mapTileConfiguration)
         self.rasterLayer = MCTiled2dMapRasterLayerInterface.create(osmTiledConfiguration,
                                                                         loaders: [MCTextureLoader()])
         rasterLayer?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
         rasterLayer?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
-        view.frame = rect
-        self.mapView.backgroundColor = .gray.withAlphaComponent(CGFloat(200))
+        //view.frame = rect
+        
         self.mapView.camera.addListener(mapCameraListener)
         setupRasterLayer(tile: tile)
         self.roadManager.initRoadManager(above: rasterLayer?.asLayerInterface())
@@ -147,9 +150,9 @@ public class OSMView: UIViewController,OnMapChanged {
         self.markerManager.initMarkerManager()
         self.setZoom(zoom: 1)
     }
-    public override func loadView() {
+    /*public override func loadView() {
         view = self.mapView
-    }
+    }*/
     func onBoundsChanged(bounds: BoundingBox, zoom: Double) {
         let center = center()
         onMapMove?.onMove(center: center, bounds: bounds,zoom: zoom)
@@ -182,13 +185,13 @@ public class OSMView: UIViewController,OnMapChanged {
         } else if zoom > zoomConfiguration.maxZoom {
             zLevelId =  zoomConfiguration.maxZoom
         }
-        let zoomId = zoomIdentifierLevel[zLevelId] /*osmTiledConfiguration.getZoomLevelInfos().first { zoomInfo in
+        let zoomId = osmTiledConfiguration.getZoomLevelInfos()[zLevelId].zoom /*osmTiledConfiguration.getZoomLevelInfos().first { zoomInfo in
             print("\(zoomInfo.zoomLevelIdentifier),\(zLevelId)")
             return zoomInfo.zoomLevelIdentifier == zLevelId
         }?.zoom*/
         print("zoom level id \(zoom)")
         print("zoom \(String(describing: zoomId))")
-        return  zoomId ?? 139770566.007
+        return  zoomId //?? 139770566.007
     }
     
     
@@ -257,7 +260,7 @@ extension OSMView {
      */
     public func zoom()-> Int {
         let zoom =  self.mapView.camera.getZoom()
-        return osmTiledConfiguration.getZoomIdentifierFromZoom(zoom: zoom) ?? Int(zoomConfiguration.maxZoom)
+        return osmTiledConfiguration.getZoomIdentifierFromZoom(zoom: zoom) ?? 1
     }
     public func zoomIn(step:Int?,animated:Bool = true) {
         let currentZoom = zoom()
