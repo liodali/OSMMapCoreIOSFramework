@@ -36,12 +36,11 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
     }*/
     
     func getTileUrl(_ x: Int32, y: Int32, t: Int32, zoom: Int32) -> String {
-        print(tile.replacingOccurrences(of: "{z}", with: "\(zoom)")
-            .replacingOccurrences(of: "{y}", with: "\(y)")
-            .replacingOccurrences(of: "{x}", with: "\(x)"))
-        return tile.replacingOccurrences(of: "{z}", with: "\(zoom)")
+        let nTile = tile.replacingOccurrences(of: "{z}", with: "\(zoom)")
             .replacingOccurrences(of: "{y}", with: "\(y)")
             .replacingOccurrences(of: "{x}", with: "\(x)")
+        print("url: \(nTile)")
+        return nTile
     }
     
     func getVectorSettings() -> MCTiled2dMapVectorSettings? {
@@ -98,7 +97,7 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
     // the layers coordinate system, the number of tiles on that level and the
     // zoom identifier used for the tile-url (see getTileUrl above) 21536.731457737689
     func getZoomLevelInfos() -> [MCTiled2dMapZoomLevelInfo] {
-        [
+        let zoomLevels:[MCTiled2dMapZoomLevelInfo] =  [
             
             .init(zoom: 279541132.015, tileWidthLayerSystemUnits: 20_037_508, numTilesX: 2, numTilesY: 2, numTilesT: 1, zoomLevelIdentifier: 1, bounds: getBounds()!),
             .init(zoom: 139770566.007, tileWidthLayerSystemUnits: 10_018_754, numTilesX: 4, numTilesY: 4, numTilesT: 1, zoomLevelIdentifier: 2, bounds: getBounds()!),
@@ -121,6 +120,8 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
             .init(zoom: 1066.36479193, tileWidthLayerSystemUnits: 76.437, numTilesX: 524_288, numTilesY: 524_288, numTilesT: 1, zoomLevelIdentifier: 19, bounds: getBounds()!),
             .init(zoom: 533.18239597, tileWidthLayerSystemUnits: 38.2185, numTilesX: 1_048_576, numTilesY: 1_048_576, numTilesT: 1, zoomLevelIdentifier: 20, bounds: getBounds()!),
         ]
+        
+        return Array(zoomLevels[0..<20])
     }
 }
 extension OSMTiledLayerConfig {

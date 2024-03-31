@@ -145,6 +145,7 @@ public class OSMView: UIViewController,OnMapChanged {
         self.roadManager.initRoadManager(above: rasterLayer?.asLayerInterface())
         self.shapeManager.initShapeManager()
         self.markerManager.initMarkerManager()
+        self.setZoom(zoom: 1)
     }
     public override func loadView() {
         view = self.mapView
@@ -227,8 +228,8 @@ extension OSMView {
         if let izoom = zoom {
             innerZoom = getZoomFromZoomIdentifier(zoom: izoom)
         }
-        self.mapView.camera.setZoom(innerZoom, animated: animated)
-        self.mapView.camera.move(toCenterPosition: location.mcCoord, animated: animated)
+       // self.mapView.camera.setZoom(innerZoom, animated: animated)
+        self.mapView.camera.move(toCenterPositionZoom: location.mcCoord,zoom: innerZoom, animated: animated)
     }
     /**
      Responsible to move the camera to [location] with zoom,animation
