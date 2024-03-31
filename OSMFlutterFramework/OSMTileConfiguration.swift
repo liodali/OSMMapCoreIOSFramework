@@ -98,7 +98,7 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
     // zoom identifier used for the tile-url (see getTileUrl above) 21536.731457737689
     func getZoomLevelInfos() -> [MCTiled2dMapZoomLevelInfo] {
         let zoomLevels:[MCTiled2dMapZoomLevelInfo] =  [
-            
+            .init(zoom: 559082264.029, tileWidthLayerSystemUnits: 40_075_016, numTilesX: 1, numTilesY: 1, numTilesT: 1, zoomLevelIdentifier: 0, bounds: getBounds()!),
             .init(zoom: 279541132.015, tileWidthLayerSystemUnits: 20_037_508, numTilesX: 2, numTilesY: 2, numTilesT: 1, zoomLevelIdentifier: 1, bounds: getBounds()!),
             .init(zoom: 139770566.007, tileWidthLayerSystemUnits: 10_018_754, numTilesX: 4, numTilesY: 4, numTilesT: 1, zoomLevelIdentifier: 2, bounds: getBounds()!),
             .init(zoom: 69885283.0036, tileWidthLayerSystemUnits: 5_009_377.1, numTilesX: 8, numTilesY: 8, numTilesT: 1, zoomLevelIdentifier: 3, bounds: getBounds()!),
