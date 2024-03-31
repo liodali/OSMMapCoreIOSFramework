@@ -79,8 +79,8 @@ public class RoadManager {
                                                     widthType: .SCREEN_PIXEL,
                                                     width: configuration.width + configuration.borderWidth!,
                                                     dashArray: [1,1],
-                                                    lineCap: configuration.lineCap/*,
-                                                    offset:0.0,
+                                                    lineCap: configuration.lineCap,
+                                                    offset:0.0/*,
                                                     dotted: false,
                                                     dottedSkew: Float(0)*/
                                         )
@@ -99,9 +99,9 @@ public class RoadManager {
                                                 widthType: .SCREEN_PIXEL,
                                                 width: configuration.width,
                                                 dashArray: [1,1],
-                                                lineCap: configuration.lineCap/*,
-                                                offset:0.0,
-                                                dotted: false,
+                                                lineCap: configuration.lineCap,
+                                                offset:0.0
+                                                /*dotted: false,
                                                 dottedSkew: Float(0)*/
                                         )
                            )

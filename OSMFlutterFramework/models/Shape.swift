@@ -71,8 +71,8 @@ extension CircleOSM {
                                             widthType: .SCREEN_PIXEL,
                                            width:  Float(style.borderWidth),
                                             dashArray: [1,1],
-                                            lineCap: MCLineCapType.ROUND/*,
-                                            offset: Float(0),
+                                            lineCap: MCLineCapType.ROUND,
+                                            offset: Float(0)/*,
                                             dotted: false,
                                             dottedSkew: Float(0)*/
                                         )
@@ -131,8 +131,8 @@ public class RectShapeOSM:Shape {
                                             widthType: .SCREEN_PIXEL,
                                             width:  Float(style.borderWidth),
                                             dashArray: [1,1],
-                                            lineCap: MCLineCapType.ROUND/*,
-                                            offset: Float(0),
+                                            lineCap: MCLineCapType.ROUND,
+                                            offset: 0.0/*,
                                             dotted: false,
                                             dottedSkew: Float(0)*/
                                         )
