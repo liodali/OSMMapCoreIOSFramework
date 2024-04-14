@@ -1,13 +1,13 @@
 {
-  "originHash" : "78ad0c98a7953394848429745b60e49da26b2dbe8548d95b8136d17574b95515",
+  "originHash" : "2fafe649039c2c148afdad6f41c791f949890fd32e896e4fda9f505b3f73b7ff",
   "pins" : [
     {
       "identity" : "djinni",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/UbiqueInnovation/djinni.git",
       "state" : {
-        "revision" : "573dd5252eb402a68e492ce42167a21a7e0886f7",
-        "version" : "1.0.6"
+        "revision" : "01dd31c42ef00a63c839b6fd20cd4895903e0215",
+        "version" : "1.0.7"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openmobilemaps/maps-core",
       "state" : {
-        "revision" : "0a3c7a736786a72346e81ae67d9a7743fb2f8f12",
-        "version" : "1.5.3"
+        "revision" : "b5a8c4f758fafcac477b41061e5cade06b50b0a0",
+        "version" : "2.0.4"
       }
     }
   ],

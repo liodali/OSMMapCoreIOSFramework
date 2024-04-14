@@ -627,8 +627,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/openmobilemaps/maps-core";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.5.3;
+				kind = exactVersion;
+				version = 2.0.4;
 			};
 		};
 		90487F792BABA4DF007393C8 /* XCRemoteSwiftPackageReference "djinni" */ = {

@@ -79,14 +79,29 @@ public class MarkerManager {
                 let isEq = try? marker.location.isEqual(rhs: location)
                 return marker.location == location || (isEq != nil && isEq!)
             }
-              if index != nil {
-                  let mcIcon = self.iconLayerInterface!.getIcons()[markers[index!].getIconIndex()!]
-                  self.iconLayerInterface?.remove(mcIcon)
-                  self.iconLayerInterface?.invalidate()
+            if index != nil {
                   markers.remove(at: index!)
-              }
+            }
+            let mcIcon =  self.iconLayerInterface!.getIcons().first { icon in
+                location ==  icon.getCoordinate().toCLLocation2D()
+            }
+            self.iconLayerInterface?.remove(mcIcon)
+            self.iconLayerInterface?.invalidate()
         }
         
+    }
+    public func removeMarkers(locations:[CLLocationCoordinate2D]) {
+        let iconsLayers = self.iconLayerInterface!.getIcons().filter { icon in
+            locations.contains { ele in
+                ele ==  icon.getCoordinate().toCLLocation2D()
+            }
+        }
+        self.iconLayerInterface?.removeList(iconsLayers)
+        markers.removeAll { m in
+            locations.contains { ele in
+                ele == m.location
+            }
+        }
     }
     public func getAllMarkers()->[CLLocationCoordinate2D]{
         markers.map { marker in

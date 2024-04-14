@@ -66,8 +66,7 @@ extension CLLocationCoordinate2D {
         return abs(latitude - rhs.latitude) <= nPrecision && abs(longitude - rhs.longitude) <= nPrecision
     }
     func toMCCoord() -> MCCoord {
-        MCCoord (systemIdentifier: MCCoordinateSystemIdentifiers.epsg4326(),x: longitude,
-                 y: latitude,z: 0.0)
+        self.mcCoord
     }
     func id()->String {
         "\(latitude),\(longitude)"
