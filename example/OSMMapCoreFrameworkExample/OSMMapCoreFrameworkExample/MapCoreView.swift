@@ -82,7 +82,7 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
     
     func onSingleTap(location: CLLocationCoordinate2D) {
         let image = UIImage(systemName: "mappin")
-        if self.location == nil {
+       // if self.location == nil {
           let marker = Marker(location: location,
                                markerConfiguration: MarkerConfiguration(icon: image!,
                                                                         iconSize: (x:Int(56.0 * UIScreen.main.nativeScale),y:Int(56.0 * UIScreen.main.nativeScale)),
@@ -90,12 +90,14 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
                                                                         anchor: (0.5,1))// (0.5,0.5))
            )
             self.map.markerManager.addMarker(marker: marker)
-        }else {
-            self.map.markerManager.updateMarker(oldlocation: self.location!, newlocation: location, icon: nil)
-        }
+       // }else {
+            //self.map.markerManager.updateMarker(oldlocation: self.location!, newlocation: location, icon: nil)
+           
+       // }
+       // self.map.markerManager.addMarker(marker: marker)
         self.location = location
 
-         
+        geos.append(location)
     }
     
     func onLongTap(location: CLLocationCoordinate2D) {
@@ -103,23 +105,60 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
     }
     
     let map:OSMView
+    var geos:[CLLocationCoordinate2D] = []
     var initMap:Bool = false
     let rect:CGRect
-    var viewStack:UIStackView? = nil
-    let buttonZoomIn = UIButton()
-    let buttonZoomOut = UIButton()
+    var viewStack:UIStackView = UIStackView(frame: CGRect(origin: CGPoint(x: 72, y: 350), size: CGSize(width: 48, height: 128)))
+    var viewStack2:UIStackView = UIStackView(frame: CGRect(origin: CGPoint(x: 350, y: 350), size: CGSize(width: 48, height: 128)))
+    let buttonZoomIn = UIButton(type: .system)
+    let buttonZoomOut = UIButton(type: .system)
+    let buttonUserLocation = UIButton(type: .system)
+    let buttonRemove = UIButton(type: .system)
+    let zoomConf = ZoomConfiguration(initZoom: 16,maxZoom: 19)
     public init(rect:CGRect) {
          self.map = OSMView(rect:rect,
                             location: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324),
-                            zoomConfig: ZoomConfiguration(initZoom: 12))
+                            zoomConfig: zoomConf)
         //map.frame = rect//CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 300, height: 300))
         self.rect = rect
         super.init(nibName: nil, bundle: nil)
-        viewStack = UIStackView(frame: CGRect(origin: CGPoint(x: 72, y: 300), size: CGSize(width: 48, height: 128)))
-        self.view.addSubview(map.view)
-        self.view.addSubview(viewStack!)
-        map.didMove(toParent: self)
+        //map.frame = rect
+        self.view.addSubview(self.map)
+        self.view.addSubview(viewStack)
+        self.view.addSubview(viewStack2)
+       
+        //map.didMove(toParent: self)
         
+        
+        buttonUserLocation.setImage((UIImage(systemName: ".location.slash") ?? UIImage()).withTintColor(.black), for: UIControl.State.normal)
+        buttonUserLocation.frame = CGRect(origin: CGPoint(x:0,y: 0), size: CGSize(width: 32,height: 56))
+        buttonUserLocation.backgroundColor = UIColor.gray
+        buttonUserLocation.translatesAutoresizingMaskIntoConstraints = true
+        buttonUserLocation.addAction(UIAction(title: "user", handler: { _ in
+            self.map.locationManager.toggleTracking(configuration: TrackConfiguration(moveMap: false,controlUserMarker: false))
+            if self.map.locationManager.isTrackingEnabled() {
+                self.buttonUserLocation.setImage((UIImage(systemName: ".location") ?? UIImage()).withTintColor(.black), for: .normal)
+            }else {
+                self.buttonUserLocation.setImage((UIImage(systemName: ".location.slash") ?? UIImage() ).withTintColor(.black), for: .normal)
+            }
+        }), for: .touchUpInside)
+        buttonRemove.setImage((UIImage(systemName: ".trash") ?? UIImage()).withTintColor(.black), for: UIControl.State.normal)
+        buttonRemove.frame = CGRect(origin: CGPoint(x:32,y: 0), size: CGSize(width: 32,height: 56))
+        buttonRemove.backgroundColor = UIColor.gray
+        buttonRemove.translatesAutoresizingMaskIntoConstraints = true
+        buttonRemove.addAction(UIAction(title: "remove location", handler: { _ in
+            //self.map.markerManager.removeMarkers(locations: self.geos)
+            for  geo in self.geos {
+                self.map.markerManager.removeMarker(location: geo)
+            }
+        }), for: .touchUpInside)
+        
+        viewStack2.alignment = .fill
+        viewStack2.distribution = .fillEqually
+        viewStack2.spacing = 8.0
+        viewStack2.axis = .vertical
+        viewStack2.addArrangedSubview(buttonUserLocation)
+        viewStack2.addArrangedSubview(buttonRemove)
         
         buttonZoomIn.setTitle("+", for: .normal)
         buttonZoomIn.frame = CGRect(x:32,y: 0,width: 48,height: 56)
@@ -137,14 +176,15 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
             self.map.zoomOut(step: 1)
         }), for: .touchUpInside)
 
-        viewStack?.alignment = .fill
-        viewStack?.distribution = .fillEqually
-        viewStack?.spacing = 8.0
-        viewStack?.axis = .vertical
+        viewStack.alignment = .fill
+        viewStack.distribution = .fillEqually
+        viewStack.spacing = 8.0
+        viewStack.axis = .vertical
         
-        viewStack?.addArrangedSubview(buttonZoomIn)
-        viewStack?.addArrangedSubview(buttonZoomOut)
-       
+        viewStack.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+        viewStack.addArrangedSubview(buttonZoomIn)
+        viewStack.addArrangedSubview(buttonZoomOut)
+        
     }
     
     override func viewDidLoad() {
@@ -158,16 +198,17 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
    
     override func viewDidAppear(_ animated: Bool) {
         if !initMap {
-            map.initialisationMapWithInitLocation()
+            //map.initialisationMapWithInitLocation()
+            //map.setZoom(zoom: 12)
             initMap = true
         }
         
         //map.moveTo(location: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324), zoom: 12, animated: false)
         
 
-        let roadConfig = RoadConfiguration(width:25.0,
+        let roadConfig = RoadConfiguration(width:20.0,
                                            color: UIColor(hex: "#ff0000ff") ?? .green,
-                                           borderWidth: 15.0,
+                                           borderWidth: 25,
                                            borderColor: .black,
                                            lineCap:LineCapType.ROUND)
         map.roadManager.addRoad(id: "road1", polylines: [
@@ -187,7 +228,7 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
                                             iconSize: MarkerIconSize(x:48,y:48), angle: nil, anchor: nil)
         map.locationManager.setUserLocationIcons(
             userLocationIcons: UserLocationConfiguration(userIcon:iconUserM , directionIcon: iconUserM))
-        map.shapeManager.drawShape(key: "rect",
+        /*map.shapeManager.drawShape(key: "rect",
                                    shape: CircleOSM(center:CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324),
                                    distanceInMeter:500,
                                    style:ShapeStyleConfiguration(
@@ -196,13 +237,15 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
                                         borderWidth: 20
                                      )
                                    )
-                                 )
+                                 )*/
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [unowned self] in
-            map.shapeManager.deleteShape(ckey: "rect")
-            map.locationManager.requestEnableLocation()
-            map.locationManager.toggleTracking(configuration: TrackConfiguration(
-                moveMap: false,controlUserMarker: false))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [unowned self] in
+            print("current zoom \(map.zoom())")
+            map.moveTo(location:  CLLocationCoordinate2D(latitude: 47.4317782, longitude: 8.4716146), zoom: zoomConf.initZoom, animated: true)
+            //map.shapeManager.deleteShape(ckey: "rect")
+            //map.locationManager.requestEnableLocation()
+           /* map.locationManager.toggleTracking(configuration: TrackConfiguration(
+                moveMap: false,controlUserMarker: false))*/
             //map.zoomIn(step: 5)
         }
         //map.locationManager.requestEnableLocation()
