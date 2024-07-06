@@ -45,6 +45,22 @@ final class OSMFlutterFrameworkTests: XCTestCase {
         print(customTile.subDomains)
         XCTAssertTrue(url == "https://\(sub).tile.openstreetmap.org/{z}/{x}/{y}.png")
     }
+    func testCustomTile2() throws {
+        // This is an example of a functional test case.
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        // Any test you write for XCTest can be annotated as throws and async.
+        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
+        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+        let customTile = CustomTiles(["urls":[["url":"https://{s}.tile.openstreetmap.org/{z}/{y}/{x}",
+                                               "subdomains":["a","b","c"]],
+                                              ],"tileExtension":".png",
+                                      "tileSize":"256","maxZoomLevel":"19"])
+        let sub = ["a","b","c"][customTile.randSubDomain]
+        let url = customTile.toString()
+        print(url)
+        print(customTile.subDomains)
+        XCTAssertTrue(url == "https://\(sub).tile.openstreetmap.org/{z}/{y}/{x}.png")
+    }
     func testBoundingBox() throws {
         let boundingbox = BoundingBox()
         XCTAssertTrue(boundingbox.isWorld())

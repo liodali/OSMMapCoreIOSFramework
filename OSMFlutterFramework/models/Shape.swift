@@ -72,9 +72,9 @@ extension CircleOSM {
                                            width:  Float(style.borderWidth),
                                             dashArray: [1,1],
                                             lineCap: MCLineCapType.ROUND,
-                                            offset: Float(0)/*,
+                                            offset: Float(0),
                                             dotted: false,
-                                            dottedSkew: Float(0)*/
+                                            dottedSkew: Float(0)
                                         )
                 )
     }
@@ -132,9 +132,9 @@ public class RectShapeOSM:Shape {
                                             width:  Float(style.borderWidth),
                                             dashArray: [1,1],
                                             lineCap: MCLineCapType.ROUND,
-                                            offset: 0.0/*,
+                                            offset: 0.0,
                                             dotted: false,
-                                            dottedSkew: Float(0)*/
+                                            dottedSkew: Float(0)
                                         )
                 )
     }

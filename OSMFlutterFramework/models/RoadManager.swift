@@ -80,9 +80,9 @@ public class RoadManager {
                                                     width: configuration.width + configuration.borderWidth!,
                                                     dashArray: [1,1],
                                                     lineCap: configuration.lineCap,
-                                                    offset:0.0/*,
+                                                    offset:0.0,
                                                     dotted: false,
-                                                    dottedSkew: Float(0)*/
+                                                    dottedSkew: Float(0)
                                         )
             )
            lineBorderLayer?.add(poylineBorder)
@@ -100,9 +100,9 @@ public class RoadManager {
                                                 width: configuration.width,
                                                 dashArray: [1,1],
                                                 lineCap: configuration.lineCap,
-                                                offset:0.0
-                                                /*dotted: false,
-                                                dottedSkew: Float(0)*/
+                                                offset:0.0,
+                                                dotted: false,
+                                                dottedSkew: Float(0)
                                         )
                            )
         lineLayer?.add(poyline)
