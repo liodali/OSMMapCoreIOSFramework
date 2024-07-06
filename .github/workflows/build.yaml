@@ -1,12 +1,13 @@
-name: "Release OSMMapCore"
+name: "Build OSMMapCore"
 
 on:
     push:
-      tags:
-        - '[0-9]+.[0-9]+.[0-9]+*'
+        branches:
+            - "main"
+       
 jobs:
-  build-deploy-ios:
-    name: "Build and Deploy iOS Release"
+  build-ios:
+    name: "Build iOS"
     runs-on: macos-latest
     steps:
       - name: "Checkout Repository"
@@ -47,12 +48,6 @@ jobs:
             mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
             cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
       
-      #-PROVUUID=$(security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision | grep -A1 UUID | awk -F'[<>]' '/string/ {print $3}')
-      #-echo "PROVUUID=$PROVUUID" >> $GITHUB_ENV
-      #- name: "install xcodeproj"
-      #  run: gem install xcodeproj
-      #- name: "create xcodeproj"
-      #  run: ruby create_xproj.rb
       - name: "set permission build.sh"
         run: chmod +x build.sh
       - name: "fix build"
@@ -60,17 +55,3 @@ jobs:
       - name: "run build.sh"
         run: ./build.sh ${{env.RELEASE_VERSION}} 
         #env.PROVUUID}}
-
-      - name: "Upload pod"
-        uses: actions/upload-artifact@v2
-        with:
-          name: OSMFlutterFramework-${{ env.RELEASE_VERSION }}
-          path: build/pod/
-      - name: Install Cocoapods
-        run: gem install cocoapods    
-      - name: Deploy to Cocoapods
-        run: |
-            set -eo pipefail
-            pod trunk push --allow-warnings
-        env:
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
