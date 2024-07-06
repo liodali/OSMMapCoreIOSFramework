@@ -11,10 +11,10 @@
 		9005B1C72B1A997E00F20F5D /* MarkerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005B1C62B1A997E00F20F5D /* MarkerManager.swift */; };
 		9005CBA22B1DC37400724B22 /* CustomTiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005CBA12B1DC37400724B22 /* CustomTiles.swift */; };
 		9005CBAD2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005CBAC2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift */; };
+		9015BB372BD95DF500CCB075 /* MapCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9015BB362BD95DF500CCB075 /* MapCore */; };
+		9015BB392BD95DF500CCB075 /* MapCoreSharedModule in Frameworks */ = {isa = PBXBuildFile; productRef = 9015BB382BD95DF500CCB075 /* MapCoreSharedModule */; };
+		9015BB3B2BD95DF500CCB075 /* MapCoreSharedModuleCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9015BB3A2BD95DF500CCB075 /* MapCoreSharedModuleCpp */; };
 		902B9F7B2B2D9DC800F86D12 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902B9F7A2B2D9DC800F86D12 /* LocationManager.swift */; };
-		90326E1E2B1D014800293AEA /* MapCore in Frameworks */ = {isa = PBXBuildFile; productRef = 90326E1D2B1D014800293AEA /* MapCore */; };
-		90326E202B1D014800293AEA /* MapCoreSharedModule in Frameworks */ = {isa = PBXBuildFile; productRef = 90326E1F2B1D014800293AEA /* MapCoreSharedModule */; };
-		90326E222B1D014800293AEA /* MapCoreSharedModuleCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 90326E212B1D014800293AEA /* MapCoreSharedModuleCpp */; };
 		90487F7E2BABA51D007393C8 /* OSMFlutterFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; };
 		90487F7F2BABA51D007393C8 /* OSMFlutterFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		906C284E2B2A3F65008F013E /* PoisManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C284D2B2A3F65008F013E /* PoisManager.swift */; };
@@ -88,9 +88,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90326E1E2B1D014800293AEA /* MapCore in Frameworks */,
-				90326E202B1D014800293AEA /* MapCoreSharedModule in Frameworks */,
-				90326E222B1D014800293AEA /* MapCoreSharedModuleCpp in Frameworks */,
+				9015BB372BD95DF500CCB075 /* MapCore in Frameworks */,
+				9015BB392BD95DF500CCB075 /* MapCoreSharedModule in Frameworks */,
+				9015BB3B2BD95DF500CCB075 /* MapCoreSharedModuleCpp in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,15 +208,15 @@
 			buildRules = (
 			);
 			dependencies = (
-				90326E242B1D018A00293AEA /* PBXTargetDependency */,
-				9005B1D72B1B694F00F20F5D /* PBXTargetDependency */,
-				9005B1D92B1B694F00F20F5D /* PBXTargetDependency */,
+				9015BB3D2BD963A500CCB075 /* PBXTargetDependency */,
+				9015BB3F2BD963A500CCB075 /* PBXTargetDependency */,
+				9015BB412BD963A500CCB075 /* PBXTargetDependency */,
 			);
 			name = OSMFlutterFramework;
 			packageProductDependencies = (
-				90326E1D2B1D014800293AEA /* MapCore */,
-				90326E1F2B1D014800293AEA /* MapCoreSharedModule */,
-				90326E212B1D014800293AEA /* MapCoreSharedModuleCpp */,
+				9015BB362BD95DF500CCB075 /* MapCore */,
+				9015BB382BD95DF500CCB075 /* MapCoreSharedModule */,
+				9015BB3A2BD95DF500CCB075 /* MapCoreSharedModuleCpp */,
 			);
 			productName = OSMFlutterFramework;
 			productReference = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */;
@@ -251,8 +251,8 @@
 			);
 			mainGroup = 90B8B82C2B1281BF0021DA8F;
 			packageReferences = (
-				90326E1C2B1D014800293AEA /* XCRemoteSwiftPackageReference "maps-core" */,
-				90487F792BABA4DF007393C8 /* XCRemoteSwiftPackageReference "djinni" */,
+				90D7D9BB2BD956BD006A8014 /* XCRemoteSwiftPackageReference "djinni" */,
+				9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */,
 			);
 			productRefGroup = 90B8B8372B1281BF0021DA8F /* Products */;
 			projectDirPath = "";
@@ -314,22 +314,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9005B1D72B1B694F00F20F5D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 9005B1D62B1B694F00F20F5D /* MapCoreSharedModule */;
-		};
-		9005B1D92B1B694F00F20F5D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 9005B1D82B1B694F00F20F5D /* MapCoreSharedModuleCpp */;
-		};
 		9005CBC22B1DE0B100724B22 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 90B8B8352B1281BF0021DA8F /* OSMFlutterFramework */;
 			targetProxy = 9005CBC12B1DE0B100724B22 /* PBXContainerItemProxy */;
 		};
-		90326E242B1D018A00293AEA /* PBXTargetDependency */ = {
+		9015BB3D2BD963A500CCB075 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 90326E232B1D018A00293AEA /* MapCore */;
+			productRef = 9015BB3C2BD963A500CCB075 /* MapCore */;
+		};
+		9015BB3F2BD963A500CCB075 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 9015BB3E2BD963A500CCB075 /* MapCoreSharedModule */;
+		};
+		9015BB412BD963A500CCB075 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 9015BB402BD963A500CCB075 /* MapCoreSharedModuleCpp */;
 		};
 /* End PBXTargetDependency section */
 
@@ -510,6 +510,7 @@
 		90B8B83E2B1281BF0021DA8F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_SHORTCUTS_ENABLE_FLEXIBLE_MATCHING = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -542,6 +543,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -552,6 +556,7 @@
 		90B8B83F2B1281BF0021DA8F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_SHORTCUTS_ENABLE_FLEXIBLE_MATCHING = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -584,6 +589,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -623,15 +631,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		90326E1C2B1D014800293AEA /* XCRemoteSwiftPackageReference "maps-core" */ = {
+		9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/openmobilemaps/maps-core";
 			requirement = {
 				kind = exactVersion;
-				version = 2.0.4;
+				version = 2.2.0;
 			};
 		};
-		90487F792BABA4DF007393C8 /* XCRemoteSwiftPackageReference "djinni" */ = {
+		90D7D9BB2BD956BD006A8014 /* XCRemoteSwiftPackageReference "djinni" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/UbiqueInnovation/djinni.git";
 			requirement = {
@@ -639,46 +647,38 @@
 				minimumVersion = 1.0.7;
 			};
 		};
-		90D305952B193093007F6DD2 /* XCRemoteSwiftPackageReference "maps-core" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/openmobilemaps/maps-core";
-			requirement = {
-				kind = exactVersion;
-				version = 1.5.3;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		9005B1D62B1B694F00F20F5D /* MapCoreSharedModule */ = {
+		9015BB362BD95DF500CCB075 /* MapCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 90D305952B193093007F6DD2 /* XCRemoteSwiftPackageReference "maps-core" */;
-			productName = MapCoreSharedModule;
-		};
-		9005B1D82B1B694F00F20F5D /* MapCoreSharedModuleCpp */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 90D305952B193093007F6DD2 /* XCRemoteSwiftPackageReference "maps-core" */;
-			productName = MapCoreSharedModuleCpp;
-		};
-		90326E1D2B1D014800293AEA /* MapCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 90326E1C2B1D014800293AEA /* XCRemoteSwiftPackageReference "maps-core" */;
+			package = 9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */;
 			productName = MapCore;
 		};
-		90326E1F2B1D014800293AEA /* MapCoreSharedModule */ = {
+		9015BB382BD95DF500CCB075 /* MapCoreSharedModule */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 90326E1C2B1D014800293AEA /* XCRemoteSwiftPackageReference "maps-core" */;
+			package = 9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */;
 			productName = MapCoreSharedModule;
 		};
-		90326E212B1D014800293AEA /* MapCoreSharedModuleCpp */ = {
+		9015BB3A2BD95DF500CCB075 /* MapCoreSharedModuleCpp */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 90326E1C2B1D014800293AEA /* XCRemoteSwiftPackageReference "maps-core" */;
+			package = 9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */;
 			productName = MapCoreSharedModuleCpp;
 		};
-		90326E232B1D018A00293AEA /* MapCore */ = {
+		9015BB3C2BD963A500CCB075 /* MapCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 90326E1C2B1D014800293AEA /* XCRemoteSwiftPackageReference "maps-core" */;
+			package = 9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */;
 			productName = MapCore;
+		};
+		9015BB3E2BD963A500CCB075 /* MapCoreSharedModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */;
+			productName = MapCoreSharedModule;
+		};
+		9015BB402BD963A500CCB075 /* MapCoreSharedModuleCpp */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */;
+			productName = MapCoreSharedModuleCpp;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

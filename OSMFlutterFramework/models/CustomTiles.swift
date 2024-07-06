@@ -5,14 +5,18 @@
 import Foundation
 
 public class CustomTiles {
-    var tileURL: String
+    var tileURL: String = ""
     var subDomains: String = ""
     var tileSize: String
     var maxZoom: String
     private(set) var randSubDomain = 0
     public init(_ mapTile: [String: Any],isMapCore: Bool = true) {
         let tiles = (mapTile["urls"] as! [[String: Any]]).first
-        tileURL = (tiles!["url"] as! String) + "{z}/{x}/{y}" + (mapTile["tileExtension"] as! String)
+        tileURL = tiles!["url"] as! String
+         if !tileURL.contains("{z}") && !tileURL.contains("{y}") && !tileURL.contains("{x}") {
+             tileURL += "{z}/{x}/{y}"
+        }
+        tileURL += (mapTile["tileExtension"] as! String)
         if isMapCore && ((tiles?.keys.contains("subdomains")) != nil) {
             let len = (tiles!["subdomains"] as? [String])?.count ?? 0
             if len != 0 {
