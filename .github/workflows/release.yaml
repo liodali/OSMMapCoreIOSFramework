@@ -62,12 +62,23 @@ jobs:
         #env.PROVUUID}}
 
       - name: "Upload pod"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: OSMFlutterFramework-${{ env.RELEASE_VERSION }}
           path: build/pod/
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: ${{ env.RELEASE_VERSION }}
+          tag_name: ${{ env.RELEASE_VERSION }}
+          make_latest: true
+          files:
+              build/pod/OSMFlutterFramework-${{ env.RELEASE_VERSION }}
       - name: Install Cocoapods
-        run: gem install cocoapods    
+        run: gem install cocoapods
+      - name: check lint
+        run:  pod spec lint --verbose
       - name: Deploy to Cocoapods
         run: |
             set -eo pipefail
