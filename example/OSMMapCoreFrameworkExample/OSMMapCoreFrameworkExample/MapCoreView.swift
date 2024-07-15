@@ -114,11 +114,12 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
     let buttonZoomOut = UIButton(type: .system)
     let buttonUserLocation = UIButton(type: .system)
     let buttonRemove = UIButton(type: .system)
-    let zoomConf = ZoomConfiguration(initZoom: 16,maxZoom: 19)
+    let zoomConf = ZoomConfiguration(initZoom: 16,minZoom: 14,maxZoom: 19)
     public init(rect:CGRect) {
          self.map = OSMView(rect:rect,
                             location: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324),
                             zoomConfig: zoomConf)
+       
         //map.frame = rect//CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 300, height: 300))
         self.rect = rect
         super.init(nibName: nil, bundle: nil)
@@ -126,7 +127,7 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
         self.view.addSubview(self.map)
         self.view.addSubview(viewStack)
         self.view.addSubview(viewStack2)
-       
+        
         //map.didMove(toParent: self)
         
         
@@ -192,10 +193,23 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
         //view.addSubview(map.view)
         map.onMapGestureDelegate = self
         map.mapHandlerDelegate = self
-        
+       // map.disableTouch()
        
     }
-   
+    func disableAllGestures(for view: UIView) {
+        if let gestureRecognizers = view.gestureRecognizers {
+            for gesture in gestureRecognizers {
+                gesture.isEnabled = false
+            }
+        }
+        for sub in view.subviews {
+            if let gestureRecognizers = sub.gestureRecognizers {
+                for gesture in gestureRecognizers {
+                    gesture.isEnabled = false
+                }
+            }
+        }
+    }
     override func viewDidAppear(_ animated: Bool) {
         if !initMap {
             //map.initialisationMapWithInitLocation()
@@ -203,10 +217,11 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
             initMap = true
         }
         
+        
         //map.moveTo(location: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324), zoom: 12, animated: false)
         
 
-        let roadConfig = RoadConfiguration(width:20.0,
+        /*let roadConfig = RoadConfiguration(width:20.0,
                                            color: UIColor(hex: "#ff0000ff") ?? .green,
                                            borderWidth: 25,
                                            borderColor: .black,
@@ -216,18 +231,19 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
         CLLocationCoordinate2D(latitude: 47.4433594, longitude: 8.4680184),
         CLLocationCoordinate2D(latitude: 47.4317782, longitude: 8.4716146),
             CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324)
-        ], configuration: roadConfig)
+        ], configuration: roadConfig)*/
         map.roadTapHandlerDelegate = self
         map.userLocationDelegate = self
         /*DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [unowned self] in
             //map.locationManager.requestSingleLocation()
             map.setCustomTile(tile: CustomTiles(["urls":[["url":"https://a.tile-cyclosm.openstreetmap.fr/cyclosm/"]],
                                                  "tileExtension":".png","tileSize":256,"maxZoomLevel":19]))
-        }*/
+        }
         let iconUserM = MarkerConfiguration(icon: UIImage(systemName: "location")!,
                                             iconSize: MarkerIconSize(x:48,y:48), angle: nil, anchor: nil)
         map.locationManager.setUserLocationIcons(
             userLocationIcons: UserLocationConfiguration(userIcon:iconUserM , directionIcon: iconUserM))
+         */
         /*map.shapeManager.drawShape(key: "rect",
                                    shape: CircleOSM(center:CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324),
                                    distanceInMeter:500,
@@ -241,7 +257,13 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [unowned self] in
             print("current zoom \(map.zoom())")
-            map.moveTo(location:  CLLocationCoordinate2D(latitude: 47.4317782, longitude: 8.4716146), zoom: zoomConf.initZoom, animated: true)
+            self.map.setBoundingBox(bounds: BoundingBox(center: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324), distanceKm: 0.1))
+            
+            let iconUserM = MarkerConfiguration(icon: UIImage(systemName: "location")!,
+                                                iconSize: MarkerIconSize(x:48,y:48), angle: nil, anchor: nil)
+            
+            self.map.markerManager.addMarker(marker: Marker(location: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324), markerConfiguration: iconUserM))
+            //map.moveTo(location:  CLLocationCoordinate2D(latitude: 47.4317782, longitude: 8.4716146), zoom: zoomConf.initZoom, animated: true)
             //map.shapeManager.deleteShape(ckey: "rect")
             //map.locationManager.requestEnableLocation()
            /* map.locationManager.toggleTracking(configuration: TrackConfiguration(

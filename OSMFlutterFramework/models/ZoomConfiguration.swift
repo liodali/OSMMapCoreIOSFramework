@@ -6,6 +6,7 @@
 //
 
 import Foundation
+@_implementationOnly import MapCore
 
 public struct ZoomConfiguration {
     public  let initZoom:Int
@@ -24,4 +25,22 @@ public struct ZoomConfiguration {
         self.maxZoom  = map["maxZoom"] ?? 19
         self.step  = map["stepZoom"] ?? 1
     }
+    func toMCTileZoomConfiguration(mcTilesZooms:[MCTiled2dMapZoomLevelInfo])->MCTileZoomConfiguration{
+      return  MCTileZoomConfiguration(initZoom: mcTilesZooms[initZoom], minZoom: mcTilesZooms[minZoom], maxZoom: mcTilesZooms[maxZoom-1])
+    }
+    
 }
+struct MCTileZoomConfiguration {
+    public let initZoom:MCTiled2dMapZoomLevelInfo
+    public let minZoom:MCTiled2dMapZoomLevelInfo
+    public let maxZoom:MCTiled2dMapZoomLevelInfo
+    public init(initZoom:MCTiled2dMapZoomLevelInfo,
+                minZoom:MCTiled2dMapZoomLevelInfo ,
+                maxZoom:MCTiled2dMapZoomLevelInfo) {
+        self.initZoom = initZoom
+        self.minZoom  = minZoom
+        self.maxZoom  = maxZoom
+    }
+   
+}
+

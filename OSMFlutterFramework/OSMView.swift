@@ -47,17 +47,29 @@ private class RasterCallbackInterface : MCTiled2dMapRasterLayerCallbackInterface
 private class MapCameraListener:MCMapCamera2dListenerInterface {
     private(set) var mapChanged:OnMapChanged?
     private var lastBounding:MCRectCoord? = nil
-    init(mapChanged: OnMapChanged?) {
+    private(set) var mapView:MCMapView?
+    private(set) var zoomConfig:MCTileZoomConfiguration?
+    init(mapChanged: OnMapChanged?,mapView:MCMapView? = nil,zoomConfig:MCTileZoomConfiguration? = nil) {
         self.mapChanged = mapChanged
+        self.mapView = mapView
+        self.zoomConfig = zoomConfig
     }
-    func setMapChanged(mapChanged: OnMapChanged?){
+    func setMapChanged(mapChanged: OnMapChanged?,mapView:MCMapView,zoomConfig:MCTileZoomConfiguration){
         self.mapChanged = mapChanged
+        self.mapView = mapView
+        self.zoomConfig = zoomConfig
     }
     public func onVisibleBoundsChanged(_ visibleBounds: MCRectCoord, zoom: Double) {
         if lastBounding == nil || !(lastBounding == visibleBounds) {
             let bounds = visibleBounds.toBoundingBox()
             mapChanged?.onBoundsChanged(bounds: bounds, zoom: zoom)
             lastBounding = visibleBounds
+        }
+        if(zoomConfig != nil && zoom > zoomConfig!.minZoom.zoom){
+            mapView?.camera.setZoom(zoomConfig!.minZoom.zoom, animated: false)
+        }
+        if(zoomConfig != nil && zoom < zoomConfig!.maxZoom.zoom){
+            mapView?.camera.setZoom(zoomConfig!.maxZoom.zoom, animated: false)
         }
     }
     
@@ -135,13 +147,14 @@ public class OSMView: UIView,OnMapChanged {
         super.init(frame: rect)
         self.mapView.backgroundColor = .gray.withAlphaComponent(CGFloat(200))
         self.addSubview(self.mapView)
-        self.mapCameraListener.setMapChanged(mapChanged: self)
+      
         self.osmTiledConfiguration = OSMTiledLayerConfig(configuration: self.mapTileConfiguration)
         self.rasterLayer = MCTiled2dMapRasterLayerInterface.create(osmTiledConfiguration,
                                                                         loaders: [MCTextureLoader()])
         rasterLayer?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
         rasterLayer?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
         //view.frame = rect
+        self.mapCameraListener.setMapChanged(mapChanged: self,mapView: mapView,zoomConfig: zoomConfiguration.toMCTileZoomConfiguration(mcTilesZooms: osmTiledConfiguration.getZoomLevelInfos()))
         
         self.mapView.camera.addListener(mapCameraListener)
         setupRasterLayer(tile: tile)
@@ -191,12 +204,7 @@ public class OSMView: UIView,OnMapChanged {
         } else if zoom > zoomConfiguration.maxZoom {
             zLevelId =  zoomConfiguration.maxZoom
         }
-        let zoomId = osmTiledConfiguration.getZoomLevelInfos()[zLevelId].zoom /*osmTiledConfiguration.getZoomLevelInfos().first { zoomInfo in
-            print("\(zoomInfo.zoomLevelIdentifier),\(zLevelId)")
-            return zoomInfo.zoomLevelIdentifier == zLevelId
-        }?.zoom*/
-        print("zoom level id \(zoom)")
-        print("zoom \(String(describing: zoomId))")
+        let zoomId = osmTiledConfiguration.getZoomLevelInfos()[zLevelId].zoom
         return  zoomId //?? 139770566.007
     }
     
@@ -336,6 +344,20 @@ extension OSMView {
         self.roadManager.showAll()
         self.markerManager.showAll()
         self.poisManager.showAll()
+    }
+    /**
+     disable touchs
+     */
+    public func disableTouch() {
+        self.mapView.isMultipleTouchEnabled = false
+        self.isUserInteractionEnabled  = false
+    }
+    /**
+     enable touchs
+     */
+    public func enableTouch() {
+        self.mapView.isMultipleTouchEnabled = true
+        self.isUserInteractionEnabled  = true
     }
 }
 

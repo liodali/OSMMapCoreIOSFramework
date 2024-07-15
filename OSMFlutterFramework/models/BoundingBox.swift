@@ -23,6 +23,35 @@ public class BoundingBox: Equatable {
         self.east = east
         self.south = south
     }
+    public  init(center:CLLocationCoordinate2D,distanceKm:Double) {
+        let R: Double = 6371
+            
+        // Convert latitude and longitude to radians
+        let lat = center.latitude * .pi / 180
+        let lon = center.longitude * .pi / 180
+            
+        // Angular distance in radians on a great circle
+        let angularDistance = distanceKm / R
+            
+        // Calculate min and max latitudes
+        var minLat = lat - angularDistance
+        var maxLat = lat + angularDistance
+            
+        // Calculate min and max longitudes
+        let deltaLon = asin(sin(angularDistance) / cos(lat))
+        var minLon = lon - deltaLon
+        var maxLon = lon + deltaLon
+            
+        // Convert back to degrees
+        minLat = minLat * 180 / .pi
+        maxLat = maxLat * 180 / .pi
+        minLon = minLon * 180 / .pi
+        maxLon = maxLon * 180 / .pi
+        self.north = maxLat
+        self.east  = maxLon
+        self.south = minLat
+        self.west  = minLon
+    }
     public  init(boundingBoxs: [Double]) {
         self.north = boundingBoxs[0]
         self.west = boundingBoxs[3]
