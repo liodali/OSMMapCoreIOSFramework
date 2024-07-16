@@ -73,8 +73,9 @@ jobs:
           name: ${{ env.RELEASE_VERSION }}
           tag_name: ${{ env.RELEASE_VERSION }}
           make_latest: true
+          fail_on_unmatched_files: true
           files:
-              build/pod/OSMFlutterFramework-${{ env.RELEASE_VERSION }}
+              build/pod/OSMFlutterFramework-${{ env.RELEASE_VERSION }}.zip
           token: ${{ secrets.TOKEN }}
       - name: Install Cocoapods
         run: gem install cocoapods
