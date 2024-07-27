@@ -22,7 +22,7 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
     private var tile:String
     let configuration:OSMMapConfiguration
      
-    init(tileURL:String="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",configuration:OSMMapConfiguration = OSMMapConfiguration()) {
+    init(tileURL:String="https://a.tile.openstreetmap.de/{z}/{x}/{y}.png",configuration:OSMMapConfiguration = OSMMapConfiguration()) {
         tile = tileURL
         self.configuration = configuration
     }
@@ -65,9 +65,9 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
         MCTiled2dMapZoomInfo(zoomLevelScaleFactor: Float(configuration.zoomLevelScaleFactor),
                              numDrawPreviousLayers: Int32(configuration.numDrawPreviousLayers),
                              adaptScaleToScreen: configuration.adaptScaleToScreen,
-                           maskTile: false,
-                           underzoom: false,
-                           overzoom: false
+                           maskTile: true,
+                           underzoom: true,
+                           overzoom: true
       )
     }
 
@@ -118,7 +118,7 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
             .init(zoom: 4265.45916770, tileWidthLayerSystemUnits: 305.748, numTilesX: 131_072, numTilesY: 131_072, numTilesT: 1, zoomLevelIdentifier: 17, bounds: getBounds()!),
             .init(zoom: 2132.72958385, tileWidthLayerSystemUnits: 152.874, numTilesX: 262_144, numTilesY: 262_144, numTilesT: 1, zoomLevelIdentifier: 18, bounds: getBounds()!),
             .init(zoom: 1066.36479193, tileWidthLayerSystemUnits: 76.437, numTilesX: 524_288, numTilesY: 524_288, numTilesT: 1, zoomLevelIdentifier: 19, bounds: getBounds()!),
-            .init(zoom: 533.18239597, tileWidthLayerSystemUnits: 38.2185, numTilesX: 1_048_576, numTilesY: 1_048_576, numTilesT: 1, zoomLevelIdentifier: 20, bounds: getBounds()!),
+            /*.init(zoom: 533.18239597, tileWidthLayerSystemUnits: 38.2185, numTilesX: 1_048_576, numTilesY: 1_048_576, numTilesT: 1, zoomLevelIdentifier: 20, bounds: getBounds()!),*/
         ]
         
         return Array(zoomLevels[0..<20])

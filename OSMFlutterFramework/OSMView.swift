@@ -161,7 +161,11 @@ public class OSMView: UIView,OnMapChanged {
         self.roadManager.initRoadManager(above: rasterLayer?.asLayerInterface())
         self.shapeManager.initShapeManager()
         self.markerManager.initMarkerManager()
-        self.setZoom(zoom: 1)
+        self.setZoom(zoom: zoomConfig.initZoom)
+        if let location = initLocation {
+            self.moveTo(location: location, zoom: zoomConfig.initZoom, animated: false)
+        }
+        
     }
     public override func layoutSubviews() {
         if frame.width != 0 && frame.height != 0 {
@@ -199,10 +203,13 @@ public class OSMView: UIView,OnMapChanged {
     
     func getZoomFromZoomIdentifier(zoom:Int) -> Double {
        var zLevelId = zoom
-        if zoom < zoomConfiguration.minZoom {
-            zLevelId = zoomConfiguration.minZoom
-        } else if zoom > zoomConfiguration.maxZoom {
-            zLevelId =  zoomConfiguration.maxZoom
+        let maxZ = zoomConfiguration.maxZoom
+        let minZ = zoomConfiguration.minZoom
+        if zoom < minZ {
+            zLevelId = minZ
+        }
+        if zoom >= maxZ {
+            zLevelId =  maxZ
         }
         let zoomId = osmTiledConfiguration.getZoomLevelInfos()[zLevelId].zoom
         return  zoomId //?? 139770566.007
@@ -276,12 +283,13 @@ extension OSMView {
         let zoom =  self.mapView.camera.getZoom()
         return osmTiledConfiguration.getZoomIdentifierFromZoom(zoom: zoom) ?? 1
     }
-    public func zoomIn(step:Int?,animated:Bool = true) {
+    public func zoomIn(step:Int? = nil,animated:Bool = true) {
         let currentZoom = zoom()
-        if( currentZoom == zoomConfiguration.maxZoom){
+        let stepZoom = step ?? zoomConfiguration.step
+        if( currentZoom  + stepZoom  > zoomConfiguration.maxZoom){
             return
         }
-        let stepZoom = step ?? zoomConfiguration.step
+      
         let nextZoom = if currentZoom + stepZoom > zoomConfiguration.maxZoom {
             getZoomFromZoomIdentifier(zoom: zoomConfiguration.maxZoom)
         }else{
@@ -289,7 +297,7 @@ extension OSMView {
         }
         self.mapView.camera.setZoom(nextZoom, animated: animated)
     }
-    public func zoomOut(step:Int?,animated:Bool = true) {
+    public func zoomOut(step:Int? = nil,animated:Bool = true) {
         let currentZoom = zoom()
         if( currentZoom == zoomConfiguration.minZoom){
             return

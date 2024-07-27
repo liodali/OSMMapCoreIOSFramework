@@ -14,6 +14,7 @@ public struct ZoomConfiguration {
     public  let maxZoom:Int
     public  let step:Int
     public init(initZoom:Int = 0,minZoom:Int = 0,maxZoom:Int = 19,step:Int = 1) {
+        assert(maxZoom <= 19,"maximum zoom should not be greater than 19")
         self.initZoom = initZoom
         self.minZoom  = minZoom
         self.maxZoom  = maxZoom
