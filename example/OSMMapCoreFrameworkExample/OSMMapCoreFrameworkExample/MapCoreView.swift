@@ -101,7 +101,7 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
     }
     
     func onLongTap(location: CLLocationCoordinate2D) {
-        
+        self.map.markerManager.removeMarker(location: location)
     }
     
     let map:OSMView
@@ -114,10 +114,12 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
     let buttonZoomOut = UIButton(type: .system)
     let buttonUserLocation = UIButton(type: .system)
     let buttonRemove = UIButton(type: .system)
-    let zoomConf = ZoomConfiguration(initZoom: 16,minZoom: 14,maxZoom: 19)
+    let zoomConf = ZoomConfiguration(initZoom: 16,minZoom: 1,maxZoom: 19)
+    let initLoc = CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324)
+    var zoomL = 16
     public init(rect:CGRect) {
          self.map = OSMView(rect:rect,
-                            location: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324),
+                            location: initLoc,
                             zoomConfig: zoomConf)
        
         //map.frame = rect//CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 300, height: 300))
@@ -162,19 +164,21 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
         viewStack2.addArrangedSubview(buttonRemove)
         
         buttonZoomIn.setTitle("+", for: .normal)
+        buttonZoomIn.setTitleColor(UIColor.white, for: .normal)
         buttonZoomIn.frame = CGRect(x:32,y: 0,width: 48,height: 56)
-        buttonZoomIn.backgroundColor = UIColor.gray
+        buttonZoomIn.backgroundColor = UIColor.blue
         buttonZoomIn.translatesAutoresizingMaskIntoConstraints = false
         buttonZoomIn.addAction(UIAction(title: "+", handler: { _ in
             self.map.zoomIn(step: 1)
         }), for: .touchUpInside)
         buttonZoomOut.setTitle("-", for: .normal)
         //buttonZoomIn.frame = CGRect(x:0,y:64,width: 48,height: 56)
-
-        buttonZoomOut.backgroundColor = UIColor.gray
+        buttonZoomOut.setTitleColor(UIColor.white, for: .normal)
+        buttonZoomOut.backgroundColor = UIColor.blue
         buttonZoomOut.translatesAutoresizingMaskIntoConstraints = false
         buttonZoomOut.addAction(UIAction(title: "-", handler: { _ in
             self.map.zoomOut(step: 1)
+
         }), for: .touchUpInside)
 
         viewStack.alignment = .fill
