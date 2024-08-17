@@ -8,7 +8,8 @@
 import Foundation
 @_implementationOnly import MapCore
 import MapKit
-import Polyline
+@_implementationOnly import Polyline
+
 public protocol PoylineHandler {
     func onTap(roadId:String)
 }

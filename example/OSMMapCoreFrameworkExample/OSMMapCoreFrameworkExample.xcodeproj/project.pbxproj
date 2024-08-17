@@ -13,24 +13,9 @@
 		904407362BA90CFA0017B6FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 904407352BA90CFA0017B6FE /* Preview Assets.xcassets */; };
 		904407592BA91E1E0017B6FE /* MapCoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904407582BA91E1E0017B6FE /* MapCoreView.swift */; };
 		9044075B2BA920130017B6FE /* OSMFlutterFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */; };
-		9044075C2BA920130017B6FE /* OSMFlutterFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9069A33A2C68CDB600A15ED3 /* osrm-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A3392C68CDB600A15ED3 /* osrm-swift */; };
 		9069A33D2C69157100A15ED3 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A33C2C69157100A15ED3 /* Polyline */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		9044075D2BA920130017B6FE /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				9044075C2BA920130017B6FE /* OSMFlutterFramework.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9044072B2BA90CF80017B6FE /* OSMMapCoreFrameworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OSMMapCoreFrameworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,7 +100,6 @@
 				904407272BA90CF80017B6FE /* Sources */,
 				904407282BA90CF80017B6FE /* Frameworks */,
 				904407292BA90CF80017B6FE /* Resources */,
-				9044075D2BA920130017B6FE /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

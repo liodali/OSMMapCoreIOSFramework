@@ -60,59 +60,6 @@
          </Group>
       </Group>
    </Group>
-   <Group
-      location = "group:OSMFlutterFramework"
-      name = "OSMFlutterFramework">
-      <FileRef
-         location = "group:OSMFlutterFramework.h">
-      </FileRef>
-      <FileRef
-         location = "group:OSMTileConfiguration.swift">
-      </FileRef>
-      <Group
-         location = "group:models"
-         name = "models">
-         <FileRef
-            location = "group:OSMMarker.swift">
-         </FileRef>
-         <FileRef
-            location = "group:BoundingBox.swift">
-         </FileRef>
-         <FileRef
-            location = "group:MarkerManager.swift">
-         </FileRef>
-         <FileRef
-            location = "group:ZoomConfiguration.swift">
-         </FileRef>
-         <FileRef
-            location = "group:RoadManager.swift">
-         </FileRef>
-         <FileRef
-            location = "group:extensions.swift">
-         </FileRef>
-         <FileRef
-            location = "group:ShapeManager.swift">
-         </FileRef>
-         <FileRef
-            location = "group:Shape.swift">
-         </FileRef>
-         <FileRef
-            location = "group:PoisManager.swift">
-         </FileRef>
-         <FileRef
-            location = "group:BaseManager.swift">
-         </FileRef>
-         <FileRef
-            location = "group:LocationManager.swift">
-         </FileRef>
-         <FileRef
-            location = "group:CustomTiles.swift">
-         </FileRef>
-      </Group>
-      <FileRef
-         location = "group:OSMView.swift">
-      </FileRef>
-   </Group>
    <FileRef
       location = "group:OSMFlutterFramework.podspec">
    </FileRef>
@@ -126,56 +73,56 @@
       location = "group:Sources"
       name = "Sources">
       <Group
-         location = "group:Sources/OSMFlutterFramework"
+         location = "group:OSMFlutterFramework"
          name = "OSMFlutterFramework">
+         <FileRef
+            location = "group:OSMFlutterFramework.h">
+         </FileRef>
+         <FileRef
+            location = "group:OSMTileConfiguration.swift">
+         </FileRef>
          <Group
-            location = "group:Sources/OSMFlutterFramework/models"
+            location = "group:models"
             name = "models">
             <FileRef
-               location = "group:models/CustomTiles.swift">
+               location = "group:OSMMarker.swift">
             </FileRef>
             <FileRef
-               location = "group:models/BoundingBox.swift">
+               location = "group:BoundingBox.swift">
             </FileRef>
             <FileRef
-               location = "group:models/ZoomConfiguration.swift">
+               location = "group:MarkerManager.swift">
             </FileRef>
             <FileRef
-               location = "group:models/extensions.swift">
+               location = "group:ZoomConfiguration.swift">
             </FileRef>
             <FileRef
-               location = "group:models/MarkerManager.swift">
+               location = "group:RoadManager.swift">
             </FileRef>
             <FileRef
-               location = "group:models/OSMMarker.swift">
+               location = "group:extensions.swift">
             </FileRef>
             <FileRef
-               location = "group:models/RoadManager.swift">
+               location = "group:ShapeManager.swift">
             </FileRef>
             <FileRef
-               location = "group:models/PoisManager.swift">
+               location = "group:Shape.swift">
             </FileRef>
             <FileRef
-               location = "group:models/LocationManager.swift">
+               location = "group:PoisManager.swift">
             </FileRef>
             <FileRef
-               location = "group:models/ShapeManager.swift">
+               location = "group:BaseManager.swift">
             </FileRef>
             <FileRef
-               location = "group:models/BaseManager.swift">
+               location = "group:LocationManager.swift">
             </FileRef>
             <FileRef
-               location = "group:models/Shape.swift">
+               location = "group:CustomTiles.swift">
             </FileRef>
          </Group>
          <FileRef
-            location = "group:Sources/OSMFlutterFramework/OSMTileConfiguration.swift">
-         </FileRef>
-         <FileRef
-            location = "group:Sources/OSMFlutterFramework/OSMView.swift">
-         </FileRef>
-         <FileRef
-            location = "group:Sources/OSMFlutterFramework/OSMFlutterFramework.h">
+            location = "group:OSMView.swift">
          </FileRef>
       </Group>
    </Group>

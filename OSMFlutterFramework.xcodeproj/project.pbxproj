@@ -11,6 +11,7 @@
 		9005B1C72B1A997E00F20F5D /* MarkerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005B1C62B1A997E00F20F5D /* MarkerManager.swift */; };
 		9005CBA22B1DC37400724B22 /* CustomTiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005CBA12B1DC37400724B22 /* CustomTiles.swift */; };
 		9005CBAD2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005CBAC2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift */; };
+		901252E22C70A38F00023664 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = 901252E12C70A38F00023664 /* Polyline */; };
 		9015BB372BD95DF500CCB075 /* MapCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9015BB362BD95DF500CCB075 /* MapCore */; };
 		9015BB392BD95DF500CCB075 /* MapCoreSharedModule in Frameworks */ = {isa = PBXBuildFile; productRef = 9015BB382BD95DF500CCB075 /* MapCoreSharedModule */; };
 		9015BB3B2BD95DF500CCB075 /* MapCoreSharedModuleCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9015BB3A2BD95DF500CCB075 /* MapCoreSharedModuleCpp */; };
@@ -88,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				901252E22C70A38F00023664 /* Polyline in Frameworks */,
 				9015BB372BD95DF500CCB075 /* MapCore in Frameworks */,
 				9015BB392BD95DF500CCB075 /* MapCoreSharedModule in Frameworks */,
 				9015BB3B2BD95DF500CCB075 /* MapCoreSharedModuleCpp in Frameworks */,
@@ -212,12 +214,14 @@
 				9015BB3D2BD963A500CCB075 /* PBXTargetDependency */,
 				9015BB3F2BD963A500CCB075 /* PBXTargetDependency */,
 				9015BB412BD963A500CCB075 /* PBXTargetDependency */,
+				901252E42C70A49C00023664 /* PBXTargetDependency */,
 			);
 			name = OSMFlutterFramework;
 			packageProductDependencies = (
 				9015BB362BD95DF500CCB075 /* MapCore */,
 				9015BB382BD95DF500CCB075 /* MapCoreSharedModule */,
 				9015BB3A2BD95DF500CCB075 /* MapCoreSharedModuleCpp */,
+				901252E12C70A38F00023664 /* Polyline */,
 			);
 			productName = OSMFlutterFramework;
 			productReference = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */;
@@ -254,6 +258,7 @@
 			packageReferences = (
 				90D7D9BB2BD956BD006A8014 /* XCRemoteSwiftPackageReference "djinni" */,
 				9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */,
+				901252E02C70A38F00023664 /* XCRemoteSwiftPackageReference "Polyline" */,
 			);
 			productRefGroup = 90B8B8372B1281BF0021DA8F /* Products */;
 			projectDirPath = "";
@@ -319,6 +324,10 @@
 			isa = PBXTargetDependency;
 			target = 90B8B8352B1281BF0021DA8F /* OSMFlutterFramework */;
 			targetProxy = 9005CBC12B1DE0B100724B22 /* PBXContainerItemProxy */;
+		};
+		901252E42C70A49C00023664 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 901252E32C70A49C00023664 /* Polyline */;
 		};
 		9015BB3D2BD963A500CCB075 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -632,6 +641,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		901252E02C70A38F00023664 /* XCRemoteSwiftPackageReference "Polyline" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/raphaelmor/Polyline";
+			requirement = {
+				kind = exactVersion;
+				version = 5.1.0;
+			};
+		};
 		9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/openmobilemaps/maps-core";
@@ -651,6 +668,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		901252E12C70A38F00023664 /* Polyline */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 901252E02C70A38F00023664 /* XCRemoteSwiftPackageReference "Polyline" */;
+			productName = Polyline;
+		};
+		901252E32C70A49C00023664 /* Polyline */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 901252E02C70A38F00023664 /* XCRemoteSwiftPackageReference "Polyline" */;
+			productName = Polyline;
+		};
 		9015BB362BD95DF500CCB075 /* MapCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */;
