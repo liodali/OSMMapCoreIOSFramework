@@ -104,34 +104,64 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
         }
        
         if(geos.count >= 2 && alert == nil){
-            Task.detached { @MainActor in
-                self.alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
-                let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
-                loadingIndicator.hidesWhenStopped = true
-                loadingIndicator.style = UIActivityIndicatorView.Style.gray
-                loadingIndicator.startAnimating();
-                self.alert!.view.addSubview(loadingIndicator)
-                self.present(self.alert!, animated: true, completion: nil)
+            self.showRoadTypeActionDialog()
+        }
+    }
+    func showWaitingDialog(){
+        Task.detached { @MainActor in
+            self.alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+            let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+            loadingIndicator.hidesWhenStopped = true
+            loadingIndicator.style = UIActivityIndicatorView.Style.medium
+            loadingIndicator.startAnimating();
+            self.alert!.view.addSubview(loadingIndicator)
+            self.present(self.alert!, animated: true, completion: nil)
+        }
+    }
+    func showRoadTypeActionDialog(){
+        Task.detached { @MainActor in
+            let actionSheetController = UIAlertController(title: "Select Road Type", message: "Choose an road", preferredStyle: .actionSheet)
+
+            let action1 = UIAlertAction(title: "Car", style: .default) { _ in
+                self.drawRoad()
             }
-           
-            DispatchQueue.global().async {
-                Task {
-                    let result = await self.osrmManager.getRoadAsync(wayPoints: self.geos, configuration: InputRoadConfiguration())
-                    if result != nil {
-                        let polyline = Polyline(encodedPolyline: result!.mRouteHigh)
-                        Task.detached { @MainActor in
-                            self.map.roadManager.addRoad(id: "1", polylines: polyline.coordinates!, configuration: RoadConfiguration(width: 5.0, color: UIColor.red))
-                        }
-                    }
+
+            let action2 = UIAlertAction(title: "Foot", style: .destructive) { _ in
+                actionSheetController.dismiss(animated: true)
+                self.drawRoad(roadType: RoadType.foot)
+            }
+
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+                actionSheetController.dismiss(animated: true)
+                self.geos.removeAll()
+            }
+
+            actionSheetController.addAction(action1)
+            actionSheetController.addAction(action2)
+            actionSheetController.addAction(cancelAction)
+
+            self.present(actionSheetController, animated: true, completion: nil)
+        }
+    }
+
+    func drawRoad(roadType:RoadType = RoadType.car) {
+        DispatchQueue.global().async {
+            Task {
+                let result = await self.osrmManager.getRoadAsync(wayPoints: self.geos, configuration: InputRoadConfiguration(typeRoad: roadType))
+                if result != nil {
+                    let polyline = Polyline(encodedPolyline: result!.mRouteHigh)
                     Task.detached { @MainActor in
-                        self.dismiss(animated: false, completion: nil)
-                        self.geos.removeAll()
-                        self.alert = nil
+                        self.map.roadManager.addRoad(id: "1", polylines: polyline.coordinates!, configuration: RoadConfiguration(width: 25.0, color: UIColor.red,                              polylineType: PolyineType.DOT))
                     }
-                   
                 }
-              
+                Task.detached { @MainActor in
+                    self.dismiss(animated: false, completion: nil)
+                    self.geos.removeAll()
+                    self.alert = nil
+                }
+               
             }
+          
         }
     }
     
@@ -299,7 +329,7 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [unowned self] in
             print("current zoom \(map.zoom())")
-            self.map.setBoundingBox(bounds: BoundingBox(center: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324), distanceKm: 0.1))
+            //self.map.setBoundingBox(bounds: BoundingBox(center: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324), distanceKm: 0.1))
             
             let iconUserM = MarkerConfiguration(icon: UIImage(systemName: "location")!,
                                                 iconSize: MarkerIconSize(x:48,y:48), angle: nil, anchor: nil)

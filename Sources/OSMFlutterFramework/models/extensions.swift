@@ -170,7 +170,11 @@ extension UIImage {
         return texture
     }
 }
-
+extension PolyineType {
+    func isDOT() -> Bool {
+       self == PolyineType.DOT
+   }
+}
 public let zoomIdentifierLevel = [
         0:559082264.029,
         1:279541132.015,

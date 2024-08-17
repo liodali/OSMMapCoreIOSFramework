@@ -30,6 +30,11 @@ public enum LineCapType {
             }
     }
 }
+public enum PolyineType {
+    case LINE
+    case DOT
+    
+}
 public class RoadManager {
     
     private let mapView:MCMapView
@@ -81,8 +86,8 @@ public class RoadManager {
                                                     dashArray: [1,1],
                                                     lineCap: configuration.lineCap,
                                                     offset:0.0,
-                                                    dotted: false,
-                                                    dottedSkew: Float(0)
+                                                    dotted: configuration.polylineType.isDOT(),
+                                                    dottedSkew: Float(1)
                                         )
             )
            lineBorderLayer?.add(poylineBorder)
@@ -99,11 +104,11 @@ public class RoadManager {
                              blur: 0,
                              widthType: .SCREEN_PIXEL,
                              width: configuration.width,
-                             dashArray: [0,0],
+                             dashArray: [-1,-1],
                              lineCap: configuration.lineCap,
-                             offset:0.0,
-                             dotted: false,
-                             dottedSkew: Float(0)
+                             offset:-1.0,
+                             dotted: configuration.polylineType.isDOT(),
+                             dottedSkew: Float(1)
                     )
                 )
         lineLayer?.add(poyline)
@@ -127,11 +132,11 @@ public class RoadManager {
                                                     blur: 0,
                                                     widthType: .SCREEN_PIXEL,
                                                     width: configuration.width + configuration.borderWidth!,
-                                                    dashArray: [1,1],
+                                                    dashArray: [-1,-1],
                                                     lineCap: configuration.lineCap,
-                                                    offset:0.0,
-                                                    dotted: false,
-                                                    dottedSkew: Float(0)
+                                                    offset:-1.0,
+                                                    dotted: configuration.polylineType.isDOT(),
+                                                    dottedSkew: Float(1)
                                         )
             )
            lineBorderLayer?.add(poylineBorder)
@@ -148,11 +153,11 @@ public class RoadManager {
                                                 blur: 0,
                                                 widthType: .SCREEN_PIXEL,
                                                 width: configuration.width,
-                                                dashArray: [1,1],
+                                                dashArray: [-1,-1],
                                                 lineCap: configuration.lineCap,
-                                                offset:0.0,
-                                                dotted: false,
-                                                dottedSkew: Float(0)
+                                                offset:-1.0,
+                                                dotted: configuration.polylineType.isDOT(),
+                                                dottedSkew: Float(1)
                                         )
                            )
         lineLayer?.add(poyline)
@@ -214,15 +219,15 @@ public struct RoadConfiguration {
     let borderWidth:Float?
     let opacity:Float
     let lineCap:MCLineCapType
-    let isRouteDotted:Bool
+    let polylineType:PolyineType
                 public init(width: Float, color: UIColor,borderWidth:Float? = nil, borderColor: UIColor? = nil,
-                            opacity:Float = 1.0,lineCap:LineCapType = LineCapType.ROUND,isRouteDotted:Bool = false) {
+                            opacity:Float = 1.0,lineCap:LineCapType = LineCapType.ROUND,polylineType:PolyineType = PolyineType.LINE) {
         self.width = width
         self.color = color
         self.borderWidth = borderWidth
         self.borderColor = borderColor
         self.opacity = opacity
-        self.isRouteDotted = isRouteDotted
+        self.polylineType = polylineType
         self.lineCap = lineCap.getValue()
     }
 }
