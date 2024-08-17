@@ -12,20 +12,21 @@ let package = Package(
     .library(name: "OSMFlutterFramework", targets: ["OSMFlutterFramework"])
   ],
   dependencies: [
-    .package(url: "https://github.com/openmobilemaps/maps-core.git", from: "2.4.0"),
     .package(url: "https://github.com/UbiqueInnovation/djinni.git", from: "1.0.7"),
+    .package(url: "https://github.com/openmobilemaps/maps-core.git", from: "2.4.0"),
     .package(url: "https://github.com/raphaelmor/Polyline.git", from: "5.1.0")
   ],
   targets: [
-    .target(name: "OSMFlutterFramework",
-            path: "Sources/OSMFlutterFramework",
-            publicHeadersPath: "Sources/OSMFlutterFramework/",
-            dependencies: [
-                    "maps-core",
+    .target(
+        name: "OSMFlutterFramework",
+        dependencies: [
                     "djinni",
-                    "Polyline"
-                  ],
-           ),
+                    "maps-core",
+                    "Polyline",
+            ],
+        path: "Sources/OSMFlutterFramework",
+        publicHeadersPath: "Sources/OSMFlutterFramework/"
+    ),
     .testTarget(
       name: "OSMFlutterFrameworkTests",
       dependencies: ["OSMFlutterFramework"]
