@@ -19,17 +19,17 @@ let package = Package(
   targets: [
     .target(
         name: "OSMFlutterFramework",
-        dependencies: [
+        /*dependencies: [
                     "djinni",
                     "maps-core",
                     "Polyline",
-            ],
+            ],*/
         path: "Sources/OSMFlutterFramework",
         publicHeadersPath: "Sources/OSMFlutterFramework/"
-    ),
+    )/*,
     .testTarget(
       name: "OSMFlutterFrameworkTests",
       dependencies: ["OSMFlutterFramework"]
-    )
+    )*/
   ]
 )

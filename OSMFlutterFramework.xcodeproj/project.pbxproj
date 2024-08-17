@@ -7,29 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9005B1C52B1A76E000F20F5D /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005B1C42B1A76E000F20F5D /* extensions.swift */; };
-		9005B1C72B1A997E00F20F5D /* MarkerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005B1C62B1A997E00F20F5D /* MarkerManager.swift */; };
-		9005CBA22B1DC37400724B22 /* CustomTiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005CBA12B1DC37400724B22 /* CustomTiles.swift */; };
 		9005CBAD2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005CBAC2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift */; };
 		901252E22C70A38F00023664 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = 901252E12C70A38F00023664 /* Polyline */; };
 		901252E62C70A7DA00023664 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 901252E52C70A7DA00023664 /* README.md */; };
-		9015BB372BD95DF500CCB075 /* MapCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9015BB362BD95DF500CCB075 /* MapCore */; };
-		9015BB392BD95DF500CCB075 /* MapCoreSharedModule in Frameworks */ = {isa = PBXBuildFile; productRef = 9015BB382BD95DF500CCB075 /* MapCoreSharedModule */; };
-		9015BB3B2BD95DF500CCB075 /* MapCoreSharedModuleCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 9015BB3A2BD95DF500CCB075 /* MapCoreSharedModuleCpp */; };
-		902B9F7B2B2D9DC800F86D12 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902B9F7A2B2D9DC800F86D12 /* LocationManager.swift */; };
+		901253112C71257300023664 /* BaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901253002C71256700023664 /* BaseManager.swift */; };
+		901253122C71257300023664 /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901253012C71256700023664 /* BoundingBox.swift */; };
+		901253132C71257300023664 /* CustomTiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901253022C71256700023664 /* CustomTiles.swift */; };
+		901253142C71257300023664 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901253032C71256700023664 /* extensions.swift */; };
+		901253152C71257300023664 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901253042C71256700023664 /* LocationManager.swift */; };
+		901253162C71257300023664 /* MarkerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901253052C71256700023664 /* MarkerManager.swift */; };
+		901253172C71257300023664 /* OSMMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901253062C71256700023664 /* OSMMarker.swift */; };
+		901253182C71257300023664 /* PoisManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901253072C71256700023664 /* PoisManager.swift */; };
+		901253192C71257300023664 /* RoadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901253082C71256700023664 /* RoadManager.swift */; };
+		9012531A2C71257300023664 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901253092C71256700023664 /* Shape.swift */; };
+		9012531B2C71257300023664 /* ShapeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9012530A2C71256700023664 /* ShapeManager.swift */; };
+		9012531C2C71257300023664 /* ZoomConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9012530B2C71256700023664 /* ZoomConfiguration.swift */; };
+		9012531D2C71257300023664 /* OSMFlutterFramework.h in Sources */ = {isa = PBXBuildFile; fileRef = 9012530D2C71256700023664 /* OSMFlutterFramework.h */; };
+		9012531E2C71257300023664 /* OSMTileConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9012530E2C71256700023664 /* OSMTileConfiguration.swift */; };
+		9012531F2C71257300023664 /* OSMView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9012530F2C71256700023664 /* OSMView.swift */; };
+		901253212C71270C00023664 /* MapCore in Frameworks */ = {isa = PBXBuildFile; productRef = 901253202C71270C00023664 /* MapCore */; };
+		901253232C71270C00023664 /* MapCoreSharedModule in Frameworks */ = {isa = PBXBuildFile; productRef = 901253222C71270C00023664 /* MapCoreSharedModule */; };
+		901253252C71270C00023664 /* MapCoreSharedModuleCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 901253242C71270C00023664 /* MapCoreSharedModuleCpp */; };
 		90487F7E2BABA51D007393C8 /* OSMFlutterFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; };
 		90487F7F2BABA51D007393C8 /* OSMFlutterFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		906C284E2B2A3F65008F013E /* PoisManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906C284D2B2A3F65008F013E /* PoisManager.swift */; };
-		9073977F2B438A8800080CB8 /* ShapeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9073977E2B438A8800080CB8 /* ShapeManager.swift */; };
-		907397812B438ADE00080CB8 /* BaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 907397802B438ADE00080CB8 /* BaseManager.swift */; };
-		90B8B83A2B1281BF0021DA8F /* OSMFlutterFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 90B8B8392B1281BF0021DA8F /* OSMFlutterFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		90B8B8452B1281EC0021DA8F /* OSMTileConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8402B1281EC0021DA8F /* OSMTileConfiguration.swift */; };
-		90B8B8462B1281EC0021DA8F /* OSMView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8412B1281EC0021DA8F /* OSMView.swift */; };
-		90B8B8472B1281EC0021DA8F /* BoundingBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8432B1281EC0021DA8F /* BoundingBox.swift */; };
-		90B8B8482B1281EC0021DA8F /* ZoomConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90B8B8442B1281EC0021DA8F /* ZoomConfiguration.swift */; };
-		90CC6CEF2B2864240015A11C /* RoadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CC6CEE2B2864240015A11C /* RoadManager.swift */; };
-		90EA02682B52000500618BD5 /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EA02672B52000500618BD5 /* Shape.swift */; };
-		90ED38362B1E24220012F419 /* OSMMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90ED38352B1E24220012F419 /* OSMMarker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,25 +57,25 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		9005B1C42B1A76E000F20F5D /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
-		9005B1C62B1A997E00F20F5D /* MarkerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerManager.swift; sourceTree = "<group>"; };
-		9005CBA12B1DC37400724B22 /* CustomTiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTiles.swift; sourceTree = "<group>"; };
 		9005CBAA2B1DD43C00724B22 /* OSMFlutterFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OSMFlutterFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9005CBAC2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMFlutterFrameworkTests.swift; sourceTree = "<group>"; };
 		901252E52C70A7DA00023664 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		902B9F7A2B2D9DC800F86D12 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		906C284D2B2A3F65008F013E /* PoisManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoisManager.swift; sourceTree = "<group>"; };
-		9073977E2B438A8800080CB8 /* ShapeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeManager.swift; sourceTree = "<group>"; };
-		907397802B438ADE00080CB8 /* BaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseManager.swift; sourceTree = "<group>"; };
+		901253002C71256700023664 /* BaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseManager.swift; sourceTree = "<group>"; };
+		901253012C71256700023664 /* BoundingBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
+		901253022C71256700023664 /* CustomTiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTiles.swift; sourceTree = "<group>"; };
+		901253032C71256700023664 /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
+		901253042C71256700023664 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		901253052C71256700023664 /* MarkerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerManager.swift; sourceTree = "<group>"; };
+		901253062C71256700023664 /* OSMMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMMarker.swift; sourceTree = "<group>"; };
+		901253072C71256700023664 /* PoisManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoisManager.swift; sourceTree = "<group>"; };
+		901253082C71256700023664 /* RoadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadManager.swift; sourceTree = "<group>"; };
+		901253092C71256700023664 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
+		9012530A2C71256700023664 /* ShapeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeManager.swift; sourceTree = "<group>"; };
+		9012530B2C71256700023664 /* ZoomConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomConfiguration.swift; sourceTree = "<group>"; };
+		9012530D2C71256700023664 /* OSMFlutterFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSMFlutterFramework.h; sourceTree = "<group>"; };
+		9012530E2C71256700023664 /* OSMTileConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMTileConfiguration.swift; sourceTree = "<group>"; };
+		9012530F2C71256700023664 /* OSMView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMView.swift; sourceTree = "<group>"; };
 		90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OSMFlutterFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		90B8B8392B1281BF0021DA8F /* OSMFlutterFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSMFlutterFramework.h; sourceTree = "<group>"; };
-		90B8B8402B1281EC0021DA8F /* OSMTileConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSMTileConfiguration.swift; sourceTree = "<group>"; };
-		90B8B8412B1281EC0021DA8F /* OSMView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSMView.swift; sourceTree = "<group>"; };
-		90B8B8432B1281EC0021DA8F /* BoundingBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBox.swift; sourceTree = "<group>"; };
-		90B8B8442B1281EC0021DA8F /* ZoomConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomConfiguration.swift; sourceTree = "<group>"; };
-		90CC6CEE2B2864240015A11C /* RoadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadManager.swift; sourceTree = "<group>"; };
-		90EA02672B52000500618BD5 /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
-		90ED38352B1E24220012F419 /* OSMMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMMarker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,10 +91,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				901253212C71270C00023664 /* MapCore in Frameworks */,
+				901253252C71270C00023664 /* MapCoreSharedModuleCpp in Frameworks */,
 				901252E22C70A38F00023664 /* Polyline in Frameworks */,
-				9015BB372BD95DF500CCB075 /* MapCore in Frameworks */,
-				9015BB392BD95DF500CCB075 /* MapCoreSharedModule in Frameworks */,
-				9015BB3B2BD95DF500CCB075 /* MapCoreSharedModuleCpp in Frameworks */,
+				901253232C71270C00023664 /* MapCoreSharedModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,11 +109,42 @@
 			path = OSMFlutterFrameworkTests;
 			sourceTree = "<group>";
 		};
+		9012530C2C71256700023664 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				901253002C71256700023664 /* BaseManager.swift */,
+				901253012C71256700023664 /* BoundingBox.swift */,
+				901253022C71256700023664 /* CustomTiles.swift */,
+				901253032C71256700023664 /* extensions.swift */,
+				901253042C71256700023664 /* LocationManager.swift */,
+				901253052C71256700023664 /* MarkerManager.swift */,
+				901253062C71256700023664 /* OSMMarker.swift */,
+				901253072C71256700023664 /* PoisManager.swift */,
+				901253082C71256700023664 /* RoadManager.swift */,
+				901253092C71256700023664 /* Shape.swift */,
+				9012530A2C71256700023664 /* ShapeManager.swift */,
+				9012530B2C71256700023664 /* ZoomConfiguration.swift */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		901253102C71256700023664 /* OSMFlutterFramework */ = {
+			isa = PBXGroup;
+			children = (
+				9012530C2C71256700023664 /* models */,
+				9012530D2C71256700023664 /* OSMFlutterFramework.h */,
+				9012530E2C71256700023664 /* OSMTileConfiguration.swift */,
+				9012530F2C71256700023664 /* OSMView.swift */,
+			);
+			name = OSMFlutterFramework;
+			path = Sources/OSMFlutterFramework;
+			sourceTree = "<group>";
+		};
 		90B8B82C2B1281BF0021DA8F = {
 			isa = PBXGroup;
 			children = (
+				901253102C71256700023664 /* OSMFlutterFramework */,
 				901252E52C70A7DA00023664 /* README.md */,
-				90B8B8382B1281BF0021DA8F /* OSMFlutterFramework */,
 				9005CBAB2B1DD43C00724B22 /* OSMFlutterFrameworkTests */,
 				90B8B8372B1281BF0021DA8F /* Products */,
 				90B8B8602B1402D80021DA8F /* Frameworks */,
@@ -127,37 +158,6 @@
 				9005CBAA2B1DD43C00724B22 /* OSMFlutterFrameworkTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		90B8B8382B1281BF0021DA8F /* OSMFlutterFramework */ = {
-			isa = PBXGroup;
-			children = (
-				90B8B8422B1281EC0021DA8F /* models */,
-				90B8B8402B1281EC0021DA8F /* OSMTileConfiguration.swift */,
-				90B8B8412B1281EC0021DA8F /* OSMView.swift */,
-				90B8B8392B1281BF0021DA8F /* OSMFlutterFramework.h */,
-			);
-			name = OSMFlutterFramework;
-			path = Sources/OSMFlutterFramework;
-			sourceTree = "<group>";
-		};
-		90B8B8422B1281EC0021DA8F /* models */ = {
-			isa = PBXGroup;
-			children = (
-				9005CBA12B1DC37400724B22 /* CustomTiles.swift */,
-				90B8B8432B1281EC0021DA8F /* BoundingBox.swift */,
-				90B8B8442B1281EC0021DA8F /* ZoomConfiguration.swift */,
-				9005B1C42B1A76E000F20F5D /* extensions.swift */,
-				9005B1C62B1A997E00F20F5D /* MarkerManager.swift */,
-				90ED38352B1E24220012F419 /* OSMMarker.swift */,
-				90CC6CEE2B2864240015A11C /* RoadManager.swift */,
-				906C284D2B2A3F65008F013E /* PoisManager.swift */,
-				902B9F7A2B2D9DC800F86D12 /* LocationManager.swift */,
-				9073977E2B438A8800080CB8 /* ShapeManager.swift */,
-				907397802B438ADE00080CB8 /* BaseManager.swift */,
-				90EA02672B52000500618BD5 /* Shape.swift */,
-			);
-			path = models;
 			sourceTree = "<group>";
 		};
 		90B8B8602B1402D80021DA8F /* Frameworks */ = {
@@ -174,7 +174,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				90B8B83A2B1281BF0021DA8F /* OSMFlutterFramework.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,10 +220,10 @@
 			);
 			name = OSMFlutterFramework;
 			packageProductDependencies = (
-				9015BB362BD95DF500CCB075 /* MapCore */,
-				9015BB382BD95DF500CCB075 /* MapCoreSharedModule */,
-				9015BB3A2BD95DF500CCB075 /* MapCoreSharedModuleCpp */,
 				901252E12C70A38F00023664 /* Polyline */,
+				901253202C71270C00023664 /* MapCore */,
+				901253222C71270C00023664 /* MapCoreSharedModule */,
+				901253242C71270C00023664 /* MapCoreSharedModuleCpp */,
 			);
 			productName = OSMFlutterFramework;
 			productReference = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */;
@@ -304,20 +303,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				906C284E2B2A3F65008F013E /* PoisManager.swift in Sources */,
-				9005B1C52B1A76E000F20F5D /* extensions.swift in Sources */,
-				9005CBA22B1DC37400724B22 /* CustomTiles.swift in Sources */,
-				90EA02682B52000500618BD5 /* Shape.swift in Sources */,
-				902B9F7B2B2D9DC800F86D12 /* LocationManager.swift in Sources */,
-				907397812B438ADE00080CB8 /* BaseManager.swift in Sources */,
-				90B8B8472B1281EC0021DA8F /* BoundingBox.swift in Sources */,
-				90ED38362B1E24220012F419 /* OSMMarker.swift in Sources */,
-				90B8B8462B1281EC0021DA8F /* OSMView.swift in Sources */,
-				9005B1C72B1A997E00F20F5D /* MarkerManager.swift in Sources */,
-				90B8B8452B1281EC0021DA8F /* OSMTileConfiguration.swift in Sources */,
-				9073977F2B438A8800080CB8 /* ShapeManager.swift in Sources */,
-				90CC6CEF2B2864240015A11C /* RoadManager.swift in Sources */,
-				90B8B8482B1281EC0021DA8F /* ZoomConfiguration.swift in Sources */,
+				901253112C71257300023664 /* BaseManager.swift in Sources */,
+				901253122C71257300023664 /* BoundingBox.swift in Sources */,
+				901253132C71257300023664 /* CustomTiles.swift in Sources */,
+				901253142C71257300023664 /* extensions.swift in Sources */,
+				901253152C71257300023664 /* LocationManager.swift in Sources */,
+				901253162C71257300023664 /* MarkerManager.swift in Sources */,
+				901253172C71257300023664 /* OSMMarker.swift in Sources */,
+				901253182C71257300023664 /* PoisManager.swift in Sources */,
+				901253192C71257300023664 /* RoadManager.swift in Sources */,
+				9012531A2C71257300023664 /* Shape.swift in Sources */,
+				9012531B2C71257300023664 /* ShapeManager.swift in Sources */,
+				9012531C2C71257300023664 /* ZoomConfiguration.swift in Sources */,
+				9012531D2C71257300023664 /* OSMFlutterFramework.h in Sources */,
+				9012531E2C71257300023664 /* OSMTileConfiguration.swift in Sources */,
+				9012531F2C71257300023664 /* OSMView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,6 +351,7 @@
 		9005CBB22B1DD43C00724B22 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -372,6 +373,7 @@
 		9005CBB32B1DD43C00724B22 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -682,17 +684,17 @@
 			package = 901252E02C70A38F00023664 /* XCRemoteSwiftPackageReference "Polyline" */;
 			productName = Polyline;
 		};
-		9015BB362BD95DF500CCB075 /* MapCore */ = {
+		901253202C71270C00023664 /* MapCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */;
 			productName = MapCore;
 		};
-		9015BB382BD95DF500CCB075 /* MapCoreSharedModule */ = {
+		901253222C71270C00023664 /* MapCoreSharedModule */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */;
 			productName = MapCoreSharedModule;
 		};
-		9015BB3A2BD95DF500CCB075 /* MapCoreSharedModuleCpp */ = {
+		901253242C71270C00023664 /* MapCoreSharedModuleCpp */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */;
 			productName = MapCoreSharedModuleCpp;
