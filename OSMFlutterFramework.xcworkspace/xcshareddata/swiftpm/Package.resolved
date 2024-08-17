@@ -1,0 +1,51 @@
+{
+  "originHash" : "8eec72f2446d670066586da3fd10e2c4c1781eb1e05db6e7ae18c16268bea57c",
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "f455c2975872ccd2d9c81594c658af65716e9b9a",
+        "version" : "5.9.1"
+      }
+    },
+    {
+      "identity" : "djinni",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/UbiqueInnovation/djinni.git",
+      "state" : {
+        "revision" : "01dd31c42ef00a63c839b6fd20cd4895903e0215",
+        "version" : "1.0.7"
+      }
+    },
+    {
+      "identity" : "maps-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/openmobilemaps/maps-core",
+      "state" : {
+        "revision" : "9af34563358f90ced1f3d531375af1d7775bf0dd",
+        "version" : "2.3.0"
+      }
+    },
+    {
+      "identity" : "osrm-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/liodali/osrm-swift",
+      "state" : {
+        "revision" : "fb657d23c9cedcb0d0ad61cfe20cfd56b316d2cf",
+        "version" : "0.1.2"
+      }
+    },
+    {
+      "identity" : "polyline",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/raphaelmor/Polyline.git",
+      "state" : {
+        "revision" : "353f80378dcd8f17eefe8550090c6b1ae3c9da23",
+        "version" : "5.1.0"
+      }
+    }
+  ],
+  "version" : 3
+}

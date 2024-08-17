@@ -163,4 +163,11 @@ extension Array where Element==CLLocationCoordinate2D {
         return MCPolygonCoord(positions: coords, holes: [])
        
     }
+    func toMCCoords()->[MCCoord]{
+        let coords = self.map { cllocation in
+            cllocation.mcCoord //.toMCCoordEpsg3857()
+        }
+        return coords
+       
+    }
 }

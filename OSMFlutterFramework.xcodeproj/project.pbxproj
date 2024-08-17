@@ -132,7 +132,8 @@
 				90B8B8412B1281EC0021DA8F /* OSMView.swift */,
 				90B8B8392B1281BF0021DA8F /* OSMFlutterFramework.h */,
 			);
-			path = OSMFlutterFramework;
+			name = OSMFlutterFramework;
+			path = Sources/OSMFlutterFramework;
 			sourceTree = "<group>";
 		};
 		90B8B8422B1281EC0021DA8F /* models */ = {
@@ -636,7 +637,7 @@
 			repositoryURL = "https://github.com/openmobilemaps/maps-core";
 			requirement = {
 				kind = exactVersion;
-				version = 2.2.0;
+				version = 2.3.0;
 			};
 		};
 		90D7D9BB2BD956BD006A8014 /* XCRemoteSwiftPackageReference "djinni" */ = {

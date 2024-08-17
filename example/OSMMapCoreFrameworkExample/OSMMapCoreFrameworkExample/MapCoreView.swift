@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 import CoreLocation
 import OSMFlutterFramework
+import osrm_swift
+import Polyline
 struct OSMMapView: UIViewControllerRepresentable {
     typealias UIViewControllerType = InnerOSMMapView
     
@@ -81,23 +83,56 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
     }
     
     func onSingleTap(location: CLLocationCoordinate2D) {
-        let image = UIImage(systemName: "mappin")
-       // if self.location == nil {
-          let marker = Marker(location: location,
-                               markerConfiguration: MarkerConfiguration(icon: image!,
-                                                                        iconSize: (x:Int(56.0 * UIScreen.main.nativeScale),y:Int(56.0 * UIScreen.main.nativeScale)),
-                                                                        angle: nil,
-                                                                        anchor: (0.5,1))// (0.5,0.5))
-           )
-            self.map.markerManager.addMarker(marker: marker)
-       // }else {
-            //self.map.markerManager.updateMarker(oldlocation: self.location!, newlocation: location, icon: nil)
-           
-       // }
-       // self.map.markerManager.addMarker(marker: marker)
-        self.location = location
+        if(geos.count < 2){
+            let image = UIImage(systemName: "mappin")
+           // if self.location == nil {
+              let marker = Marker(location: location,
+                                   markerConfiguration: MarkerConfiguration(icon: image!,
+                                                                            iconSize: (x:Int(56.0 * UIScreen.main.nativeScale),y:Int(56.0 * UIScreen.main.nativeScale)),
+                                                                            angle: nil,
+                                                                            anchor: (0.5,1))// (0.5,0.5))
+               )
+                self.map.markerManager.addMarker(marker: marker)
+           // }else {
+                //self.map.markerManager.updateMarker(oldlocation: self.location!, newlocation: location, icon: nil)
+               
+           // }
+           // self.map.markerManager.addMarker(marker: marker)
+            self.location = location
 
-        geos.append(location)
+            geos.append(location)
+        }
+       
+        if(geos.count >= 2 && alert == nil){
+            Task.detached { @MainActor in
+                self.alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+                let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+                loadingIndicator.hidesWhenStopped = true
+                loadingIndicator.style = UIActivityIndicatorView.Style.gray
+                loadingIndicator.startAnimating();
+                self.alert!.view.addSubview(loadingIndicator)
+                self.present(self.alert!, animated: true, completion: nil)
+            }
+           
+            DispatchQueue.global().async {
+                Task {
+                    let result = await self.osrmManager.getRoadAsync(wayPoints: self.geos, configuration: InputRoadConfiguration())
+                    if result != nil {
+                        let polyline = Polyline(encodedPolyline: result!.mRouteHigh)
+                        Task.detached { @MainActor in
+                            self.map.roadManager.addRoad(id: "1", polylines: polyline.coordinates!, configuration: RoadConfiguration(width: 5.0, color: UIColor.red))
+                        }
+                    }
+                    Task.detached { @MainActor in
+                        self.dismiss(animated: false, completion: nil)
+                        self.geos.removeAll()
+                        self.alert = nil
+                    }
+                   
+                }
+              
+            }
+        }
     }
     
     func onLongTap(location: CLLocationCoordinate2D) {
@@ -105,6 +140,8 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
     }
     
     let map:OSMView
+    let osrmManager:OSRMManager
+    var alert:UIAlertController? = nil
     var geos:[CLLocationCoordinate2D] = []
     var initMap:Bool = false
     let rect:CGRect
@@ -124,6 +161,7 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
        
         //map.frame = rect//CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 300, height: 300))
         self.rect = rect
+        self.osrmManager = try! OSRMManager()
         super.init(nibName: nil, bundle: nil)
         //map.frame = rect
         self.view.addSubview(self.map)

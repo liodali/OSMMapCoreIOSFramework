@@ -7,11 +7,12 @@
 
 import Foundation
 @_implementationOnly import MapCore
+
 public struct OSMMapConfiguration {
     let zoomLevelScaleFactor:Double
     let numDrawPreviousLayers:Int
     let adaptScaleToScreen:Bool
-    public init(zoomLevelScaleFactor: Double = 0.65, numDrawPreviousLayers: Int = 10, adaptScaleToScreen: Bool = true) {
+    public init(zoomLevelScaleFactor: Double = 0.65, numDrawPreviousLayers: Int = 1, adaptScaleToScreen: Bool = true) {
         self.zoomLevelScaleFactor = zoomLevelScaleFactor
         self.numDrawPreviousLayers = numDrawPreviousLayers
         self.adaptScaleToScreen = adaptScaleToScreen
@@ -63,7 +64,7 @@ class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
     // when the zoom is smaller/larger than the valid range
     func getZoomInfo() -> MCTiled2dMapZoomInfo {
         MCTiled2dMapZoomInfo(zoomLevelScaleFactor: Float(configuration.zoomLevelScaleFactor),
-                             numDrawPreviousLayers: Int32(configuration.numDrawPreviousLayers),
+                             numDrawPreviousLayers: Int32(configuration.numDrawPreviousLayers), numDrawPreviousOrLaterTLayers: Int32(configuration.numDrawPreviousLayers),
                              adaptScaleToScreen: configuration.adaptScaleToScreen,
                            maskTile: true,
                            underzoom: true,

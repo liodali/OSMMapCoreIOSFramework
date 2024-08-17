@@ -14,6 +14,8 @@
 		904407592BA91E1E0017B6FE /* MapCoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904407582BA91E1E0017B6FE /* MapCoreView.swift */; };
 		9044075B2BA920130017B6FE /* OSMFlutterFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */; };
 		9044075C2BA920130017B6FE /* OSMFlutterFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9069A33A2C68CDB600A15ED3 /* osrm-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A3392C68CDB600A15ED3 /* osrm-swift */; };
+		9069A33D2C69157100A15ED3 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A33C2C69157100A15ED3 /* Polyline */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +50,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9044075B2BA920130017B6FE /* OSMFlutterFramework.framework in Frameworks */,
+				9069A33A2C68CDB600A15ED3 /* osrm-swift in Frameworks */,
+				9069A33D2C69157100A15ED3 /* Polyline in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +122,10 @@
 			dependencies = (
 			);
 			name = OSMMapCoreFrameworkExample;
+			packageProductDependencies = (
+				9069A3392C68CDB600A15ED3 /* osrm-swift */,
+				9069A33C2C69157100A15ED3 /* Polyline */,
+			);
 			productName = OSMMapCoreFrameworkExample;
 			productReference = 9044072B2BA90CF80017B6FE /* OSMMapCoreFrameworkExample.app */;
 			productType = "com.apple.product-type.application";
@@ -146,6 +154,10 @@
 				Base,
 			);
 			mainGroup = 904407222BA90CF80017B6FE;
+			packageReferences = (
+				9069A3382C68CDB600A15ED3 /* XCRemoteSwiftPackageReference "osrm-swift" */,
+				9069A33B2C69157100A15ED3 /* XCRemoteSwiftPackageReference "Polyline" */,
+			);
 			productRefGroup = 9044072C2BA90CF80017B6FE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -398,6 +410,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9069A3382C68CDB600A15ED3 /* XCRemoteSwiftPackageReference "osrm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/liodali/osrm-swift";
+			requirement = {
+				kind = exactVersion;
+				version = 0.1.2;
+			};
+		};
+		9069A33B2C69157100A15ED3 /* XCRemoteSwiftPackageReference "Polyline" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/raphaelmor/Polyline";
+			requirement = {
+				kind = exactVersion;
+				version = 5.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9069A3392C68CDB600A15ED3 /* osrm-swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9069A3382C68CDB600A15ED3 /* XCRemoteSwiftPackageReference "osrm-swift" */;
+			productName = "osrm-swift";
+		};
+		9069A33C2C69157100A15ED3 /* Polyline */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9069A33B2C69157100A15ED3 /* XCRemoteSwiftPackageReference "Polyline" */;
+			productName = Polyline;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 904407232BA90CF80017B6FE /* Project object */;
 }
