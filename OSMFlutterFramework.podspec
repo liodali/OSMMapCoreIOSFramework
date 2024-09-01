@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
     s.platform              = :ios
     s.ios.deployment_target = '13.0'
     
-    #s.sources_files = “Sources/OSMFlutterFramework/**/*.{h,m,swift}“
+    #s.source_files = 'Sources/OSMFlutterFramework/**/*.{h,swift}'
     
     #s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386 arm64'}
     #s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386 arm64'}

@@ -30,7 +30,7 @@ public enum LineCapType {
             }
     }
 }
-public enum PolyineType {
+public enum PolylineType {
     case LINE
     case DOT
     
@@ -219,9 +219,9 @@ public struct RoadConfiguration {
     let borderWidth:Float?
     let opacity:Float
     let lineCap:MCLineCapType
-    let polylineType:PolyineType
+    let polylineType:PolylineType
                 public init(width: Float, color: UIColor,borderWidth:Float? = nil, borderColor: UIColor? = nil,
-                            opacity:Float = 1.0,lineCap:LineCapType = LineCapType.ROUND,polylineType:PolyineType = PolyineType.LINE) {
+                            opacity:Float = 1.0,lineCap:LineCapType = LineCapType.ROUND,polylineType:PolylineType = PolylineType.LINE) {
         self.width = width
         self.color = color
         self.borderWidth = borderWidth
