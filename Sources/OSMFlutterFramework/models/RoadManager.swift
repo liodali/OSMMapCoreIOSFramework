@@ -6,9 +6,18 @@
 //
 
 import Foundation
-@_implementationOnly import MapCore
 import MapKit
+#if compiler(>=5.10)
+/* private */ internal import Polyline
+#else
 @_implementationOnly import Polyline
+#endif
+
+#if compiler(>=5.10)
+/* private */ internal import MapCore
+#else
+@_implementationOnly import MapCore
+#endif
 
 public protocol PoylineHandler {
     func onTap(roadId:String)

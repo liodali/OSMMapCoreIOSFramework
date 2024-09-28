@@ -7,7 +7,11 @@
 
 import Foundation
 import MapKit
+#if compiler(>=5.10)
+/* private */ internal import MapCore
+#else
 @_implementationOnly import MapCore
+#endif
 
 public protocol OnMapGesture {
     func onSingleTap(location:CLLocationCoordinate2D)

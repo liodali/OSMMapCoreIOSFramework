@@ -1,5 +1,5 @@
 {
-  "originHash" : "2fafe649039c2c148afdad6f41c791f949890fd32e896e4fda9f505b3f73b7ff",
+  "originHash" : "ec387899b55e69f42986ded2b8888dc5d8c4e2fa71f24567167b4c0bf511887f",
   "pins" : [
     {
       "identity" : "djinni",
@@ -15,8 +15,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openmobilemaps/maps-core",
       "state" : {
-        "revision" : "ba0a088cd692b3d33714a961da2ffdfc854d5e48",
-        "version" : "2.2.0"
+        "revision" : "cea64807bd1b2eb184bf03ac5a6d16d18270b063",
+        "version" : "2.5.1"
+      }
+    },
+    {
+      "identity" : "polyline",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/raphaelmor/Polyline",
+      "state" : {
+        "revision" : "353f80378dcd8f17eefe8550090c6b1ae3c9da23",
+        "version" : "5.1.0"
       }
     }
   ],

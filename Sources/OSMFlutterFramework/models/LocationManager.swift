@@ -7,8 +7,12 @@
 
 import Foundation
 import CoreLocation
-@_implementationOnly import MapCore
 import MapKit
+#if compiler(>=5.10)
+/* private */ internal import MapCore
+#else
+@_implementationOnly import MapCore
+#endif
 
 public struct TrackConfiguration {
     public var moveMap:Bool = false

@@ -7,7 +7,11 @@
 
 import Foundation
 import MapKit
+#if compiler(>=5.10)
+/* private */ internal import MapCore
+#else
 @_implementationOnly import MapCore
+#endif
 
 let RADIUS_EARTH = 6378137.0
 let deg2rad = Double.pi / 180.0

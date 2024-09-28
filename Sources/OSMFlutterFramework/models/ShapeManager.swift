@@ -6,8 +6,13 @@
 //
 
 import Foundation
-@_implementationOnly import MapCore
 import MapKit
+#if compiler(>=5.10)
+/* private */ internal import MapCore
+#else
+@_implementationOnly import MapCore
+#endif
+
 public enum ShapeTypes {
     case Rect
     case Circle

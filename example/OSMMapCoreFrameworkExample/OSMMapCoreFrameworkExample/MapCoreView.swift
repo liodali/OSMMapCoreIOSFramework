@@ -85,19 +85,44 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
     func onSingleTap(location: CLLocationCoordinate2D) {
         if(geos.count < 2){
             let image = UIImage(systemName: "mappin")
-           // if self.location == nil {
-              let marker = Marker(location: location,
-                                   markerConfiguration: MarkerConfiguration(icon: image!,
-                                                                            iconSize: (x:Int(56.0 * UIScreen.main.nativeScale),y:Int(56.0 * UIScreen.main.nativeScale)),
-                                                                            angle: nil,
-                                                                            anchor: (0.5,1))// (0.5,0.5))
-               )
-                self.map.markerManager.addMarker(marker: marker)
-           // }else {
-                //self.map.markerManager.updateMarker(oldlocation: self.location!, newlocation: location, icon: nil)
-               
-           // }
-           // self.map.markerManager.addMarker(marker: marker)
+           
+            let marker = Marker(
+                location: location,
+                markerConfiguration: MarkerConfiguration(
+                    icon: image!,
+                    iconSize: (x:Int(56.0 * UIScreen.main.nativeScale),y:Int(56.0 * UIScreen.main.nativeScale)),
+                    angle: nil,
+                    anchor: (0.5,1)// (0.5,0.5))
+                )
+              )
+            self.map.markerManager.addMarker(marker: marker)
+            let steLoc = "\(location)"
+            map.shapeManager.drawShape(
+                key: steLoc,
+                shape: CircleOSM(
+                    center:location,
+                    distanceInMeter:500,
+                    style:ShapeStyleConfiguration(
+                        filledColor: UIColor.red.withAlphaComponent(CGFloat(0.5)),
+                        borderColor: UIColor.green.withAlphaComponent(CGFloat(1)),
+                        borderWidth: 20
+                    )
+                )
+            )
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [unowned self] in
+                map.shapeManager.deleteShape(ckey: steLoc)
+                self.map.markerManager.updateMarker(
+                    oldlocation: location,
+                    newlocation: location,
+                    icon: UIImage(
+                        systemName: "mappin",
+                        withConfiguration: UIImage.SymbolConfiguration(
+                                    paletteColors: [.blue]
+                        )
+                    )
+                )
+            }
+         
             self.location = location
 
             geos.append(location)
@@ -151,7 +176,7 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
                 if result != nil {
                     let polyline = Polyline(encodedPolyline: result!.mRouteHigh)
                     Task.detached { @MainActor in
-                        self.map.roadManager.addRoad(id: "1", polylines: polyline.coordinates!, configuration: RoadConfiguration(width: 25.0, color: UIColor.red,                              polylineType: PolyineType.DOT))
+                        self.map.roadManager.addRoad(id: "1", polylines: polyline.coordinates!, configuration: RoadConfiguration(width: 25.0, color: UIColor.red,                              polylineType: PolylineType.DOT))
                     }
                 }
                 Task.detached { @MainActor in
@@ -288,53 +313,27 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
             //map.setZoom(zoom: 12)
             initMap = true
         }
-        
-        
-        //map.moveTo(location: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324), zoom: 12, animated: false)
-        
 
-        /*let roadConfig = RoadConfiguration(width:20.0,
-                                           color: UIColor(hex: "#ff0000ff") ?? .green,
-                                           borderWidth: 25,
-                                           borderColor: .black,
-                                           lineCap:LineCapType.ROUND)
-        map.roadManager.addRoad(id: "road1", polylines: [
-            CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324),
-        CLLocationCoordinate2D(latitude: 47.4433594, longitude: 8.4680184),
-        CLLocationCoordinate2D(latitude: 47.4317782, longitude: 8.4716146),
-            CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324)
-        ], configuration: roadConfig)*/
         map.roadTapHandlerDelegate = self
         map.userLocationDelegate = self
-        /*DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [unowned self] in
-            //map.locationManager.requestSingleLocation()
-            map.setCustomTile(tile: CustomTiles(["urls":[["url":"https://a.tile-cyclosm.openstreetmap.fr/cyclosm/"]],
-                                                 "tileExtension":".png","tileSize":256,"maxZoomLevel":19]))
-        }
-        let iconUserM = MarkerConfiguration(icon: UIImage(systemName: "location")!,
-                                            iconSize: MarkerIconSize(x:48,y:48), angle: nil, anchor: nil)
-        map.locationManager.setUserLocationIcons(
-            userLocationIcons: UserLocationConfiguration(userIcon:iconUserM , directionIcon: iconUserM))
-         */
-        /*map.shapeManager.drawShape(key: "rect",
-                                   shape: CircleOSM(center:CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324),
-                                   distanceInMeter:500,
-                                   style:ShapeStyleConfiguration(
-                                    filledColor: UIColor.red.withAlphaComponent(CGFloat(0.5)),
-                                        borderColor: UIColor.green.withAlphaComponent(CGFloat(1)),
-                                        borderWidth: 20
-                                     )
-                                   )
-                                 )*/
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [unowned self] in
             print("current zoom \(map.zoom())")
             //self.map.setBoundingBox(bounds: BoundingBox(center: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324), distanceKm: 0.1))
             
-            let iconUserM = MarkerConfiguration(icon: UIImage(systemName: "location")!,
-                                                iconSize: MarkerIconSize(x:48,y:48), angle: nil, anchor: nil)
-            
-            self.map.markerManager.addMarker(marker: Marker(location: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324), markerConfiguration: iconUserM))
+            let iconUserM = MarkerConfiguration(
+                icon: UIImage(systemName: "location")!,
+                iconSize: MarkerIconSize(x:48,y:48),
+                angle: nil,
+                anchor: nil
+            )
+            self.map.markerManager.addMarker(
+                marker: Marker(
+                    location: CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324),
+                    markerConfiguration: iconUserM
+                )
+            )
+            //map.shapeManager.deleteShape(ckey: "circle")
             //map.moveTo(location:  CLLocationCoordinate2D(latitude: 47.4317782, longitude: 8.4716146), zoom: zoomConf.initZoom, animated: true)
             //map.shapeManager.deleteShape(ckey: "rect")
             //map.locationManager.requestEnableLocation()

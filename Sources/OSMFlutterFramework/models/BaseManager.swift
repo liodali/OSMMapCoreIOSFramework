@@ -6,8 +6,13 @@
 //
 
 import Foundation
-@_implementationOnly import MapCore
 import MapKit
+#if compiler(>=5.10)
+/* private */ internal import MapCore
+#else
+@_implementationOnly import MapCore
+#endif
+
 public protocol Manager {
     func hideAll()
     func hide(location:CLLocationCoordinate2D)

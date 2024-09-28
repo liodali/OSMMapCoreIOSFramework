@@ -7,7 +7,11 @@
 
 import Foundation
 import MapKit
+#if compiler(>=5.10)
+/* private */ internal import MapCore
+#else
 @_implementationOnly import MapCore
+#endif
 
 public protocol MapMarkerHandler {
     func onTap(location:CLLocationCoordinate2D)
@@ -39,10 +43,9 @@ public class MarkerManager {
     }
     
     public func addMarker(marker:Marker){
-        var nMarker = marker
+        var nMarker = marker.copy()
         let icon = nMarker.createMapIcon()
         iconLayerInterface?.add(icon)
-        nMarker.setIconIndex(index: iconLayerInterface!.getIcons().count - 1)
         markers.append(nMarker)
     }
     public func updateMarker(oldlocation:CLLocationCoordinate2D,
@@ -63,10 +66,9 @@ public class MarkerManager {
                 var marker = markers[index!]
                 let config = marker.markerConfiguration.copyWith(icon: icon,iconSize: iconSize, angle: angle, anchor: anchor,scaleType: scaleType)
                 marker.updateMarker(newLocation: newlocation, configuration: config)
-                let mcIcon = self.iconLayerInterface!.getIcons()[marker.getIconIndex()!]
+                let mcIcon = marker.getIconInterface()
                 self.iconLayerInterface?.remove(mcIcon)
                 self.iconLayerInterface?.add(marker.createMapIcon())
-                marker.setIconIndex(index: iconLayerInterface!.getIcons().count - 1)
                 markers[index!] = marker
                 self.map.invalidate()
             }

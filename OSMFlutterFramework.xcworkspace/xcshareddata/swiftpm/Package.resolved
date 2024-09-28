@@ -1,5 +1,5 @@
 {
-  "originHash" : "8eec72f2446d670066586da3fd10e2c4c1781eb1e05db6e7ae18c16268bea57c",
+  "originHash" : "4f2317518d64a30e5dd1e6b103fa396bb802d29ff5f9d0cd076cf1178890aaf6",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openmobilemaps/maps-core",
       "state" : {
-        "revision" : "9af34563358f90ced1f3d531375af1d7775bf0dd",
-        "version" : "2.3.0"
+        "revision" : "cea64807bd1b2eb184bf03ac5a6d16d18270b063",
+        "version" : "2.5.1"
       }
     },
     {

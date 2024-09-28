@@ -6,7 +6,11 @@
 //
 
 import Foundation
+#if compiler(>=5.10)
+/* private */ internal import MapCore
+#else
 @_implementationOnly import MapCore
+#endif
 
 public struct ZoomConfiguration {
     public  let initZoom:Int
