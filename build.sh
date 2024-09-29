@@ -43,8 +43,12 @@ echo "retrieve build directory"
 
 
 dir_build=$(xcodebuild -project OSMFlutterFramework.xcodeproj -showBuildSettings | grep BUILD_ROOT| awk '{print $3}')
-dir_build="${dir_build}/Build/Products"
+#dir_build="${dir_build}/Build/Products"
+echo "dir_build:$dir_build"
+echo -e "\n"
 dir_project=$(xcodebuild -project OSMFlutterFramework.xcodeproj -showBuildSettings | grep PROJECT_DIR| awk '{print $3}')
+echo "dir_project:$dir_project"
+echo -e "\n"
 echo "================================"   
 echo -e "\n"
 xcframeworklocation="${dir_build}/OSMFlutterFramework.xcframework"
@@ -100,6 +104,8 @@ then
    rm -rf LICENSE
 else
    echo "xcframework not generated"
+   echo "build 0.8.0 failed"
+   exit 1
 fi
 echo "================================"   
 echo -e "\n"
