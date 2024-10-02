@@ -79,9 +79,18 @@ public struct MarkerConfiguration{
                   angle: Float? = nil,
                   anchor: MarkerAnchor? = nil,
                   scaleType:MarkerScaleType? = nil) -> MarkerConfiguration {
-        MarkerConfiguration(icon: icon ?? self.icon,iconSize: iconSize ?? self.iconSize,
-                            angle: angle ?? self.angle, anchor: anchor ?? self.anchor,
-                            scaleType: scaleType ?? self.scaleType)
+        MarkerConfiguration(
+            icon: icon ?? self.icon,
+            iconSize: iconSize ?? self.iconSize,
+            angle: angle ?? self.angle,
+            anchor: anchor ?? self.anchor,
+            scaleType: scaleType ?? self.scaleType)
+    }
+    func anchorToMCVec2F() -> MCVec2F {
+        MCVec2F(
+            x: Float(anchor?.x ?? 0),
+            y: Float(anchor?.y ?? 0)
+        )
     }
 }
 extension Marker {
@@ -113,21 +122,25 @@ extension Marker {
        // MCVec2F(x:Float(markerConfiguration.iconSize.x),y:Float(markerConfiguration.iconSize.y))
         let location = mccoord ?? self.location.mcCoord //.toMCCoordEpsg3857()
         mcIconInfoInterface = if markerConfiguration.anchor != nil {
-            MCIconFactory.createIcon(withAnchor: id,
-                                     coordinate: location,
-                                     texture: texture,
-                                     iconSize: iconSize,
-                                           scale: markerConfiguration.scaleType.getValue(), blendMode: .NORMAL,
-                                     iconAnchor: MCVec2F(x: Float(markerConfiguration.anchor!.x), y: Float(markerConfiguration.anchor!.y)))
+            MCIconFactory.createIcon(
+                withAnchor: id,
+                coordinate: location,
+                texture: texture,
+                iconSize: iconSize,
+                scale: markerConfiguration.scaleType.getValue(),
+                blendMode: .NORMAL,
+                iconAnchor: markerConfiguration.anchorToMCVec2F()
+            )
         }else {
-            MCIconFactory.createIcon(id,
-                                            coordinate: location,
-                                            texture: texture,
-                                            iconSize: iconSize,
-                                            scale: markerConfiguration.scaleType.getValue()
-                                            ,blendMode: .NORMAL)
+            MCIconFactory.createIcon(
+                id,
+                coordinate: location,
+                texture: texture,
+                iconSize: iconSize,
+                scale: markerConfiguration.scaleType.getValue(),
+                blendMode: .NORMAL
+            )
         }
-       
         return mcIconInfoInterface
     }
 }
