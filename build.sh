@@ -25,7 +25,7 @@ awk  -v version="$argVersion" 'NR==4 {$0=version} 1' OSMFlutterFramework.podspec
 version=$(sed  -n 4p  OSMFlutterFramework.podspec | awk '{print $3}' | xargs)
 
 echo " the new version : $version "
-echo "================================"   
+echo "================================"
 echo "building for iOS (Devices/Simulator)"
 echo -e "\n"
 #if [ -n "$2" ]
@@ -36,7 +36,7 @@ echo -e "\n"
 xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES -quiet
 #fi
 
-echo "================================"   
+echo "================================"
 echo -e "\n"
 #version=$0
 echo "retrieve build directory"
@@ -44,17 +44,18 @@ echo "retrieve build directory"
 
 dir_build=$(xcodebuild -project OSMFlutterFramework.xcodeproj -showBuildSettings | grep BUILD_ROOT| awk '{print $3}')
 #dir_build="${dir_build}/Build/Products"
-echo "dir_build:$dir_build"
+echo "dir_build=>$dir_build"
 echo -e "\n"
 dir_project=$(xcodebuild -project OSMFlutterFramework.xcodeproj -showBuildSettings | grep PROJECT_DIR| awk '{print $3}')
-echo "dir_project:$dir_project"
+echo "dir_project=>$dir_project"
 echo -e "\n"
-echo "================================"   
+echo "================================"
 echo -e "\n"
-xcframeworklocation="${dir_build}/OSMFlutterFramework.xcframework"
+xcframeworklocation="${dir_project}/DerivedData/OSMFlutterFramework/Build/Products/OSMFlutterFramework.xcframework"
+buildDir="${dir_project}/DerivedData/OSMFlutterFramework/Build/Products"
 
 #cd DerivedData/OSMFlutterFramework/Build/Products
-if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ] 
+if [ -d "${buildDir}/OSMFlutterFramework.xcframework" ]
 then
    echo "folder exist"
    echo -e "\n"
@@ -63,16 +64,16 @@ then
 else
    echo "xcframework not found"
 fi
-cd $dir_build
+cd $buildDir
 echo -e "\n"
 echo "generate xcframework"
 echo -e "\n"
 
-frameworkiphoneos="${dir_build}/Release-iphoneos/OSMFlutterFramework.framework"
-frameworkiphonesimulator="${dir_build}/Release-iphonesimulator/OSMFlutterFramework.framework"
+frameworkiphoneos="${buildDir}/Release-iphoneos/OSMFlutterFramework.framework"
+frameworkiphonesimulator="${buildDir}/Release-iphonesimulator/OSMFlutterFramework.framework"
 
-frameworkBundleiphoneos="${dir_build}/Release-iphoneos/MapCore_MapCore.bundle"
-frameworkBundleiphonesimulator="${dir_build}/Release-iphonesimulator/MapCore_MapCore.bundle"
+frameworkBundleiphoneos="${buildDir}/Release-iphoneos/MapCore_MapCore.bundle"
+frameworkBundleiphonesimulator="${buildDir}/Release-iphonesimulator/MapCore_MapCore.bundle"
 
 xcframeworkiphoneosBundle="${xcframeworklocation}/ios-arm64"
 xcframeworkiphonesimulatorBundle="${xcframeworklocation}/ios-arm64_x86_64-simulator"
@@ -80,9 +81,9 @@ licence="${dir_project}/LICENSE"
 
 xcodebuild  -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation
 
-if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ] 
+if [ -d "${buildDir}/OSMFlutterFramework.xcframework" ]
 then
-   echo "================================"   
+   echo "================================"
    echo -e "\n"
    echo "xcframework generated successfully"
    echo -e "\n"
@@ -94,20 +95,20 @@ then
          exit 0
       fi
    fi
-   ziplocation="${dir_build}/OSMFlutterFramework.zip"
-   if [ -d $ziplocation ] 
+   ziplocation="${buildDir}/OSMFlutterFramework.zip"
+   if [ -d $ziplocation ]
    then
    rm -rf $ziplocation
    fi
-   cp  $licence $dir_build/LICENSE
+   cp  $licence $buildDir/LICENSE
    zip -r OSMFlutterFramework.zip OSMFlutterFramework.xcframework LICENSE
    rm -rf LICENSE
 else
    echo "xcframework not generated"
-   echo "build 0.8.0 failed"
+   echo "build $version failed"
    exit 1
 fi
-echo "================================"   
+echo "================================"
 echo -e "\n"
 echo $(pwd)
 mkdir -p $dir_project/build/pod

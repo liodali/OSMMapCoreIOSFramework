@@ -13,7 +13,7 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/UbiqueInnovation/djinni.git", from: "1.0.7"),
-    .package(url: "https://github.com/openmobilemaps/maps-core.git", from: "2.4.0"),
+    .package(url: "https://github.com/openmobilemaps/maps-core.git", from: "3.0.2"),
     .package(url: "https://github.com/raphaelmor/Polyline.git", from: "5.1.0")
   ],
   targets: [

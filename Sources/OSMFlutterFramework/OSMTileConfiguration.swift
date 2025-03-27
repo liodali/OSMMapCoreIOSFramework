@@ -23,6 +23,10 @@ public struct OSMMapConfiguration {
     }
 }
 class OSMTiledLayerConfig: MCTiled2dMapLayerConfig {
+    func getVirtualZoomLevelInfos() -> [MCTiled2dMapZoomLevelInfo] {
+        return []
+    }
+    
    
     private var tile:String
     let configuration:OSMMapConfiguration

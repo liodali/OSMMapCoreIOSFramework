@@ -48,7 +48,8 @@ private class RasterCallbackInterface : MCTiled2dMapRasterLayerCallbackInterface
     
     
 }
-private class MapCameraListener:MCMapCamera2dListenerInterface {
+private class MapCameraListener:MCMapCameraListenerInterface {
+    
     private(set) var mapChanged:OnMapChanged?
     private var lastBounding:MCRectCoord? = nil
     private(set) var mapView:MCMapView?
@@ -76,7 +77,9 @@ private class MapCameraListener:MCMapCamera2dListenerInterface {
             mapView?.camera.setZoom(zoomConfig!.maxZoom.zoom, animated: false)
         }
     }
-    
+    func onCameraChange(_ viewMatrix: [NSNumber], projectionMatrix: [NSNumber], origin: MCVec3D, verticalFov: Float, horizontalFov: Float, width: Float, height: Float, focusPointAltitude: Float, focusPointPosition: MCCoord, zoom: Float) {
+        //TODO
+    }
     public func onRotationChanged(_ angle: Float) {
         mapChanged?.onRotationChanged(angle: Double(angle))
     }
