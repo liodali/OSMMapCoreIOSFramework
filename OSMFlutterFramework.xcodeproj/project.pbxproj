@@ -666,7 +666,7 @@
 			repositoryURL = "https://github.com/openmobilemaps/maps-core";
 			requirement = {
 				kind = exactVersion;
-				version = 2.6.1;
+				version = 3.0.2;
 			};
 		};
 		90D7D9BB2BD956BD006A8014 /* XCRemoteSwiftPackageReference "djinni" */ = {
