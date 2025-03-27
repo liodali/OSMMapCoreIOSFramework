@@ -51,11 +51,10 @@ echo "dir_project=>$dir_project"
 echo -e "\n"
 echo "================================"
 echo -e "\n"
-xcframeworklocation="${dir_project}/DerivedData/OSMFlutterFramework/Build/Products/OSMFlutterFramework.xcframework"
-buildDir="${dir_project}/DerivedData/OSMFlutterFramework/Build/Products"
+xcframeworklocation="${dir_build}/OSMFlutterFramework.xcframework"
 
 #cd DerivedData/OSMFlutterFramework/Build/Products
-if [ -d "${buildDir}/OSMFlutterFramework.xcframework" ]
+if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ]
 then
    echo "folder exist"
    echo -e "\n"
@@ -69,11 +68,11 @@ echo -e "\n"
 echo "generate xcframework"
 echo -e "\n"
 
-frameworkiphoneos="${buildDir}/Release-iphoneos/OSMFlutterFramework.framework"
-frameworkiphonesimulator="${buildDir}/Release-iphonesimulator/OSMFlutterFramework.framework"
+frameworkiphoneos="${dir_build}/Release-iphoneos/OSMFlutterFramework.framework"
+frameworkiphonesimulator="${dir_build}/Release-iphonesimulator/OSMFlutterFramework.framework"
 
-frameworkBundleiphoneos="${buildDir}/Release-iphoneos/MapCore_MapCore.bundle"
-frameworkBundleiphonesimulator="${buildDir}/Release-iphonesimulator/MapCore_MapCore.bundle"
+frameworkBundleiphoneos="${dir_build}/Release-iphoneos/MapCore_MapCore.bundle"
+frameworkBundleiphonesimulator="${dir_build}/Release-iphonesimulator/MapCore_MapCore.bundle"
 
 xcframeworkiphoneosBundle="${xcframeworklocation}/ios-arm64"
 xcframeworkiphonesimulatorBundle="${xcframeworklocation}/ios-arm64_x86_64-simulator"
@@ -81,7 +80,7 @@ licence="${dir_project}/LICENSE"
 
 xcodebuild  -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation
 
-if [ -d "${buildDir}/OSMFlutterFramework.xcframework" ]
+if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ]
 then
    echo "================================"
    echo -e "\n"
@@ -95,12 +94,12 @@ then
          exit 0
       fi
    fi
-   ziplocation="${buildDir}/OSMFlutterFramework.zip"
+   ziplocation="${dir_build}/OSMFlutterFramework.zip"
    if [ -d $ziplocation ]
    then
    rm -rf $ziplocation
    fi
-   cp  $licence $buildDir/LICENSE
+   cp  $licence $dir_build/LICENSE
    zip -r OSMFlutterFramework.zip OSMFlutterFramework.xcframework LICENSE
    rm -rf LICENSE
 else
