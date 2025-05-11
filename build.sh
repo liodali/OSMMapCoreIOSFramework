@@ -76,14 +76,12 @@ xcframeworkiphoneosBundle="${xcframeworklocation}/ios-arm64"
 xcframeworkiphonesimulatorBundle="${xcframeworklocation}/ios-arm64_x86_64-simulator"
 licence="${dir_project}/LICENSE"
 
-if [ -d "$frameworkiphoneos" ] then
+if [ -d "$frameworkiphoneos" ]; then
   echo "✅ Framework was correctly built at $FRAMEWORK_PATH"
 else
   echo "OSMFlutterFramework Framework not found or incomplete at $FRAMEWORK_PATH"
   exit 1
 fi
-echo
-
 
 xcodebuild -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation
 
