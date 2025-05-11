@@ -90,14 +90,22 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
             }
         }
     }
-    
+    private func authorizationLocation() -> CLAuthorizationStatus {
+        if #available(iOS 14, *) {
+            return locationManager.authorizationStatus
+         } else {
+            return CLLocationManager.authorizationStatus()
+         }
+    }
     func checkLocationAuthorization() {
-        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways
-            || CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse {
+       let  autorizationLocation = authorizationLocation()
+        if autorizationLocation == CLAuthorizationStatus.authorizedAlways
+            || autorizationLocation == CLAuthorizationStatus.authorizedWhenInUse {
             locationManager.requestLocation()
         }else {
             locationManager.requestWhenInUseAuthorization() // Request permission
         }
+        
     }
   
     public func requestEnableLocation() {
@@ -111,7 +119,8 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         if !isTracking {
             stopLocation()
         }else {
-            if CLLocationManager.authorizationStatus() == .notDetermined {
+            let  autorizationLocation = authorizationLocation()
+            if autorizationLocation == .notDetermined {
                         locationManager.requestWhenInUseAuthorization()
             }else {
                 locationManager.startUpdatingLocation()
