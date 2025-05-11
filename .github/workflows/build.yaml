@@ -13,6 +13,8 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
             xcode-version: latest-stable
+      - name: check location
+        run: ls -l
       - name: check xcode version
         run: /usr/bin/xcodebuild -version   
       - name: check xcodebuild
