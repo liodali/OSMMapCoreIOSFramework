@@ -29,18 +29,23 @@ echo " the new version : $version "
 echo "================================"
 echo "building for iOS (Devices/Simulator)"
 echo -e "\n"
-
-dir_config_build=$(pwd)/DerivedData
-xcodebuild -workspace OSMFlutterFramework.xcworkspace -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build -quiet
-
+base_build_dir=$(pwd)/DerivedData
+dir_config_build=$base_build_dir/OSMFlutterFramework/Build/Products
+echo "Start with building for iOS (Devices)"
+xcodebuild -workspace OSMFlutterFramework.xcworkspace -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' ARCHS="arm64 x86_64" BUILD_LIBRARIES_FOR_DISTRIBUTION=YES -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build/Release-iphoneos -quiet
+echo "Done building for iOS (Devices)"
+echo "building for iOS (Simulator)"
+xcodebuild -workspace OSMFlutterFramework.xcworkspace -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64" BUILD_LIBRARIES_FOR_DISTRIBUTION=YES -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build/Release-iphonesimulator -quiet
+echo "Done building for iOS (Simulator)"
+echo "$(ls -l $dir_config_build)"
 # Example verification step for CI
-"================================"
+echo "================================"
 echo -e "\n"
 #version=$0
 echo "retrieve build directory"
 
 #dir_build=$(xcodebuild -project OSMFlutterFramework.xcodeproj -showBuildSettings | grep BUILD_ROOT| awk '{print $3}')
-dir_build="${dir_config_build}/OSMFlutterFramework/Build/Products"
+dir_build=$dir_config_build #"${base_build_dir}/OSMFlutterFramework/Build/Products"
 echo "dir_build=>$dir_build"
 echo -e "\n"
 dir_project=$(pwd)
@@ -50,7 +55,6 @@ echo -e "\n"
 echo "================================"
 echo -e "\n"
 xcframeworklocation="${dir_build}/OSMFlutterFramework.xcframework"
-
 #cd DerivedData/OSMFlutterFramework/Build/Products
 if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ]
 then
@@ -61,7 +65,7 @@ then
 else
    echo "xcframework not found"
 fi
-cd $buildDir
+cd $dir_build
 echo -e "\n"
 echo "generate xcframework"
 echo -e "\n"
@@ -80,13 +84,16 @@ if [ -d "$frameworkiphoneos" ] && [ -d "$frameworkiphonesimulator" ]; then
   echo "✅ Framework was correctly built at $dir_build"
 else
   echo "OSMFlutterFramework Framework not found or incomplete at $dir_build"
-  echo "$(ls -l $dir_build)" 
+  echo "$(ls -l $dir_build)"
   exit 1
 fi
 
-xcodebuild -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation
+xcodebuild -create-xcframework \
+-framework $frameworkiphoneos \
+-framework $frameworkiphonesimulator \
+-output $xcframeworklocation
 
-if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ]
+if [ -d "OSMFlutterFramework.xcframework" ]
 then
    echo "================================"
    echo -e "\n"
@@ -100,19 +107,18 @@ then
          exit 0
       fi
    fi
-   ziplocation="${dir_build}/OSMFlutterFramework.zip"
+   ziplocation="OSMFlutterFramework.zip"
    if [ -d $ziplocation ]
    then
    rm -rf $ziplocation
    fi
    cp  $licence $dir_build/LICENSE
    sleep 1
-   zip -r $dir_build/OSMFlutterFramework.zip $dir_build/OSMFlutterFramework.xcframework $dir_build/LICENSE --verbose
+   zip -r OSMFlutterFramework.zip OSMFlutterFramework.xcframework LICENSE --verbose
    sleep 1
    rm -rf LICENSE
    sleep 1
-   if [ ! -d "${dir_build}/OSMFlutterFramework.zip" ]
-   then
+   if [ ! -f "OSMFlutterFramework.zip" ]; then
        echo "xcframework got not zip correclty"
        echo "build $version failed"
        exit 1
@@ -126,7 +132,7 @@ echo "================================"
 echo -e "\n"
 echo $(pwd)
 mkdir -p $dir_project/build/pod
-cp -r OSMFlutterFramework.zip $dir_project/build/pod/OSMFlutterFramework-$version.zip
+cp -r OSMFlutterFramework.zip $dir_project/build/pod/OSMFlutterFramework-${version}.zip
 
 date
 echo "build finish $1"
