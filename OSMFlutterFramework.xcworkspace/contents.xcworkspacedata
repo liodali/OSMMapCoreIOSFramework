@@ -64,7 +64,7 @@
       location = "group:OSMFlutterFramework.podspec">
    </FileRef>
    <FileRef
-      location = "group:OSMFlutterFramework.xcodeproj">
+      location = "container:OSMFlutterFramework.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Package.swift">

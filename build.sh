@@ -42,7 +42,6 @@ echo -e "\n"
 #version=$0
 echo "retrieve build directory"
 
-
 dir_build=$(xcodebuild -project OSMFlutterFramework.xcodeproj -showBuildSettings | grep BUILD_ROOT| awk '{print $3}')
 #dir_build="${dir_build}/Build/Products"
 echo "dir_build=>$dir_build"

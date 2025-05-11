@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -251,7 +251,6 @@
 				};
 			};
 			buildConfigurationList = 90B8B8302B1281BF0021DA8F /* Build configuration list for PBXProject "OSMFlutterFramework" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -264,6 +263,7 @@
 				9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */,
 				901252E02C70A38F00023664 /* XCRemoteSwiftPackageReference "Polyline" */,
 			);
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 90B8B8372B1281BF0021DA8F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

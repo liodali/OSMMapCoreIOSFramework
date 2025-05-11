@@ -14,7 +14,9 @@ jobs:
         with:
             xcode-version: latest-stable
       - name: check xcode version
-        run: /usr/bin/xcodebuild -version      
+        run: /usr/bin/xcodebuild -version   
+      - name: check xcodebuild
+        run: /usr/bin/xcodebuild -list
       - name: "Checkout Repository"
         uses: actions/checkout@v2
         with:
