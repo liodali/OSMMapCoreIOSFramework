@@ -33,7 +33,7 @@ echo -e "\n"
 #  then
 #    xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES PROVISIONING_PROFILE=$2
 
-dir_config_build=$(pwd)/DerivedData
+dir_config_build=$(pwd)/DerivedData/Build/Products
 xcodebuild -workspace OSMFlutterFramework.xcworkspace -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build -quiet
 
 #fi
@@ -44,7 +44,7 @@ echo -e "\n"
 echo "retrieve build directory"
 
 #dir_build=$(xcodebuild -project OSMFlutterFramework.xcodeproj -showBuildSettings | grep BUILD_ROOT| awk '{print $3}')
-dir_build="${dir_config_build}/Build/Products"
+dir_build="${dir_config_build}"
 echo "dir_build=>$dir_build"
 echo -e "\n"
 dir_project=$(pwd)
