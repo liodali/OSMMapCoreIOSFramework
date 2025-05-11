@@ -29,22 +29,18 @@ echo " the new version : $version "
 echo "================================"
 echo "building for iOS (Devices/Simulator)"
 echo -e "\n"
-#if [ -n "$2" ]
-#  then
-#    xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES PROVISIONING_PROFILE=$2
 
-dir_config_build=$(pwd)/DerivedData/Build/Products
+dir_config_build=$(pwd)/DerivedData
 xcodebuild -workspace OSMFlutterFramework.xcworkspace -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build -quiet
 
-#fi
-
-echo "================================"
+# Example verification step for CI
+"================================"
 echo -e "\n"
 #version=$0
 echo "retrieve build directory"
 
 #dir_build=$(xcodebuild -project OSMFlutterFramework.xcodeproj -showBuildSettings | grep BUILD_ROOT| awk '{print $3}')
-dir_build="${dir_config_build}"
+dir_build="${dir_config_build}/OSMFlutterFramework/Build/Products"
 echo "dir_build=>$dir_build"
 echo -e "\n"
 dir_project=$(pwd)
@@ -79,6 +75,15 @@ frameworkBundleiphonesimulator="${dir_build}/Release-iphonesimulator/MapCore_Map
 xcframeworkiphoneosBundle="${xcframeworklocation}/ios-arm64"
 xcframeworkiphonesimulatorBundle="${xcframeworklocation}/ios-arm64_x86_64-simulator"
 licence="${dir_project}/LICENSE"
+
+if [ -d "$frameworkiphoneos" ] then
+  echo "✅ Framework was correctly built at $FRAMEWORK_PATH"
+else
+  echo "OSMFlutterFramework Framework not found or incomplete at $FRAMEWORK_PATH"
+  exit 1
+fi
+echo
+
 
 xcodebuild -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation
 
