@@ -80,7 +80,7 @@ xcframeworkiphoneosBundle="${xcframeworklocation}/ios-arm64"
 xcframeworkiphonesimulatorBundle="${xcframeworklocation}/ios-arm64_x86_64-simulator"
 licence="${dir_project}/LICENSE"
 
-xcodebuild -scheme OSMFlutterFramework  -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build
+xcodebuild -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build
 
 if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ]
 then
