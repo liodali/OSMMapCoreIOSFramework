@@ -13,16 +13,18 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
             xcode-version: latest-stable
-      - name: check location
-        run: ls -l
       - name: check xcode version
-        run: /usr/bin/xcodebuild -version   
-      - name: check xcodebuild
-        run: /usr/bin/xcodebuild -list
+        run: /usr/bin/xcodebuild -version 
       - name: "Checkout Repository"
         uses: actions/checkout@v2
         with:
           submodules: true
+      - name: check location
+        run: |
+            pwd
+            ls -l  
+      - name: check xcodebuild
+        run: /usr/bin/xcodebuild -list
       - name: "Set version variable"
         run: |
           RELEASE_VERSION=$(if [[ ${{ github.ref_type }} == "tag" ]]; then echo ${{ github.ref_name }}; else echo ${{ github.sha }}; fi)
