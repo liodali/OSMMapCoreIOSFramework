@@ -34,9 +34,7 @@ echo -e "\n"
 #    xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES PROVISIONING_PROFILE=$2
 
 dir_config_build=$(pwd)/DerivedData
-xcodebuild -workspace OSMFlutterFramework.xcworkspace -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build
-
-#-quiet
+xcodebuild -workspace OSMFlutterFramework.xcworkspace -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build -quiet
 
 #fi
 
@@ -82,7 +80,7 @@ xcframeworkiphoneosBundle="${xcframeworklocation}/ios-arm64"
 xcframeworkiphonesimulatorBundle="${xcframeworklocation}/ios-arm64_x86_64-simulator"
 licence="${dir_project}/LICENSE"
 
-xcodebuild -workspace OSMFlutterFramework.xcworkspace  -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build
+xcodebuild -workspace OSMFlutterFramework.xcworkspace -scheme OSMFlutterFramework  -create-xcframework -framework $frameworkiphoneos -framework $frameworkiphonesimulator -output $xcframeworklocation -UseModernBuildSystem=YES CONFIGURATION_BUILD_DIR=$dir_config_build
 
 if [ -d "${dir_build}/OSMFlutterFramework.xcframework" ]
 then
