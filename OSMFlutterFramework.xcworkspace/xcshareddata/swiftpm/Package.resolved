@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openmobilemaps/maps-core",
       "state" : {
-        "revision" : "41ff3b2ae0ffdbdde0fc8335459381bb619d7ae5",
-        "version" : "3.0.2"
+        "revision" : "d83a94c86145d365e1e482d60c598e98e3f3177e",
+        "version" : "3.1.3"
       }
     },
     {
