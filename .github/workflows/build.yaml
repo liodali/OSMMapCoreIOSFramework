@@ -24,7 +24,7 @@ jobs:
             pwd
             ls -l  
       - name: check xcodebuild
-        run: /usr/bin/xcodebuild -list
+        run: /usr/bin/xcodebuild -list -UseModernBuildSystem=YES
       - name: "Set version variable"
         run: |
           RELEASE_VERSION=$(if [[ ${{ github.ref_type }} == "tag" ]]; then echo ${{ github.ref_name }}; else echo ${{ github.sha }}; fi)
