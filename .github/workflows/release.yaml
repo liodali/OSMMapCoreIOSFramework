@@ -9,6 +9,11 @@ jobs:
     name: "Build and Deploy iOS Release"
     runs-on: macos-latest
     steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+            xcode-version: latest-stable
+      - name: check xcode version
+        run: /usr/bin/xcodebuild -version
       - name: "Checkout Repository"
         uses: actions/checkout@v2
         with:
@@ -53,6 +58,8 @@ jobs:
       #  run: gem install xcodeproj
       #- name: "create xcodeproj"
       #  run: ruby create_xproj.rb
+      - name: Install Cocoapods
+        run: gem install cocoapods
       - name: "set permission build.sh"
         run: chmod +x build.sh
       - name: "fix build"
@@ -77,8 +84,6 @@ jobs:
           files:
               build/pod/OSMFlutterFramework-${{ env.RELEASE_VERSION }}.zip
           token: ${{ secrets.TOKEN }}
-      - name: Install Cocoapods
-        run: gem install cocoapods
       - name: check lint
         run:  pod spec lint --verbose
       - name: Deploy to Cocoapods

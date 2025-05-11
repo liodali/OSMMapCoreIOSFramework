@@ -1,4 +1,5 @@
 #!/bin/bash
+clear
 helpFunction()
 {
    echo ""
@@ -33,7 +34,7 @@ echo -e "\n"
 #    xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES PROVISIONING_PROFILE=$2
 
 #else
-xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES -quiet
+xcodebuild -scheme OSMFlutterFramework -configuration Release -destination 'generic/platform=iOS' -destination 'generic/platform=iOS Simulator' ARCHS="arm64 x86_64"  BUILD_LIBRARIES_FOR_DISTRIBUTION=YES #-quiet
 #fi
 
 echo "================================"
@@ -100,8 +101,17 @@ then
    rm -rf $ziplocation
    fi
    cp  $licence $dir_build/LICENSE
-   zip -r OSMFlutterFramework.zip OSMFlutterFramework.xcframework LICENSE
+   sleep 1
+   zip -r $dir_build/OSMFlutterFramework.zip $dir_build/OSMFlutterFramework.xcframework $dir_build/LICENSE --verbose
+   sleep 1
    rm -rf LICENSE
+   sleep 1
+   if [ ! -d "${dir_build}/OSMFlutterFramework.zip" ]
+   then
+       echo "xcframework got not zip correclty"
+       echo "build $version failed"
+       exit 1
+   fi
 else
    echo "xcframework not generated"
    echo "build $version failed"
