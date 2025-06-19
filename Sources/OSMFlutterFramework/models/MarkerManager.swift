@@ -14,7 +14,8 @@ import MapKit
 #endif
 
 public protocol MapMarkerHandler {
-    func onTap(location:CLLocationCoordinate2D)
+    func onMarkerSingleTap(location:CLLocationCoordinate2D)
+    func onMarkerLongPress(location:CLLocationCoordinate2D)
 }
 
 public class MarkerManager {
@@ -124,6 +125,15 @@ public class MarkerManager {
 }
 class IconLayerHander:MCIconLayerCallbackInterface {
     func onLongPress(_ icons: [MCIconInfoInterface]) -> Bool {
+        if let handler = markerHandler, !skipHandler {
+            if icons.count == 1 {
+                handler.onMarkerLongPress(location: icons.first!.getCoordinate().toCLLocation2D())
+            }else {
+                icons.forEach { icon in
+                    handler.onMarkerLongPress(location: icon.getCoordinate().toCLLocation2D())
+                }
+            }
+        }
         return true
     }
     
@@ -135,10 +145,10 @@ class IconLayerHander:MCIconLayerCallbackInterface {
     func onClickConfirmed(_ icons: [MCIconInfoInterface]) -> Bool {
         if let handler = markerHandler, !skipHandler {
             if icons.count == 1 {
-                handler.onTap(location: icons.first!.getCoordinate().toCLLocation2D())
+                handler.onMarkerSingleTap(location: icons.first!.getCoordinate().toCLLocation2D())
             }else {
                 icons.forEach { icon in
-                    handler.onTap(location: icon.getCoordinate().toCLLocation2D())
+                    handler.onMarkerSingleTap(location: icon.getCoordinate().toCLLocation2D())
                 }
             }
         }
