@@ -49,21 +49,34 @@ struct MapCoreOSM:View {
     }
 }
 class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,PoylineHandler,MapMarkerHandler {
-    var location:CLLocationCoordinate2D? = nil
-    func onTap(location: CLLocationCoordinate2D) {
+    func onMarkerSingleTap(location: CLLocationCoordinate2D) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) { [unowned self] in
             do {
-                let isEq = try self.location!.isEqual(rhs:location)
-                if self.location != nil && isEq {
-                    self.map.markerManager.removeMarker(location: self.location!)
-                    self.location = nil
+                self.map.markerManager.removeMarker(location: location)
+                let searchedLocation = try self.locations.first(where: { (l:CLLocationCoordinate2D) -> Bool in return try l.isEqual(rhs: location, precision: 1e6)
+                })
+                if searchedLocation != nil {
+                    self.map.markerManager.removeMarker(location: searchedLocation!)
+                    let isEq = try self.location!.isEqual(rhs:searchedLocation!)
+                    if self.location != nil && isEq {
+                        self.location = nil
+                    }
                 }
+                
             }catch {
                 
             }
             
         }
     }
+    
+    func onMarkerLongPress(location: CLLocationCoordinate2D) {
+        
+    }
+    
+    var location:CLLocationCoordinate2D? = nil
+    var locations:[CLLocationCoordinate2D] = [CLLocationCoordinate2D]()
+    
     
   
     func onTap(roadId: String) {
@@ -85,44 +98,21 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
     func onSingleTap(location: CLLocationCoordinate2D) {
         if(geos.count < 2){
             let image = UIImage(systemName: "mappin")
-           
+            let nImage = resizeImage(image:image!,targetSize:CGSize(width: 48, height: 56))
+            let xImage = nImage?.size.width ?? CGFloat(48)
+            let yImage = nImage?.size.height ?? CGFloat(56)
             let marker = Marker(
                 location: location,
                 markerConfiguration: MarkerConfiguration(
                     icon: image!,
-                    iconSize: (x:Int(56.0 * UIScreen.main.nativeScale),y:Int(56.0 * UIScreen.main.nativeScale)),
+                    iconSize: (x:Int(xImage * UIScreen.main.nativeScale),y:Int(yImage * UIScreen.main.nativeScale)),
+                        //(x:Int(56.0 * UIScreen.main.nativeScale),y:Int(56.0 * UIScreen.main.nativeScale)),
                     angle: nil,
                     anchor: (0.5,1)// (0.5,0.5))
                 )
               )
             self.map.markerManager.addMarker(marker: marker)
             let steLoc = "\(location)"
-            map.shapeManager.drawShape(
-                key: steLoc,
-                shape: CircleOSM(
-                    center:location,
-                    distanceInMeter:500,
-                    style:ShapeStyleConfiguration(
-                        filledColor: UIColor.red.withAlphaComponent(CGFloat(0.5)),
-                        borderColor: UIColor.green.withAlphaComponent(CGFloat(1)),
-                        borderWidth: 20
-                    )
-                )
-            )
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [unowned self] in
-                map.shapeManager.deleteShape(ckey: steLoc)
-                self.map.markerManager.updateMarker(
-                    oldlocation: location,
-                    newlocation: location,
-                    icon: UIImage(
-                        systemName: "mappin",
-                        withConfiguration: UIImage.SymbolConfiguration(
-                                    paletteColors: [.blue]
-                        )
-                    )
-                )
-            }
-         
             self.location = location
 
             geos.append(location)
@@ -349,7 +339,21 @@ class InnerOSMMapView: UIViewController, OnMapGesture,OSMUserLocationHandler,Poy
         fatalError("init(coder:) has not been implemented")
     }
     
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
+        // Create a new image context with the target size
+        UIGraphicsBeginImageContextWithOptions(targetSize, false, 0.0)
 
+        // Draw the original image into the new context
+        image.draw(in: CGRect(origin: .zero, size: targetSize))
+
+        // Extract the new image from the context
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+
+        // End the context
+        UIGraphicsEndImageContext()
+
+        return newImage
+    }
 }
 extension UIColor {
     public convenience init?(hex: String) {
