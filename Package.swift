@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.1
 import PackageDescription
 
 
@@ -12,8 +12,8 @@ let package = Package(
     .library(name: "OSMFlutterFramework", targets: ["OSMFlutterFramework"])
   ],
   dependencies: [
-    .package(url: "https://github.com/UbiqueInnovation/djinni.git", from: "1.0.9"),
-    .package(url: "https://github.com/openmobilemaps/maps-core.git", from: "3.1.3"),
+    .package(url: "https://github.com/UbiqueInnovation/djinni.git", from: "1.1.1"),
+    .package(url: "https://github.com/openmobilemaps/maps-core.git", from: "3.2.0"),
     .package(url: "https://github.com/raphaelmor/Polyline.git", from: "5.1.0")
   ],
   targets: [
