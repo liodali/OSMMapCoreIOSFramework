@@ -11,9 +11,11 @@ jobs:
     steps:
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-            xcode-version: latest-stable
+            xcode-version: 16.4.0 #latest-stable
       - name: check xcode version
         run: /usr/bin/xcodebuild -version
+      - name: check swift version
+        run: swift -version
       - name: "Checkout Repository"
         uses: actions/checkout@v2
         with:
