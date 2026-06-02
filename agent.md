@@ -1,0 +1,190 @@
+# OSMFlutterFramework — Agent Guide
+
+## Overview
+
+Swift package that wraps MapCore (OpenStreetMap) for iOS. Provides a `UIView`-based map (`OSMView`) with managers for markers, roads, shapes, POIs, and user location. Designed to be embedded in Flutter apps via platform views, but usable standalone.
+
+## Key Files
+
+- `Package.swift` — SPM manifest, depends on `MapCore`, `Alamofire`, `Polyline`, `OSRMTextInstruction`, `DjinniSupport`
+- `Sources/OSMFlutterFramework/OSMView.swift` — Main `OSMView` UIView subclass. Owns `MCMapView`, raster tile layer, camera listener
+- `Sources/OSMFlutterFramework/models/` — Managers: `MarkerManager`, `RoadManager`, `ShapeManager`, `PoisManager`, `LocationManager`
+- `example/` — SwiftUI example app (`MapCoreView.swift`, `ContentView.swift`)
+
+## Architecture
+
+- `OSMView` is a `UIView` wrapping `MCMapView` (MapCore)
+- Managers are thin wrappers that insert layers above the raster layer
+- `OSMView` exposes zoom/pan/rotation APIs and delegates for gestures, user location, road taps, marker taps
+- Example uses `UIViewControllerRepresentable` (`OSMMapView`) to bridge into SwiftUI
+
+## Public API Surface
+
+- `OSMView(rect:location:zoomConfig:mapTileConfiguration:tile:)`
+- `zoomIn(step:animated:)`, `zoomOut(step:animated:)`, `setZoom(zoom:animated:)`
+- `moveTo(location:zoom:animated:)`, `moveToByBoundingBox(bounds:animated:)`
+- `center()`, `zoom()`, `getBoundingBox()`
+- `enableRotation(enable:)`, `setRotation(angle:animated:)`
+- `disableTouch()`, `enableTouch()`
+- Managers accessed via `markerManager`, `roadManager`, `poisManager`, `shapeManager`, `locationManager`
+
+## Example Integration Pattern
+
+```swift
+struct OSMMapView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> InnerOSMMapView { ... }
+}
+class InnerOSMMapView: UIViewController {
+    let map = OSMView(...)
+}
+```
+
+## Build & Test
+
+- Build via `swift build` or Xcode workspace `OSMFlutterFramework.xcworkspace`
+- Example app is in `example/OSMMapCoreFrameworkExample/`
+
+## Rules
+
+- Do NOT add UIKit/SwiftUI code inside the main SPM package — keep it pure framework code
+- UI/overlay changes belong in the example app only
+- Avoid `import SwiftUI` in `Sources/OSMFlutterFramework/`
+
+---
+
+## Agent Development Guide
+
+### Common Tasks
+
+#### Adding a new public API to OSMView
+
+1. Add the method in `OSMView.swift` inside the `extension OSMView` block (lines 237+)
+2. If it needs a delegate, add the protocol in the file header and a public `var` delegate property
+3. Keep method signatures simple — avoid exposing MapCore types publicly
+
+#### Adding a new Manager
+
+1. Create file in `Sources/OSMFlutterFramework/models/`
+2. Follow the pattern: `init(map: MCMapView)`, `initXManager()` called from `OSMView.init`, expose public methods, support `hideAll()`/`showAll()`/`lockHandler()`
+3. Insert the layer above `rasterLayer` or at a specific z-index in `OSMView.init`
+4. Add public property on `OSMView` (like `public let myManager: MyManager`)
+
+#### Adding a delegate/protocol
+
+1. Define the protocol in the manager file or `OSMView.swift`
+2. Add a `public var xDelegate: XDelegate?` on `OSMView` with `didSet` that passes it to the manager
+3. Inside the manager, create a private callback handler class conforming to the MapCore protocol, which forwards to your Swift protocol
+
+#### Modifying Marker behavior
+
+- `OSMMarker.swift` defines `Marker`, `MarkerConfiguration`, `MarkerScaleType`, `MarkerIconSize`, `MarkerAnchor`
+- `MarkerManager.swift` handles `MCIconLayerInterface` and `IconLayerHander`
+- To change how markers render, modify `Marker.createMapIcon()` which calls `MCIconFactory.createIcon`
+
+#### Modifying Road behavior
+
+- `RoadManager.swift` uses `MCLineLayerInterface` (two layers: border + main)
+- `RoadConfiguration` defines styling; `LineLayerHander` handles taps
+- Roads are identified by a `String id`
+
+#### Modifying Location tracking
+
+- `LocationManager.swift` wraps `CLLocationManager` and manages an `MCIconLayerInterface` for the user marker
+- `TrackConfiguration` controls whether map moves with user, direction marker rotation, etc.
+- `UserLocationConfiguration` defines the user and direction marker icons
+- Default icons use `UIImage(systemName: "mappin")` and `UIImage(systemName: "location.north.fill")`
+
+### File-by-File Notes
+
+| File                         | Purpose             | Agent Notes                                                                                                                                 |
+| ---------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OSMView.swift`              | Main map view       | Contains private MapCore types. Public API lives in `extension OSMView` (line 237+). Camera listener enforces min/max zoom bounds.          |
+| `OSMTileConfiguration.swift` | Tile layer config   | Defines `OSMMapConfiguration`, `OSMTiledLayerConfig` for raster tile URLs.                                                                  |
+| `MarkerManager.swift`        | Marker layer        | Uses `MCIconLayerInterface`. Markers stored in array. Taps forwarded via `IconLayerHander`.                                                 |
+| `RoadManager.swift`          | Polyline/road layer | Two `MCLineLayerInterface` instances (border + main). Supports `PolylineType.LINE` and `.DOT`. Encoded polyline string overload available.  |
+| `ShapeManager.swift`         | Polygon shapes      | Uses `MCPolygonLayerInterface` + `MCLineLayerInterface` for borders. Supports `Rect` and `Circle`.                                          |
+| `PoisManager.swift`          | POI icons           | Groups of markers per POI ID. Each POI has its own `MCIconLayerInterface`.                                                                  |
+| `LocationManager.swift`      | User location       | Wraps `CLLocationManager`. Handles permissions, heading updates, user marker rotation. Toggle tracking via `toggleTracking()`.              |
+| `OSMMarker.swift`            | Marker models       | `Marker`, `MarkerConfiguration` structs. `MarkerScaleType` maps to `MCIconType`.                                                            |
+| `ZoomConfiguration.swift`    | Zoom config         | Maps integer zoom levels to MapCore `MCTiled2dMapZoomLevelInfo`. Max zoom asserted <= 19.                                                   |
+| `BoundingBox.swift`          | Bounds math         | Supports init from corners, center+distance, array. Converts to/from `MCRectCoord` for MapCore.                                             |
+| `CustomTiles.swift`          | Custom tile URLs    | Parses tile URL templates with `{x}/{y}/{z}` placeholders.                                                                                  |
+| `Shape.swift`                | Shape models        | `PShape` protocol, `Shape`, `RectShapeOSM`, `CircleShapeOSM` implementations.                                                               |
+| `extensions.swift`           | Utilities           | `CLLocationCoordinate2D` helpers (`isEqual` with precision, `distance`, `destinationPoint`), `UIImage.toTexture()`, coordinate conversions. |
+
+### Patterns to Follow
+
+**Manager Pattern:**
+
+```swift
+public class MyManager {
+    let map: MCMapView
+    init(map: MCMapView) { self.map = map }
+    func initMyManager() { /* insert layer */ }
+    public func hideAll() { layer?.asLayerInterface()?.hide() }
+    public func showAll() { layer?.asLayerInterface()?.show() }
+}
+```
+
+**Delegate Forwarding Pattern:**
+
+```swift
+// In OSMView
+public var myDelegate: MyDelegate? {
+    didSet { myManager.updateHandler(delegate: myDelegate) }
+}
+
+// In Manager
+func updateHandler(delegate: MyDelegate?) {
+    callbackHandler.setHandler(delegate)
+}
+
+// Private callback class
+class MyCallback: SomeMapCoreCallbackInterface {
+    private var delegate: MyDelegate?
+    func setHandler(_ d: MyDelegate?) { delegate = d }
+    func onEvent() { delegate?.onEvent() }
+}
+```
+
+**Adding Method to OSMView:**
+
+```swift
+extension OSMView {
+    public func myNewFeature() {
+        // use mapView.camera or mapView directly
+    }
+}
+```
+
+### Gotchas
+
+- `MapCore` is imported as `internal import MapCore` (Swift 5.10+) or `@_implementationOnly import MapCore` (older). Do not expose MapCore types in public APIs.
+- Zoom levels in `ZoomConfiguration` are integer identifiers (0-19). MapCore uses actual zoom scale values. Conversion happens via `getZoomFromZoomIdentifier()` in `OSMView`.
+- `layoutSubviews()` syncs `mapView.frame` to `self.frame` when non-zero.
+- `hildeAll()` is intentionally misspelled in source — match existing naming if adding similar methods.
+- `RoadManager` uses two line layers: `lineBorderLayer` (clickable=false) below `lineLayer` (clickable=true). Both must be initialized.
+- `LocationManager` defaults to `controlUserMarker = true`, meaning it draws/moves the user marker automatically.
+- The raster tile layer is inserted at index 0; other layers are inserted above it.
+
+### Build Commands
+
+```bash
+# Build package
+swift build
+
+# Build example app (from example dir)
+cd example/OSMMapCoreFrameworkExample
+xcodebuild -workspace OSMMapCoreFrameworkExample.xcworkspace -scheme OSMMapCoreFrameworkExample -destination 'platform=iOS Simulator,name=iPhone 15'
+```
+
+### Testing
+
+- Unit tests live in `OSMFlutterFrameworkTests/OSMFlutterFrameworkTests.swift`
+- Example app serves as integration test — run on simulator to verify map renders, markers/roads/shapes work, location tracking works.
+
+### Dependency Notes
+
+- `MapCore` is the C++ rendering engine. Public headers are bridged to Swift.
+- `Alamofire` and `Polyline` are used by the example app and potentially for network/encoded polyline features.
+- Do not add new heavy dependencies without considering Flutter platform view embedding constraints.

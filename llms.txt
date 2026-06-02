@@ -1,0 +1,329 @@
+# OSMFlutterFramework
+
+A Swift package providing an iOS OpenStreetMap view (`OSMView`) backed by MapCore. Designed for embedding in Flutter apps via platform views, and directly usable in SwiftUI/UIKit apps.
+
+## Stack
+- Swift 5.9+
+- SPM package
+- Dependencies: MapCore, Alamofire, Polyline, OSRMTextInstruction, DjinniSupport
+
+## Source Layout
+```
+Sources/OSMFlutterFramework/
+  OSMView.swift            # Main UIView map view, camera, gesture delegates
+  OSMTileConfiguration.swift
+  models/
+    MarkerManager.swift    # Add/remove/update map markers
+    RoadManager.swift      # Draw polylines/roads, tap handling
+    ShapeManager.swift     # Draw circles, rectangles, polygons
+    PoisManager.swift      # POI layer management
+    LocationManager.swift  # User location tracking, CLLocationManager wrapper
+    OSMMarker.swift        # Marker and MarkerConfiguration models
+    ZoomConfiguration.swift
+    BoundingBox.swift
+    CustomTiles.swift
+    extensions.swift
+```
+
+## Installation
+Add to `Package.swift`:
+```swift
+.package(url: "https://github.com/liodali/OSMMapCoreIOSFramework.git", from: "1.0.0")
+```
+
+## OSMView (Main Map View)
+
+### Initialization
+```swift
+public init(
+    rect: CGRect,
+    location: CLLocationCoordinate2D?,
+    zoomConfig: ZoomConfiguration,
+    mapTileConfiguration: OSMMapConfiguration = OSMMapConfiguration(),
+    tile: CustomTiles? = nil
+)
+```
+
+### Camera & Navigation
+```swift
+public func initialisationMapWithInitLocation()
+public func moveTo(location: CLLocationCoordinate2D, zoom: Int?, animated: Bool)
+public func moveToByBoundingBox(bounds: BoundingBox, animated: Bool)
+public func setBoundingBox(bounds: BoundingBox)
+public func center() -> CLLocationCoordinate2D
+public func getBoundingBox() -> BoundingBox
+public func zoom() -> Int
+public func setZoom(zoom: Int, animated: Bool = true)
+public func zoomIn(step: Int? = nil, animated: Bool = true)
+public func zoomOut(step: Int? = nil, animated: Bool = true)
+public func enableRotation(enable: Bool)
+public func setRotation(angle: Double, animated: Bool = true)
+public func stopCamera()
+```
+
+### Touch Control
+```swift
+public func disableTouch()
+public func enableTouch()
+```
+
+### Tile Configuration
+```swift
+public func setCustomTile(tile: CustomTiles)
+```
+
+### Layer Visibility
+```swift
+public func hideAllLayers()
+public func showAllLayers()
+```
+
+### Managers (Public Properties)
+```swift
+public let markerManager: MarkerManager
+public let roadManager: RoadManager
+public let poisManager: PoisManager
+public let locationManager: LocationManager
+public let shapeManager: ShapeManager
+```
+
+### Delegates (Public Properties)
+```swift
+public var onMapGestureDelegate: OnMapGesture?
+public var onMapMove: OnMapMoved?
+public var mapHandlerDelegate: MapMarkerHandler?
+public var userLocationDelegate: OSMUserLocationHandler?
+public var roadTapHandlerDelegate: PoylineHandler?
+```
+
+## MarkerManager
+```swift
+public func addMarker(marker: Marker)
+public func updateMarker(
+    oldlocation: CLLocationCoordinate2D,
+    newlocation: CLLocationCoordinate2D,
+    icon: UIImage?,
+    iconSize: MarkerIconSize? = nil,
+    angle: Float? = nil,
+    anchor: MarkerAnchor? = nil,
+    scaleType: MarkerScaleType? = nil
+)
+public func removeMarker(location: CLLocationCoordinate2D)
+public func removeMarkers(locations: [CLLocationCoordinate2D])
+public func getAllMarkers() -> [CLLocationCoordinate2D]
+public func hildeAll()          // hides all markers
+public func showAll()           // shows all markers
+public func lockHandler()       // toggle marker tap handler on/off
+```
+
+## RoadManager
+```swift
+public func addRoad(id: String, polylines: [CLLocationCoordinate2D], configuration: RoadConfiguration)
+public func addRoad(id: String, polylines: String, configuration: RoadConfiguration) // encoded polyline string
+public func removeRoad(id: String)
+public func removeAllRoads()
+public func hildeAll()
+public func showAll()
+public func lockHandler()
+```
+
+## ShapeManager
+```swift
+public func drawShape(key: String, shape: PShape)
+public func deleteShape(ckey: String)
+public func deleteAllShapes()
+public func deleteAllCircles()
+public func deleteAllRect()
+public func hideAll()
+public func showAll()
+```
+
+## PoisManager
+```swift
+public func setOrCreateIconPoi(id: String, icon: UIImage, iconSize: MarkerIconSize?)
+public func setMarkersPoi(id: String, markers: [MarkerIconPoi])
+public func clearMarkersPoi(id: String, markers: [MarkerIconPoi])
+public func hildeAll()
+public func showAll()
+public func lockHandler()
+```
+
+## LocationManager
+```swift
+public func setUserLocationIcons(userLocationIcons: UserLocationConfiguration)
+public func requestSingleLocation()
+public func requestEnableLocation()
+public func toggleTracking(configuration: TrackConfiguration)
+public func isTrackingEnabled() -> Bool
+public func stopLocation()
+public func moveToUserLocation(animated: Bool = true)
+public func setCLLocationManager(locationDelegate: CLLocationManagerDelegate?)
+public func setCLLocationManagerToDefault()
+```
+
+## Configuration Types
+
+### ZoomConfiguration
+```swift
+public struct ZoomConfiguration {
+    public let initZoom: Int
+    public let minZoom: Int
+    public let maxZoom: Int
+    public let step: Int
+    public init(initZoom: Int = 0, minZoom: Int = 0, maxZoom: Int = 19, step: Int = 1)
+    public init(_ map: [String: Int])
+}
+```
+
+### Marker / MarkerConfiguration
+```swift
+public struct Marker {
+    public init(location: CLLocationCoordinate2D, markerConfiguration: MarkerConfiguration)
+}
+
+public typealias MarkerIconSize = (x: Int, y: Int)
+public typealias MarkerAnchor = (x: Double, y: Double)
+
+public enum MarkerScaleType {
+    case Scale
+    case rotate
+    case invariant
+    case fixed
+}
+
+public struct MarkerConfiguration {
+    public init(
+        icon: UIImage,
+        iconSize: MarkerIconSize?,
+        angle: Float?,
+        anchor: MarkerAnchor?,
+        scaleType: MarkerScaleType = .Scale
+    )
+    public func copyWith(
+        icon: UIImage? = nil,
+        iconSize: MarkerIconSize? = nil,
+        angle: Float? = nil,
+        anchor: MarkerAnchor? = nil,
+        scaleType: MarkerScaleType? = nil
+    ) -> MarkerConfiguration
+}
+```
+
+### RoadConfiguration
+```swift
+public enum PolylineType { case LINE; case DOT }
+public enum LineCapType { case BUTT; case ROUND; case SQUARE }
+
+public struct RoadConfiguration {
+    public init(
+        width: Float,
+        color: UIColor,
+        borderWidth: Float? = nil,
+        borderColor: UIColor? = nil,
+        opacity: Float = 1.0,
+        lineCap: LineCapType = .ROUND,
+        polylineType: PolylineType = .LINE
+    )
+}
+```
+
+### ShapeStyleConfiguration
+```swift
+public struct ShapeStyleConfiguration {
+    public init(
+        filledColor: UIColor,
+        borderColor: UIColor,
+        borderWidth: Double,
+        lineCap: LineCapType = .ROUND
+    )
+}
+```
+
+### TrackConfiguration
+```swift
+public struct TrackConfiguration {
+    public var moveMap: Bool = false
+    public var useDirectionMarker: Bool = false
+    public var disableMarkerRotation: Bool = false
+    public var controlUserMarker: Bool = true
+    public init(
+        moveMap: Bool = false,
+        useDirectionMarker: Bool = false,
+        disableMarkerRotation: Bool = false,
+        controlUserMarker: Bool = true
+    )
+}
+```
+
+### UserLocationConfiguration
+```swift
+public struct UserLocationConfiguration {
+    public init(userIcon: MarkerConfiguration, directionIcon: MarkerConfiguration?)
+    public func copyWith(
+        userIcon: MarkerConfiguration? = nil,
+        directionIcon: MarkerConfiguration? = nil
+    ) -> UserLocationConfiguration
+}
+```
+
+### BoundingBox
+```swift
+public class BoundingBox: Equatable {
+    public init(north: Double = 85.0, west: Double = -180.0, east: Double = 180.0, south: Double = -85.0)
+    public init(center: CLLocationCoordinate2D, distanceKm: Double)
+    public init(boundingBoxs: [Double])
+    public func center() -> CLLocationCoordinate2D
+    public func isWorld() -> Bool
+    public func toLLocations() -> (topLeft: CLLocationCoordinate2D, bottomRight: CLLocationCoordinate2D)
+    public func toMap() -> [String: Double]
+}
+```
+
+### CustomTiles
+```swift
+public class CustomTiles {
+    public init(_ mapTile: [String: Any], isMapCore: Bool = true)
+    public func toString() -> String
+}
+```
+
+## Delegate Protocols
+
+```swift
+public protocol OnMapGesture {
+    func onSingleTap(location: CLLocationCoordinate2D)
+    func onLongTap(location: CLLocationCoordinate2D)
+}
+
+public protocol OnMapMoved {
+    func onMove(center: CLLocationCoordinate2D, bounds: BoundingBox, zoom: Double)
+    func onRotate(angle: Double)
+    func onMapInteraction()
+}
+
+public protocol OSMUserLocationHandler {
+    func locationChanged(userLocation: CLLocationCoordinate2D, heading: Double)
+    func handlePermission(state: LocationPermission)
+}
+
+public protocol PoylineHandler {
+    func onTap(roadId: String)
+}
+
+public protocol MapMarkerHandler {
+    func onMarkerSingleTap(location: CLLocationCoordinate2D)
+    func onMarkerLongPress(location: CLLocationCoordinate2D)
+}
+```
+
+## CLLocationCoordinate2D Extensions
+```swift
+public func isEqual(rhs: CLLocationCoordinate2D, precision: Double = 1e6) throws -> Bool
+public func distance(other: CLLocationCoordinate2D) -> Double
+public func destinationPoint(distanceInMeter: Double, bearingInDegree: Double) -> CLLocationCoordinate2D
+```
+
+## Rules for Contributors
+- Do NOT add UIKit/SwiftUI code inside `Sources/OSMFlutterFramework/` — keep it pure framework code
+- UI/overlay changes belong in the example app or the consumer app only
+- Avoid `import SwiftUI` in the main package sources
