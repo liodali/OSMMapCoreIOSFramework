@@ -9,3 +9,4 @@ DerivedData/**
 .build
 *.resolved
 **/*.resolved
+.derived-data**
