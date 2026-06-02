@@ -12,7 +12,7 @@ let package = Package(
     .library(name: "OSMFlutterFramework", targets: ["OSMFlutterFramework"])
   ],
   dependencies: [
-    .package(url: "https://github.com/UbiqueInnovation/djinni.git", from: "1.1.1"),
+    .package(url: "https://github.com/UbiqueInnovation/djinni.git", from: "1.0.9"),
     .package(url: "https://github.com/openmobilemaps/maps-core.git", from: "3.7.1"),
     .package(url: "https://github.com/raphaelmor/Polyline.git", from: "5.1.0")
   ],
