@@ -41,7 +41,7 @@ public protocol OSMUserLocationHandler {
     func handlePermission(state: LocationPermission)
 }
 @MainActor
-public class LocationManager: NSObject, CLLocationManagerDelegate {
+public class LocationManager: NSObject {
     private var locationManager: CLLocationManager
     private let map: MCMapView
     var userLocationHandler: OSMUserLocationHandler?
@@ -167,6 +167,22 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
         }
 
     }
+    static func pinIcon() -> MarkerConfiguration {
+        let icon = (UIImage(systemName: "mappin") ?? UIImage()).withTintColor(.red)
+        return MarkerConfiguration(icon: icon, iconSize: nil, angle: nil, anchor: nil)
+    }
+    static func directionIcon() -> MarkerConfiguration {
+        let icon = (UIImage(systemName: "location.north.fill") ?? UIImage()).withTintColor(.black)
+        return MarkerConfiguration(icon: icon, iconSize: nil, angle: nil, anchor: nil)
+    }
+
+    private func addUserMakerToMap() {
+        iconUserMarkerMap = userMarker?.createMapIcon(mccoord: userMCCoord)!
+        iconLayer?.add(iconUserMarkerMap)
+    }
+
+}
+@preconcurrency extension LocationManager: CLLocationManagerDelegate {
     public func locationManager(
         _ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]
     ) {
@@ -266,22 +282,6 @@ public class LocationManager: NSObject, CLLocationManagerDelegate {
 
         }
     }
-    static func pinIcon() -> MarkerConfiguration {
-        let icon = (UIImage(systemName: "mappin") ?? UIImage()).withTintColor(.red)
-        return MarkerConfiguration(icon: icon, iconSize: nil, angle: nil, anchor: nil)
-    }
-    static func directionIcon() -> MarkerConfiguration {
-        let icon = (UIImage(systemName: "location.north.fill") ?? UIImage()).withTintColor(.black)
-        return MarkerConfiguration(icon: icon, iconSize: nil, angle: nil, anchor: nil)
-    }
-
-    private func addUserMakerToMap() {
-        iconUserMarkerMap = userMarker?.createMapIcon(mccoord: userMCCoord)!
-        iconLayer?.add(iconUserMarkerMap)
-    }
-
-}
-extension LocationManager {
     func setCLLocationManager(locationDelegate: CLLocationManagerDelegate?) {
         self.locationManager.delegate = locationDelegate
     }
