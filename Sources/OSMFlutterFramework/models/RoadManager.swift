@@ -20,6 +20,7 @@ import MapKit
     @_implementationOnly import MapCore
 #endif
 
+@MainActor
 public protocol PoylineHandler {
     func onTap(roadId: String)
 }
@@ -43,6 +44,7 @@ public enum PolylineType {
     case DOT
 
 }
+@MainActor
 public class RoadManager {
 
     private let mapView: MCMapView
@@ -285,7 +287,9 @@ class LineLayerHander: MCLineLayerCallbackInterface {
     func onLineClickConfirmed(_ line: MCLineInfoInterface?) {
         if let polyline = line, !skipHandler {
             let id = polyline.getIdentifier()
-            poylineHandler?.onTap(roadId: id)
+            Task { @MainActor in
+                poylineHandler?.onTap(roadId: id)
+            }
         }
     }
     func setHandler(poylineHandler: PoylineHandler) {

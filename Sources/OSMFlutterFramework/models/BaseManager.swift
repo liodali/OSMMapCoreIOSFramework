@@ -7,22 +7,24 @@
 
 import Foundation
 import MapKit
+
 #if compiler(>=5.10)
-/* private */ internal import MapCore
+    /* private */ internal import MapCore
 #else
-@_implementationOnly import MapCore
+    @_implementationOnly import MapCore
 #endif
 
 public protocol Manager {
     func hideAll()
-    func hide(location:CLLocationCoordinate2D)
-    func show(location:CLLocationCoordinate2D)
+    func hide(location: CLLocationCoordinate2D)
+    func show(location: CLLocationCoordinate2D)
     func showAll()
 }
+@MainActor
 public class BaseManager {
     let map: MCMapView
-    final let iconLayer: MCIconLayerInterface?  = MCIconLayerInterface.create()
-    
+    final let iconLayer: MCIconLayerInterface? = MCIconLayerInterface.create()
+
     init(map: MCMapView) {
         self.map = map
     }
