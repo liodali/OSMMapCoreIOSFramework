@@ -36,12 +36,41 @@ public enum LocationPermission {
     case NotGranted
 }
 
+@MainActor
 public protocol OSMUserLocationHandler {
     func locationChanged(userLocation: CLLocationCoordinate2D, heading: Double)
     func handlePermission(state: LocationPermission)
 }
 
-nonisolated public class LocationManager: NSObject {
+private class LocationDelegateHandler: NSObject, CLLocationManagerDelegate {
+    weak var manager: LocationManager?
+
+    nonisolated func locationManager(
+        _ mgr: CLLocationManager, didUpdateLocations locations: [CLLocation]
+    ) {
+        guard let lm = manager, let location = locations.last else { return }
+        let heading = mgr.heading?.trueHeading ?? 0
+        Task { @MainActor in
+            lm.handleLocationUpdate(location: location, heading: heading)
+        }
+    }
+
+    nonisolated func locationManager(
+        _ mgr: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus
+    ) {
+        guard let lm = manager else { return }
+        Task { @MainActor in
+            lm.handleAuthorizationChange(status: status)
+        }
+    }
+
+    nonisolated func locationManager(_ mgr: CLLocationManager, didFailWithError error: Error) {
+        print(error.localizedDescription)
+    }
+}
+
+@MainActor
+public class LocationManager: NSObject {
     private var locationManager: CLLocationManager
     private let map: MCMapView
     var userLocationHandler: OSMUserLocationHandler?
@@ -58,6 +87,7 @@ nonisolated public class LocationManager: NSObject {
     private var disableMarkerRotation = false
     private var controlUserMarker = true
     private var iconUserMarkerMap: MCIconInfoInterface? = nil
+    private let delegateHandler = LocationDelegateHandler()
     init(map: MCMapView, userLocationIcons: UserLocationConfiguration?) {
         self.map = map
         self.locationManager = CLLocationManager()
@@ -68,7 +98,8 @@ nonisolated public class LocationManager: NSObject {
                 directionIcon: LocationManager.directionIcon()
             )
         super.init()
-        self.locationManager.delegate = self
+        delegateHandler.manager = self
+        self.locationManager.delegate = delegateHandler
         iconLayer?.setLayerClickable(false)
         self.map.insert(layer: iconLayer?.asLayerInterface(), at: 3)
     }
@@ -181,24 +212,17 @@ nonisolated public class LocationManager: NSObject {
         iconLayer?.add(iconUserMarkerMap)
     }
 
-}
-extension LocationManager: CLLocationManagerDelegate {
-    public func locationManager(
-        _ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]
-    ) {
-
-        if let handler = userLocationHandler,
-            locations.last != nil && locations.last?.coordinate != nil
-        {
-            if userMCCoord == nil || userMCCoord != locations.last!.coordinate.mcCoord {
-                userMCCoord = locations.last!.coordinate.mcCoord
+    func handleLocationUpdate(location: CLLocation, heading: Double) {
+        if let handler = userLocationHandler {
+            if userMCCoord == nil || userMCCoord != location.coordinate.mcCoord {
+                userMCCoord = location.coordinate.mcCoord
             }
             handler.locationChanged(
-                userLocation: locations.last!.coordinate, heading: manager.heading?.trueHeading ?? 0
+                userLocation: location.coordinate, heading: heading
             )
         }
-        if locations.last != nil && locations.last?.coordinate != nil && !isSingleRetrieve {
-            userMCCoord = locations.last!.coordinate.mcCoord
+        if !isSingleRetrieve {
+            userMCCoord = location.coordinate.mcCoord
             if !controlMapFromOutSide {
                 self.map.camera.move(toCenterPosition: userMCCoord!, animated: true)
             }
@@ -214,7 +238,7 @@ extension LocationManager: CLLocationManagerDelegate {
                         }
 
                     userMarker = Marker(
-                        location: locations.last!.coordinate,
+                        location: location.coordinate,
                         markerConfiguration: MarkerConfiguration(
                             icon: iconMarker.icon,
                             iconSize: iconMarker.iconSize,
@@ -228,13 +252,12 @@ extension LocationManager: CLLocationManagerDelegate {
                     iconLayer?.remove(iconUserMarkerMap)
                     updateIcon = false
                 }
-                let angle = manager.heading?.trueHeading
-                if angle != nil && angle != 0 && !disableMarkerRotation {
+                if heading != 0 && !disableMarkerRotation {
                     iconLayer?.remove(iconUserMarkerMap)
                     let configuration = userMarker!.markerConfiguration.copyWith(
                         icon: userLocationIconConfiguration.directionIcon?.icon,
                         iconSize: userLocationIconConfiguration.directionIcon?.iconSize,
-                        angle: Float(angle!),
+                        angle: Float(heading),
                         anchor: userLocationIconConfiguration.directionIcon?.anchor
                     )
                     userMarker?.updateMarker(newLocation: nil, configuration: configuration)
@@ -250,10 +273,8 @@ extension LocationManager: CLLocationManagerDelegate {
             isSingleRetrieve = false
         }
     }
-    public func locationManager(
-        _ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus
-    ) {
 
+    func handleAuthorizationChange(status: CLAuthorizationStatus) {
         if status == CLAuthorizationStatus.authorizedWhenInUse
             || status == CLAuthorizationStatus.authorizedAlways
         {
@@ -276,17 +297,11 @@ extension LocationManager: CLLocationManagerDelegate {
         }
     }
 
-    public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
-        if userLocationHandler != nil {
-
-        }
-    }
     func setCLLocationManager(locationDelegate: CLLocationManagerDelegate?) {
         self.locationManager.delegate = locationDelegate
     }
     public func setCLLocationManagerToDefault() {
-        self.locationManager.delegate = self
+        self.locationManager.delegate = delegateHandler
     }
 }
 public struct UserLocationConfiguration {

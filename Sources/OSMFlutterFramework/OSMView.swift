@@ -23,8 +23,8 @@ public protocol OnMapMoved {
     func onRotate(angle: Double)
     func onMapInteraction()
 }
-@MainActor
-protocol OnMapChanged {
+
+nonisolated protocol OnMapChanged {
     func onBoundsChanged(bounds: BoundingBox, zoom: Double)
     func onRotationChanged(angle: Double)
     func onMapInteraction()
@@ -73,9 +73,9 @@ private class MapCameraListener: MCMapCameraListenerInterface {
     public func onVisibleBoundsChanged(_ visibleBounds: MCRectCoord, zoom: Double) {
         if lastBounding == nil || !(lastBounding == visibleBounds) {
             let bounds = visibleBounds.toBoundingBox()
-            Task { @MainActor in
-                mapChanged?.onBoundsChanged(bounds: bounds, zoom: zoom)
-            }
+
+            mapChanged?.onBoundsChanged(bounds: bounds, zoom: zoom)
+
             lastBounding = visibleBounds
         }
         if zoomConfig != nil && zoom > zoomConfig!.minZoom.zoom {
@@ -93,18 +93,14 @@ private class MapCameraListener: MCMapCameraListenerInterface {
         //TODO
     }
     public func onRotationChanged(_ angle: Float) {
-        Task { @MainActor in
-            mapChanged?.onRotationChanged(angle: Double(angle))
-        }
+        mapChanged?.onRotationChanged(angle: Double(angle))
     }
 
     public func onMapInteraction() {
-        Task { @MainActor in
-            mapChanged?.onMapInteraction()
-        }
+        mapChanged?.onMapInteraction()
     }
 }
-public class OSMView: UIView, OnMapChanged {
+public final class OSMView: UIView, OnMapChanged {
 
     private let initLocation: CLLocationCoordinate2D?
     private let zoomConfiguration: ZoomConfiguration

@@ -20,8 +20,8 @@ import MapKit
     @_implementationOnly import MapCore
 #endif
 
-@MainActor
-public protocol PoylineHandler {
+
+nonisolated public protocol PoylineHandler {
     func onTap(roadId: String)
 }
 public enum LineCapType {
@@ -287,9 +287,7 @@ class LineLayerHander: MCLineLayerCallbackInterface {
     func onLineClickConfirmed(_ line: MCLineInfoInterface?) {
         if let polyline = line, !skipHandler {
             let id = polyline.getIdentifier()
-            Task { @MainActor in
-                poylineHandler?.onTap(roadId: id)
-            }
+            self.poylineHandler?.onTap(roadId: id)
         }
     }
     func setHandler(poylineHandler: PoylineHandler) {

@@ -14,14 +14,14 @@ import MapKit
     @_implementationOnly import MapCore
 #endif
 
-@MainActor
-public protocol MapMarkerHandler {
-    func onMarkerSingleTap(location: CLLocationCoordinate2D)
-    func onMarkerLongPress(location: CLLocationCoordinate2D)
+
+nonisolated public protocol MapMarkerHandler {
+    nonisolated  func onMarkerSingleTap(location: CLLocationCoordinate2D)
+    nonisolated  func onMarkerLongPress(location: CLLocationCoordinate2D)
 }
 
-@MainActor
-public class MarkerManager {
+
+nonisolated public class MarkerManager {
     let map: MCMapView
     var markers: [Marker] = []
     private let markerHandler: IconLayerHander
@@ -31,6 +31,7 @@ public class MarkerManager {
         markerHandler = IconLayerHander(nil)
 
     }
+    @MainActor
     func initMarkerManager() {
         self.map.add(layer: iconLayerInterface?.asLayerInterface())
         iconLayerInterface?.setLayerClickable(true)
@@ -133,14 +134,12 @@ public class MarkerManager {
 class IconLayerHander: MCIconLayerCallbackInterface {
     func onLongPress(_ icons: [MCIconInfoInterface]) -> Bool {
         if let handler = markerHandler, !skipHandler {
-            Task { @MainActor in
-                if icons.count == 1 {
-                    handler.onMarkerLongPress(
-                        location: icons.first!.getCoordinate().toCLLocation2D())
-                } else {
-                    icons.forEach { icon in
-                        handler.onMarkerLongPress(location: icon.getCoordinate().toCLLocation2D())
-                    }
+            if icons.count == 1 {
+                handler.onMarkerLongPress(
+                    location: icons.first!.getCoordinate().toCLLocation2D())
+            } else {
+                icons.forEach { icon in
+                    handler.onMarkerLongPress(location: icon.getCoordinate().toCLLocation2D())
                 }
             }
         }
@@ -154,7 +153,6 @@ class IconLayerHander: MCIconLayerCallbackInterface {
     }
     func onClickConfirmed(_ icons: [MCIconInfoInterface]) -> Bool {
         if let handler = markerHandler, !skipHandler {
-            Task { @MainActor in
                 if icons.count == 1 {
                     handler.onMarkerSingleTap(
                         location: icons.first!.getCoordinate().toCLLocation2D())
@@ -163,7 +161,6 @@ class IconLayerHander: MCIconLayerCallbackInterface {
                         handler.onMarkerSingleTap(location: icon.getCoordinate().toCLLocation2D())
                     }
                 }
-            }
         }
         return true
     }
