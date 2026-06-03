@@ -14,6 +14,7 @@ import MapKit
     @_implementationOnly import MapCore
 #endif
 
+@MainActor
 public protocol Manager {
     func hideAll()
     func hide(location: CLLocationCoordinate2D)

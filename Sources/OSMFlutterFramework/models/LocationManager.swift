@@ -5,7 +5,7 @@
 //  Created by Dali Hamza on 16.12.23.
 //
 
-import CoreLocation
+@preconcurrency import CoreLocation
 import Foundation
 import MapKit
 
