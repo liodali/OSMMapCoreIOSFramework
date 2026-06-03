@@ -182,7 +182,7 @@ public class LocationManager: NSObject {
     }
 
 }
-@preconcurrency extension LocationManager: CLLocationManagerDelegate {
+extension LocationManager: CLLocationManagerDelegate {
     public func locationManager(
         _ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]
     ) {
