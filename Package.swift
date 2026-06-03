@@ -27,9 +27,9 @@ let package = Package(
         path: "Sources/OSMFlutterFramework",
         publicHeadersPath: "Sources/OSMFlutterFramework/",
         //(name: "enable-experimental-features", value: "true")
-        swiftSettings: [
-            .unsafeFlags(["-enable-experimental-feature", "AccessLevelOnImport"])
-        ]
+        // swiftSettings: [
+        //     .unsafeFlags(["-enable-experimental-feature", "AccessLevelOnImport"])
+        // ]
     ),
    
     /*,
