@@ -5,7 +5,7 @@
 //  Created by Dali Hamza on 16.12.23.
 //
 
-@preconcurrency import CoreLocation
+import CoreLocation
 import Foundation
 import MapKit
 
@@ -35,13 +35,13 @@ public enum LocationPermission {
     case Granted
     case NotGranted
 }
-@MainActor
+
 public protocol OSMUserLocationHandler {
     func locationChanged(userLocation: CLLocationCoordinate2D, heading: Double)
     func handlePermission(state: LocationPermission)
 }
-@MainActor
-public class LocationManager: NSObject {
+
+nonisolated public class LocationManager: NSObject {
     private var locationManager: CLLocationManager
     private let map: MCMapView
     var userLocationHandler: OSMUserLocationHandler?
