@@ -158,22 +158,22 @@ public class LocationManager: NSObject {
         enableLocation = true
     }
     public func toggleTracking(configuration: TrackConfiguration) {
-        isTracking = !isTracking
-        if !isTracking {
+        if isTracking {
             stopLocation()
-        } else {
-            let autorizationLocation = authorizationLocation()
-            if autorizationLocation == .notDetermined {
-                locationManager.requestWhenInUseAuthorization()
-            } else {
-                locationManager.startUpdatingLocation()
-                locationManager.startUpdatingHeading()
-            }
-            self.controlMapFromOutSide = configuration.moveMap
-            self.useDirectionMarker = configuration.useDirectionMarker
-            self.disableMarkerRotation = configuration.disableMarkerRotation
-            controlUserMarker = configuration.controlUserMarker
+            return
         }
+        let autorizationLocation = authorizationLocation()
+        if autorizationLocation == .notDetermined {
+            locationManager.requestWhenInUseAuthorization()
+        } else {
+            locationManager.startUpdatingLocation()
+            locationManager.startUpdatingHeading()
+        }
+        self.controlMapFromOutSide = configuration.moveMap
+        self.useDirectionMarker = configuration.useDirectionMarker
+        self.disableMarkerRotation = configuration.disableMarkerRotation
+        controlUserMarker = configuration.controlUserMarker
+        isTracking = true
     }
     public func isTrackingEnabled() -> Bool {
         isTracking
