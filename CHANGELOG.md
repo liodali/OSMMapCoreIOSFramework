@@ -1,4 +1,5 @@
 
+## 0.8.7: Fix Bugs
 ## 0.8.6: Fix Bugs
 ## 0.0.4: Fix Bugs
 ## 0.0.3: Add new APIs
