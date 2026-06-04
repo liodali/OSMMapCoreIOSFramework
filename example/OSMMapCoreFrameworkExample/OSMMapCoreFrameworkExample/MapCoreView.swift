@@ -55,6 +55,12 @@ struct MapCoreOSM: View {
                     height: Int(geometry.size.height),
                     controller: $mapController
                 )
+                .onTapGesture {
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder),
+                        to: nil, from: nil, for: nil
+                    )
+                }
 
                 VStack(spacing: 0) {
                     HStack(spacing: 10) {
@@ -113,13 +119,27 @@ struct MapCoreOSM: View {
                             )
 
                             Button {
-                                mapController?.toggleTracking()
-                                isTracking = mapController?.isTracking() ?? false
+                                mapController?.moveToUserLocation()
                             } label: {
-                                Image(systemName: isTracking ? "location.fill" : "location")
+                                Image(systemName: "location")
                                     .font(.system(size: 18))
                                     .frame(width: 40, height: 40)
                                     .foregroundColor(.blue)
+                            }
+                            .background(
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(.ultraThinMaterial)
+                                    .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
+                            )
+
+                            Button {
+                                mapController?.toggleTracking()
+                                isTracking = mapController?.isTracking() ?? false
+                            } label: {
+                                Image(systemName: isTracking ? "location.fill" : "location.circle")
+                                    .font(.system(size: 18))
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(isTracking ? .green : .blue)
                             }
                             .background(
                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -177,6 +197,7 @@ class InnerOSMMapView: UIViewController, OnMapGesture, OSMUserLocationHandler, P
 
     func locationChanged(userLocation: CLLocationCoordinate2D, heading: Double) {
         print("\(userLocation),\(heading)")
+        lastUserLocation = userLocation
         self.map.moveTo(location: userLocation, zoom: nil, animated: true)
     }
 
@@ -318,9 +339,17 @@ class InnerOSMMapView: UIViewController, OnMapGesture, OSMUserLocationHandler, P
         return self.map.locationManager.isTrackingEnabled()
     }
 
+    var lastUserLocation: CLLocationCoordinate2D? = nil
+
     func toggleTracking() {
         self.map.locationManager.toggleTracking(
-            configuration: TrackConfiguration(moveMap: false, controlUserMarker: false))
+            configuration: TrackConfiguration(moveMap: false, controlUserMarker: true))
+    }
+
+    func moveToUserLocation() {
+        if let loc = lastUserLocation {
+            self.map.moveTo(location: loc, zoom: nil, animated: true)
+        }
     }
 
     func removeAllMarkers() {
