@@ -28,10 +28,10 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
     init(
         fontMappings: [String: UIFont],
         charset: String,
-        atlasSize: CGSize = CGSize(width: 2048, height: 2048),
-        fontSize: CGFloat = 64,
+        atlasSize: CGSize = CGSize(width: 1024, height: 1024),
+        fontSize: CGFloat = 28,
         padding: CGFloat = 2,
-        distanceRange: CGFloat = 8
+        distanceRange: CGFloat = 4
     ) {
         self.fontMappings = fontMappings
         self.charset = charset
@@ -69,6 +69,17 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
         }
         cacheLock.unlock()
 
+        // First, try to load pre-generated MSDF atlas + JSON from the bundle.
+        if let atlas = loadBundledMSDFAtlas(name: name) {
+            print("SystemFontLoader: using pre-generated MSDF atlas for \(name)")
+            cacheLock.lock()
+            cache.setObject(atlas, forKey: name as NSString)
+            cacheLock.unlock()
+            return MCFontLoaderResult(
+                imageData: atlas.texture, fontData: atlas.fontData, status: .OK)
+        }
+
+        // Fall back to runtime SDF generation.
         let uiFont =
             fontMappings[name] ?? SystemFontLoader.uiFont(forStyleName: name, size: fontSize)
         guard let atlas = generateAtlas(font: uiFont, name: name) else {
@@ -82,10 +93,129 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
         return MCFontLoaderResult(imageData: atlas.texture, fontData: atlas.fontData, status: .OK)
     }
 
+    // MARK: - Pre-generated MSDF atlas loading (BMFont JSON + PNG)
+
+    /// Attempts to load a pre-generated MSDF font atlas (PNG) and glyph data (JSON)
+    /// from the Swift package resource bundle. The JSON format matches the output
+    /// of msdf-bmfont and the format expected by MCFontLoader.
+    private func loadBundledMSDFAtlas(name: String) -> FontAtlas? {
+        // Try multiple naming conventions for the atlas files.
+        let psMapping: [String: String] = [
+            "Noto Sans Regular": "NotoSans-Regular",
+            "Noto Sans Italic": "NotoSans-Italic",
+            "Noto Sans Bold": "NotoSans-Bold",
+        ]
+        let candidates = [
+            name.replacingOccurrences(of: " ", with: "_"),  // Noto_Sans_Regular
+            psMapping[name],  // NotoSans-Regular
+        ].compactMap { $0 }
+
+        var jsonURL: URL?
+        var pngURL: URL?
+        for candidate in candidates {
+            if jsonURL == nil {
+                jsonURL = Bundle.module.url(forResource: candidate, withExtension: "json")
+            }
+            if pngURL == nil {
+                pngURL = Bundle.module.url(forResource: candidate, withExtension: "png")
+            }
+        }
+
+        guard let jsonURL = jsonURL, let pngURL = pngURL else {
+            return nil
+        }
+
+        // Load and parse the JSON.
+        guard let jsonData = try? Data(contentsOf: jsonURL),
+            let json = try? JSONSerialization.jsonObject(with: jsonData) as? [String: AnyObject]
+        else {
+            print("SystemFontLoader: failed to parse JSON for \(name)")
+            return nil
+        }
+
+        guard let infoJson = json["info"] as? [String: AnyObject],
+            let commonJson = json["common"] as? [String: AnyObject],
+            let distanceFieldJson = json["distanceField"] as? [String: AnyObject],
+            let charsJson = json["chars"] as? [NSDictionary]
+        else {
+            print("SystemFontLoader: invalid BMFont JSON structure for \(name)")
+            return nil
+        }
+
+        let size = (infoJson["size"] as? NSNumber)?.doubleValue ?? 0
+        let imageSize = (commonJson["scaleW"] as? NSNumber)?.doubleValue ?? 0
+        guard size > 0, imageSize > 0 else { return nil }
+
+        let fontInfo = MCFontWrapper(
+            name: name,
+            lineHeight: ((commonJson["lineHeight"] as? NSNumber)?.doubleValue ?? 0) / size,
+            base: ((commonJson["base"] as? NSNumber)?.doubleValue ?? 0) / size,
+            bitmapSize: MCVec2D(x: imageSize, y: imageSize),
+            size: size,
+            distanceRange: (distanceFieldJson["distanceRange"] as? NSNumber)?.doubleValue ?? 0
+        )
+
+        var glyphs: [MCFontGlyph] = []
+        for g in charsJson {
+            var glyph: [String: AnyObject] = [:]
+            for a in g { glyph[a.key as! String] = a.value as AnyObject }
+
+            let character = (glyph["char"] as? String) ?? ""
+            var s0 = (glyph["x"] as? NSNumber)?.doubleValue ?? 0
+            var s1 = s0 + ((glyph["width"] as? NSNumber)?.doubleValue ?? 0)
+            var t0 = (glyph["y"] as? NSNumber)?.doubleValue ?? 0
+            var t1 = t0 + ((glyph["height"] as? NSNumber)?.doubleValue ?? 0)
+
+            s0 /= imageSize
+            s1 /= imageSize
+            t0 /= imageSize
+            t1 /= imageSize
+
+            // BMFont convention: yoffset is from top, bearing.y is negated.
+            let xoffset = (glyph["xoffset"] as? NSNumber)?.doubleValue ?? 0
+            let yoffset = (glyph["yoffset"] as? NSNumber)?.doubleValue ?? 0
+            let bearing = MCVec2D(x: xoffset / size, y: -yoffset / size)
+
+            let uv = MCQuad2dD(
+                topLeft: MCVec2D(x: s0, y: t1),
+                topRight: MCVec2D(x: s1, y: t1),
+                bottomRight: MCVec2D(x: s1, y: t0),
+                bottomLeft: MCVec2D(x: s0, y: t0)
+            )
+
+            let advanceVal = (glyph["xadvance"] as? NSNumber)?.doubleValue ?? 0
+            let widthVal = (glyph["width"] as? NSNumber)?.doubleValue ?? 0
+            let heightVal = (glyph["height"] as? NSNumber)?.doubleValue ?? 0
+            let glyphEntry = MCFontGlyph(
+                charCode: character,
+                advance: MCVec2D(x: advanceVal / size, y: 0.0),
+                boundingBoxSize: MCVec2D(
+                    x: widthVal / size,
+                    y: heightVal / size
+                ),
+                bearing: bearing,
+                uv: uv
+            )
+            glyphs.append(glyphEntry)
+        }
+
+        // Load the PNG atlas image.
+        guard let image = UIImage(contentsOfFile: pngURL.path),
+            let cgImage = image.cgImage,
+            let textureHolder = try? TextureHolder(cgImage)
+        else {
+            print("SystemFontLoader: failed to load atlas PNG for \(name)")
+            return nil
+        }
+
+        let fontData = MCFontData(info: fontInfo, glyphs: glyphs)
+        print(
+            "SystemFontLoader: loaded MSDF atlas for \(name) (\(glyphs.count) glyphs, \(Int(imageSize))x\(Int(imageSize)))"
+        )
+        return FontAtlas(texture: textureHolder, fontData: fontData)
+    }
+
     static let defaultFontMappings: [String: UIFont] = [
-        "Noto Sans Regular": UIFont.systemFont(ofSize: 64),
-        "Noto Sans Bold": UIFont.boldSystemFont(ofSize: 64),
-        "Noto Sans Italic": UIFont.italicSystemFont(ofSize: 64),
         "Open Sans Regular": UIFont.systemFont(ofSize: 64),
         "Open Sans Bold": UIFont.boldSystemFont(ofSize: 64),
         "Open Sans Italic": UIFont.italicSystemFont(ofSize: 64),
@@ -95,17 +225,62 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
         "Roboto Italic": UIFont.italicSystemFont(ofSize: 64),
     ]
 
+    private static nonisolated(unsafe) var registeredBundledFonts = Set<String>()
+    private static nonisolated(unsafe) let bundledFontLock = NSLock()
+
+    private static func loadBundledFont(ttfName: String, size: CGFloat) -> UIFont? {
+        bundledFontLock.lock()
+        let alreadyRegistered = registeredBundledFonts.contains(ttfName)
+        if !alreadyRegistered {
+            registeredBundledFonts.insert(ttfName)
+        }
+        bundledFontLock.unlock()
+        guard
+            let url = Bundle.module.url(
+                forResource: ttfName, withExtension: "ttf", subdirectory: nil)
+        else {
+            print("SystemFontLoader: \(ttfName).ttf not found in resource bundle")
+            return nil
+        }
+        if !alreadyRegistered {
+            var error: Unmanaged<CFError>?
+            guard
+                CTFontManagerRegisterFontsForURL(url as CFURL, .process, &error)
+            else {
+                if let error = error?.takeRetainedValue() {
+                    print("SystemFontLoader: failed to register \(ttfName): \(error)")
+                }
+                return nil
+            }
+        }
+        guard
+            let dataProvider = CGDataProvider(url: url as CFURL),
+            let cgFont = CGFont(dataProvider)
+        else {
+            print("SystemFontLoader: could not create CGFont from \(ttfName)")
+            return nil
+        }
+        let psName = cgFont.postScriptName as? String ?? ttfName
+        let ctFont = CTFontCreateWithGraphicsFont(cgFont, size, nil, nil)
+        let descriptor = CTFontCopyFontDescriptor(ctFont)
+        let uiFont = UIFont(descriptor: descriptor, size: size)
+        print(
+            "SystemFontLoader: loaded bundled \(ttfName) -> family=\(uiFont.familyName ?? "?") ps=\(psName) name=\(uiFont.fontName)"
+        )
+        return uiFont
+    }
+
     static let defaultCharset: String = {
-        let latin = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-        let digits = "0123456789"
-        let punctuation = " .,;:!?-_/'\"()[]{}&@#$%*+=<>~`"
+        let ascii = String(
+            (0x21...0x7E).compactMap { UnicodeScalar($0) }.map { Character($0) })
         let latin1 = String(
-            (0x00C0...0x00FF).compactMap { UnicodeScalar($0) }.map { Character($0) })
-        let latinExtendedA = String(
-            (0x0100...0x017F).compactMap { UnicodeScalar($0) }.map { Character($0) })
-        let latinExtendedB = String(
-            (0x0180...0x024F).compactMap { UnicodeScalar($0) }.map { Character($0) })
-        return latin + digits + punctuation + latin1 + latinExtendedA + latinExtendedB
+            (0x00A1...0x00FF).compactMap { UnicodeScalar($0) }.map { Character($0) })
+        // Greek letters visible in the reference atlas.
+        let greek =
+            "\u{03B1}\u{03B2}\u{0393}\u{03C0}\u{03A3}\u{03C3}\u{03BC}\u{03C4}\u{03A6}\u{0398}\u{03A9}\u{03B4}\u{03C6}\u{03B5}"
+        // Symbols in the reference atlas that are outside Latin-1.
+        let symbols = "\u{2022}\u{221E}\u{207F}"
+        return ascii + latin1 + greek + symbols
     }()
 
     private static func uiFont(forStyleName name: String, size: CGFloat) -> UIFont {
@@ -126,6 +301,33 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
         } else {
             traits = []
         }
+
+        // Try to load the requested font from the bundled TTF resources.
+        let ttfMapping: [String: String] = [
+            "Noto Sans Regular": "NotoSans-Regular",
+            "Noto Sans Italic": "NotoSans-Italic",
+            "Noto Sans Bold": "NotoSans-Bold",
+        ]
+        for (styleName, ttfName) in ttfMapping {
+            if lowercased == styleName.lowercased() {
+                if let font = Self.loadBundledFont(ttfName: ttfName, size: size) {
+                    return font
+                }
+                break
+            }
+        }
+
+        // Try to load the requested font by its PostScript name.
+        let postscriptNames = [
+            "NotoSans-Regular", "NotoSans-RegularItalic", "NotoSans-Regular-Bold",
+            "Noto Sans Regular", "NotoSans", "NotoSans-Regular",
+        ]
+        for psName in postscriptNames {
+            if let font = UIFont(name: psName, size: size) {
+                return font
+            }
+        }
+
         let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body)
             .addingAttributes([
                 .traits: [
@@ -257,17 +459,22 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
             return nil
         }
 
-        atlasContext.setFillColor(UIColor.clear.cgColor)
+        // Match UIKit: origin top-left, y increasing downward. The Metal texture loader
+        // preserves the CGImage row order, so drawing the glyph image upside-down here
+        // lets the 2D text shader (which flips v) render the glyph right-side up.
+        atlasContext.translateBy(x: 0, y: atlasSize.height)
+        atlasContext.scaleBy(x: 1.0, y: -1.0)
+
+        atlasContext.setFillColor(UIColor.black.cgColor)
         atlasContext.fill(CGRect(origin: .zero, size: atlasSize))
 
         for entry in packed {
             guard let glyphImage = createSDFGlyphImage(ctFont: ctFont, entry: entry) else {
                 continue
             }
-            let bottomUpY = atlasSize.height - entry.atlasY - entry.imageSize.height
             let drawRect = CGRect(
                 x: entry.atlasX,
-                y: bottomUpY,
+                y: entry.atlasY,
                 width: entry.imageSize.width,
                 height: entry.imageSize.height)
             atlasContext.draw(glyphImage, in: drawRect)
@@ -277,7 +484,8 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
             return nil
         }
 
-        // Debug: save atlas image to Documents directory
+        // Debug: save atlas image to Documents directory.
+        // The raw PNG follows the Quartz/Metal row order used by the texture loader.
         let uiImage = UIImage(cgImage: atlasCGImage)
         if let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let url = docs.appendingPathComponent(
@@ -285,6 +493,22 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
             if let pngData = uiImage.pngData() {
                 try? pngData.write(to: url)
                 print("DEBUG: Atlas saved to \(url.path)")
+            }
+
+            // Compare generated atlas against a reference atlas if present.
+            if let correctImage = {
+                let correctURL = docs.appendingPathComponent(
+                    "font_atlas_\(name.replacingOccurrences(of: " ", with: "_"))_correct.png"
+                )
+                return FileManager.default.fileExists(atPath: correctURL.path)
+                    ? UIImage(contentsOfFile: correctURL.path)?.cgImage
+                    : nil
+            }() {
+                let comparison = compareAtlases(
+                    generated: atlasCGImage,
+                    reference: correctImage,
+                    name: name)
+                print("DEBUG: Atlas comparison for \(name): \(comparison)")
             }
         }
 
@@ -336,7 +560,7 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
                 y: Double(packedEntry.imageSize.height / fontSize))
             let bearing = MCVec2D(
                 x: Double((packedEntry.bounds.origin.x - distanceRange - padding) / fontSize),
-                y: Double((distanceRange + padding - packedEntry.bounds.origin.y) / fontSize))
+                y: Double((packedEntry.bounds.origin.y - distanceRange - padding) / fontSize))
 
             let glyph = MCFontGlyph(
                 charCode: packedEntry.charCode,
@@ -437,35 +661,6 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
             }
         }
 
-        // Debug: save SDF for letter 'A'
-        if entry.charCode == "A" {
-            var debugRGBA = [UInt8](repeating: 0, count: width * height * 4)
-            for i in 0..<(width * height) {
-                let v = sdf[i]
-                let idx = i * 4
-                debugRGBA[idx] = v
-                debugRGBA[idx + 1] = v
-                debugRGBA[idx + 2] = v
-                debugRGBA[idx + 3] = 255
-            }
-            let cs = CGColorSpaceCreateDeviceRGB()
-            let bi = CGBitmapInfo.byteOrder32Big.union(
-                .init(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue))
-            if let ctx = CGContext(
-                data: &debugRGBA, width: width, height: height, bitsPerComponent: 8,
-                bytesPerRow: width * 4, space: cs, bitmapInfo: bi.rawValue),
-                let img = ctx.makeImage()
-            {
-                if let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-                    .first
-                {
-                    let url = docs.appendingPathComponent("debug_glyph_A_sdf.png")
-                    try? UIImage(cgImage: img).pngData()?.write(to: url)
-                    print("DEBUG: SDF glyph A saved to \(url.path)")
-                }
-            }
-        }
-
         var rgba = [UInt8](repeating: 0, count: width * height * 4)
         for i in 0..<(width * height) {
             let v = sdf[i]
@@ -533,5 +728,64 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
         }
 
         return dist
+    }
+
+    private func compareAtlases(generated: CGImage, reference: CGImage, name: String) -> String {
+        let w = min(generated.width, reference.width)
+        let h = min(generated.height, reference.height)
+        let sizeInfo =
+            "generated(\(generated.width)x\(generated.height)) vs ref(\(reference.width)x\(reference.height))"
+        guard w > 0, h > 0 else { return "size mismatch \(sizeInfo)" }
+
+        let bytesPerPixel = 4
+        let bytesPerRow = w * bytesPerPixel
+        var diffCount = 0
+        var totalDiff: Double = 0
+        var flippedDiffCount = 0
+        var flippedTotalDiff: Double = 0
+
+        guard let genData = generated.dataProvider?.data as Data?,
+            let refData = reference.dataProvider?.data as Data?,
+            genData.count >= h * bytesPerRow,
+            refData.count >= h * bytesPerRow
+        else { return "could not read pixel data" }
+
+        let genBytes = [UInt8](genData)
+        let refBytes = [UInt8](refData)
+
+        for y in 0..<h {
+            for x in 0..<w {
+                let idx = y * bytesPerRow + x * bytesPerPixel
+                let a = abs(Int(genBytes[idx]) - Int(refBytes[idx]))
+                let r = abs(Int(genBytes[idx + 1]) - Int(refBytes[idx + 1]))
+                let g = abs(Int(genBytes[idx + 2]) - Int(refBytes[idx + 2]))
+                let b = abs(Int(genBytes[idx + 3]) - Int(refBytes[idx + 3]))
+                let channelDiff = a + r + g + b
+                if channelDiff > 4 {
+                    diffCount += 1
+                }
+                totalDiff += Double(channelDiff)
+
+                // Compare against vertically flipped reference to detect orientation.
+                let flippedY = h - 1 - y
+                let fIdx = flippedY * bytesPerRow + x * bytesPerPixel
+                let fa = abs(Int(genBytes[idx]) - Int(refBytes[fIdx]))
+                let fr = abs(Int(genBytes[idx + 1]) - Int(refBytes[fIdx + 1]))
+                let fg = abs(Int(genBytes[idx + 2]) - Int(refBytes[fIdx + 2]))
+                let fb = abs(Int(genBytes[idx + 3]) - Int(refBytes[fIdx + 3]))
+                let fChannelDiff = fa + fr + fg + fb
+                if fChannelDiff > 4 {
+                    flippedDiffCount += 1
+                }
+                flippedTotalDiff += Double(fChannelDiff)
+            }
+        }
+
+        let totalPixels = w * h
+        let avgDiff = totalDiff / Double(totalPixels * 4)
+        let flippedAvgDiff = flippedTotalDiff / Double(totalPixels * 4)
+        let orientation = avgDiff < flippedAvgDiff ? "upright" : "flipped"
+        return
+            "\(sizeInfo) diffPixels=\(diffCount)/\(totalPixels) avgDiff=\(String(format: "%.2f", avgDiff)) vs flipped avgDiff=\(String(format: "%.2f", flippedAvgDiff)) likelyOrientation=\(orientation)"
     }
 }
