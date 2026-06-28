@@ -49,6 +49,28 @@ private class RasterCallbackInterface: MCTiled2dMapRasterLayerCallbackInterface 
     }
 
 }
+private class VectorCallbackInterface: MCTiled2dMapVectorLayerSelectionCallbackInterface {
+    var onMapGesture: OnMapGesture?
+    init(onMapGesture: OnMapGesture? = nil) {
+        self.onMapGesture = onMapGesture
+    }
+    func didClickBackgroundConfirmed(_ coord: MCCoord) -> Bool {
+        if onMapGesture != nil {
+            onMapGesture!.onSingleTap(location: coord.toCLLocation2D())
+        }
+        return true
+    }
+    func didSelectFeature(
+        _ featureInfo: MCVectorLayerFeatureInfo, layerIdentifier: String, coord: MCCoord
+    ) -> Bool {
+        return false
+    }
+    func didMultiSelectLayerFeatures(
+        _ featureInfos: [MCVectorLayerFeatureInfo], layerIdentifier: String, coord: MCCoord
+    ) -> Bool {
+        return false
+    }
+}
 private class MapCameraListener: MCMapCameraListenerInterface {
 
     private(set) var mapChanged: OnMapChanged?
@@ -111,6 +133,7 @@ public final class OSMView: UIView, OnMapChanged {
     private let mapTileConfiguration: OSMMapConfiguration
     private var osmTiledConfiguration: OSMTiledLayerConfig!
     private var rasterLayer: MCTiled2dMapRasterLayerInterface!
+    private var vectorLayer: MCTiled2dMapVectorLayerInterface?
     private let identifier = MCCoordinateSystemIdentifiers.epsg4326()
 
     public let markerManager: MarkerManager
@@ -119,10 +142,12 @@ public final class OSMView: UIView, OnMapChanged {
     public let locationManager: LocationManager
     public let shapeManager: ShapeManager
     private let rasterCallback: RasterCallbackInterface = RasterCallbackInterface()
+    private let vectorCallback: VectorCallbackInterface = VectorCallbackInterface()
     private let mapCameraListener: MapCameraListener = MapCameraListener(mapChanged: nil)
     public var onMapGestureDelegate: OnMapGesture? {
         didSet {
             rasterCallback.onMapGesture = onMapGestureDelegate
+            vectorCallback.onMapGesture = onMapGestureDelegate
         }
     }
     public var onMapMove: OnMapMoved?
@@ -165,11 +190,7 @@ public final class OSMView: UIView, OnMapChanged {
         self.addSubview(self.mapView)
 
         self.osmTiledConfiguration = OSMTiledLayerConfig(configuration: self.mapTileConfiguration)
-        self.rasterLayer = MCTiled2dMapRasterLayerInterface.create(
-            osmTiledConfiguration,
-            loaders: [MCTextureLoader()])
-        rasterLayer?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
-        rasterLayer?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
+        vectorCallback.onMapGesture = onMapGestureDelegate
         //view.frame = rect
         self.mapCameraListener.setMapChanged(
             mapChanged: self, mapView: mapView,
@@ -177,8 +198,8 @@ public final class OSMView: UIView, OnMapChanged {
                 mcTilesZooms: osmTiledConfiguration.getZoomLevelInfos()))
 
         self.mapView.camera.addListener(mapCameraListener)
-        setupRasterLayer(tile: tile)
-        self.roadManager.initRoadManager(above: rasterLayer?.asLayerInterface())
+        setupBaseLayer(tile: tile)
+        self.roadManager.initRoadManager(above: baseLayer)
         self.shapeManager.initShapeManager()
         self.markerManager.initMarkerManager()
         self.setZoom(zoom: zoomConfig.initZoom)
@@ -233,12 +254,37 @@ public final class OSMView: UIView, OnMapChanged {
         return zoomId  //?? 139770566.007
     }
 
-    func setupRasterLayer(tile: CustomTiles? = nil) {
-        self.rasterLayer?.setCallbackHandler(rasterCallback)
-        if tile != nil {
-            osmTiledConfiguration.setTileURL(tileURL: tile!.toString())
+    private var baseLayer: MCLayerInterface? {
+        rasterLayer?.asLayerInterface() ?? vectorLayer?.asLayerInterface()
+    }
+
+    func setupBaseLayer(tile: CustomTiles? = nil) {
+        print("setupBaseLayer tile: \(tile?.isVector ?? false) url: \(tile?.toString() ?? "nil")")
+        if let tile = tile, tile.isVector {
+            let vector = MCTiled2dMapVectorLayerInterface.create(
+                fromStyleJson: "OSM Vector Layer",
+                styleJsonUrl: tile.toString(),
+                loaders: [MCTextureLoader()],
+                fontLoader: SystemFontLoader())
+            print("vector layer created: \(vector != nil)")
+            vector?.setSelectionDelegate(vectorCallback)
+            vector?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
+            vector?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
+            self.vectorLayer = vector
+            self.mapView.insert(layer: vector?.asLayerInterface(), at: 0)
+        } else {
+            if tile != nil {
+                osmTiledConfiguration.setTileURL(tileURL: tile!.toString())
+            }
+            let raster = MCTiled2dMapRasterLayerInterface.create(
+                osmTiledConfiguration,
+                loaders: [MCTextureLoader()])
+            raster?.setCallbackHandler(rasterCallback)
+            raster?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
+            raster?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
+            self.rasterLayer = raster
+            self.mapView.insert(layer: raster?.asLayerInterface(), at: 0)
         }
-        self.mapView.insert(layer: rasterLayer?.asLayerInterface(), at: 0)
     }
 
 }
@@ -285,14 +331,16 @@ extension OSMView {
      Responsible  change Tiles of the map
      */
     public func setCustomTile(tile: CustomTiles) {
-        self.osmTiledConfiguration.setTileURL(tileURL: tile.toString())
-        let nRaster = MCTiled2dMapRasterLayerInterface.create(
-            osmTiledConfiguration,
-            loaders: [MCTextureLoader()])
-        nRaster?.setCallbackHandler(rasterCallback)
-        self.mapView.insert(layer: nRaster?.asLayerInterface(), at: 0)
-        self.mapView.remove(layer: self.rasterLayer?.asLayerInterface())
-        self.rasterLayer = nRaster
+        let previousLayer = baseLayer
+        setupBaseLayer(tile: tile)
+        if let previousLayer = previousLayer {
+            self.mapView.remove(layer: previousLayer)
+        }
+        if tile.isVector {
+            self.rasterLayer = nil
+        } else {
+            self.vectorLayer = nil
+        }
         self.mapView.invalidate()
     }
 
