@@ -11,6 +11,7 @@ A Swift package providing an iOS OpenStreetMap view (`OSMView`) backed by MapCor
 ```
 Sources/OSMFlutterFramework/
   OSMView.swift            # Main UIView map view, camera, gesture delegates
+  SystemFontLoader.swift   # MCFontLoaderInterface implementation for vector tile fonts
   OSMTileConfiguration.swift
   models/
     MarkerManager.swift    # Add/remove/update map markers
@@ -71,6 +72,10 @@ public func enableTouch()
 ```swift
 public func setCustomTile(tile: CustomTiles)
 ```
+
+- `OSMView` initializes with either a raster or vector base layer depending on `tile?.isVector`.
+- Raster tiles use `OSMTiledLayerConfig` with `{x}/{y}/{z}` URL templates.
+- Vector tiles use `MCTiled2dMapVectorLayerInterface` with a `styleURL` and a built-in `SystemFontLoader`.
 
 ### Layer Visibility
 ```swift
@@ -282,10 +287,14 @@ public class BoundingBox: Equatable {
 ### CustomTiles
 ```swift
 public class CustomTiles {
+    public private(set) var isVector: Bool
     public init(_ mapTile: [String: Any], isMapCore: Bool = true)
     public func toString() -> String
 }
 ```
+
+- Raster tiles: parses a URL template with `{x}/{y}/{z}` and optional `{s}` subdomains.
+- Vector tiles: when `mapTile["isVector"] == true`, reads `styleURL` (or the first entry in `urls`) and returns that style URL from `toString()`.
 
 ## Delegate Protocols
 

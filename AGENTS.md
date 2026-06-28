@@ -7,14 +7,19 @@ Swift package that wraps MapCore (OpenStreetMap) for iOS. Provides a `UIView`-ba
 ## Key Files
 
 - `Package.swift` — SPM manifest, depends on `MapCore`, `Alamofire`, `Polyline`, `OSRMTextInstruction`, `DjinniSupport`
-- `Sources/OSMFlutterFramework/OSMView.swift` — Main `OSMView` UIView subclass. Owns `MCMapView`, raster tile layer, camera listener
+- `Sources/OSMFlutterFramework/OSMView.swift` — Main `OSMView` UIView subclass. Owns `MCMapView`, raster/vector tile base layer, camera listener
+- `Sources/OSMFlutterFramework/SystemFontLoader.swift` — `MCFontLoaderInterface` implementation. Generates signed-distance-field (SDF) font atlases and returns `MCFontLoaderResult` for vector tile layers
+- `Sources/OSMFlutterFramework/OSMTileConfiguration.swift` — `OSMMapConfiguration` and `OSMTiledLayerConfig` for raster tile URLs
 - `Sources/OSMFlutterFramework/models/` — Managers: `MarkerManager`, `RoadManager`, `ShapeManager`, `PoisManager`, `LocationManager`
-- `example/` — SwiftUI example app (`MapCoreView.swift`, `ContentView.swift`)
+- `example/` — SwiftUI example app (`MapCoreView.swift`, `ContentView.swift`, search UI)
 
 ## Architecture
 
 - `OSMView` is a `UIView` wrapping `MCMapView` (MapCore)
-- Managers are thin wrappers that insert layers above the raster layer
+- `OSMView` sets up **either** a raster or vector base layer at index 0
+  - Raster: `OSMTiledLayerConfig` + `MCTiled2dMapRasterLayerInterface`
+  - Vector: `MCTiled2dMapVectorLayerInterface.create(fromStyleJson:styleJsonUrl:loaders:fontLoader:)` with `SystemFontLoader()`
+- Managers are thin wrappers that insert layers above the base layer
 - `OSMView` exposes zoom/pan/rotation APIs and delegates for gestures, user location, road taps, marker taps
 - Example uses `UIViewControllerRepresentable` (`OSMMapView`) to bridge into SwiftUI
 
@@ -26,6 +31,8 @@ Swift package that wraps MapCore (OpenStreetMap) for iOS. Provides a `UIView`-ba
 - `center()`, `zoom()`, `getBoundingBox()`
 - `enableRotation(enable:)`, `setRotation(angle:animated:)`
 - `disableTouch()`, `enableTouch()`
+- `setCustomTile(tile:)` — swap the current raster or vector base layer at runtime
+- `onMapInteraction()` on `OnMapMoved` — called when the user interacts with the map
 - Managers accessed via `markerManager`, `roadManager`, `poisManager`, `shapeManager`, `locationManager`
 
 ## Example Integration Pattern
@@ -58,7 +65,7 @@ class InnerOSMMapView: UIViewController {
 
 #### Adding a new public API to OSMView
 
-1. Add the method in `OSMView.swift` inside the `extension OSMView` block (lines 237+)
+1. Add the method in `OSMView.swift` inside the `extension OSMView` block (after the initializers)
 2. If it needs a delegate, add the protocol in the file header and a public `var` delegate property
 3. Keep method signatures simple — avoid exposing MapCore types publicly
 
@@ -66,7 +73,7 @@ class InnerOSMMapView: UIViewController {
 
 1. Create file in `Sources/OSMFlutterFramework/models/`
 2. Follow the pattern: `init(map: MCMapView)`, `initXManager()` called from `OSMView.init`, expose public methods, support `hideAll()`/`showAll()`/`lockHandler()`
-3. Insert the layer above `rasterLayer` or at a specific z-index in `OSMView.init`
+3. Insert the layer above the base layer in `OSMView.init`
 4. Add public property on `OSMView` (like `public let myManager: MyManager`)
 
 #### Adding a delegate/protocol
@@ -94,12 +101,19 @@ class InnerOSMMapView: UIViewController {
 - `UserLocationConfiguration` defines the user and direction marker icons
 - Default icons use `UIImage(systemName: "mappin")` and `UIImage(systemName: "location.north.fill")`
 
+#### Changing the base tile layer
+
+- `OSMView.setupBaseLayer(tile:)` creates the raster or vector layer based on `CustomTiles.isVector`
+- `OSMView.setCustomTile(tile:)` removes the previous base layer and calls `setupBaseLayer(tile:)` + `mapView.invalidate()`
+- `OSMTiledLayerConfig` is only used for raster tiles; vector tiles use `MCTiled2dMapVectorLayerInterface` with a style JSON URL
+
 ### File-by-File Notes
 
 | File                         | Purpose             | Agent Notes                                                                                                                                 |
 | ---------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OSMView.swift`              | Main map view       | Contains private MapCore types. Public API lives in `extension OSMView` (line 237+). Camera listener enforces min/max zoom bounds.          |
-| `OSMTileConfiguration.swift` | Tile layer config   | Defines `OSMMapConfiguration`, `OSMTiledLayerConfig` for raster tile URLs.                                                                  |
+| `OSMView.swift`              | Main map view       | Contains private MapCore types. Public API lives in `extension OSMView`. Camera listener enforces min/max zoom bounds and forwards interaction events. |
+| `OSMTileConfiguration.swift` | Tile layer config   | `OSMMapConfiguration` is shared by both raster and vector paths. `OSMTiledLayerConfig` is only for raster tiles.                          |
+| `SystemFontLoader.swift`   | Vector font loader  | `MCFontLoaderInterface` implementation. Builds SDF glyph atlases, caches `FontAtlas` results, and maps font names to system fonts. Used only for vector layers. |
 | `MarkerManager.swift`        | Marker layer        | Uses `MCIconLayerInterface`. Markers stored in array. Taps forwarded via `IconLayerHander`.                                                 |
 | `RoadManager.swift`          | Polyline/road layer | Two `MCLineLayerInterface` instances (border + main). Supports `PolylineType.LINE` and `.DOT`. Encoded polyline string overload available.  |
 | `ShapeManager.swift`         | Polygon shapes      | Uses `MCPolygonLayerInterface` + `MCLineLayerInterface` for borders. Supports `Rect` and `Circle`.                                          |
@@ -108,7 +122,7 @@ class InnerOSMMapView: UIViewController {
 | `OSMMarker.swift`            | Marker models       | `Marker`, `MarkerConfiguration` structs. `MarkerScaleType` maps to `MCIconType`.                                                            |
 | `ZoomConfiguration.swift`    | Zoom config         | Maps integer zoom levels to MapCore `MCTiled2dMapZoomLevelInfo`. Max zoom asserted <= 19.                                                   |
 | `BoundingBox.swift`          | Bounds math         | Supports init from corners, center+distance, array. Converts to/from `MCRectCoord` for MapCore.                                             |
-| `CustomTiles.swift`          | Custom tile URLs    | Parses tile URL templates with `{x}/{y}/{z}` placeholders.                                                                                  |
+| `CustomTiles.swift`          | Custom tile URLs    | Supports raster `{x}/{y}/{z}` templates with optional `{s}` subdomains, and vector tiles via `styleURL` when `isVector == true`.           |
 | `Shape.swift`                | Shape models        | `PShape` protocol, `Shape`, `RectShapeOSM`, `CircleShapeOSM` implementations.                                                               |
 | `extensions.swift`           | Utilities           | `CLLocationCoordinate2D` helpers (`isEqual` with precision, `distance`, `destinationPoint`), `UIImage.toTexture()`, coordinate conversions. |
 
@@ -165,7 +179,10 @@ extension OSMView {
 - `hildeAll()` is intentionally misspelled in source — match existing naming if adding similar methods.
 - `RoadManager` uses two line layers: `lineBorderLayer` (clickable=false) below `lineLayer` (clickable=true). Both must be initialized.
 - `LocationManager` defaults to `controlUserMarker = true`, meaning it draws/moves the user marker automatically.
-- The raster tile layer is inserted at index 0; other layers are inserted above it.
+- The base layer is inserted at index 0; other layers are inserted above it.
+- Vector tile layers require a valid MapCore style JSON URL and use `SystemFontLoader()` for label rendering.
+- `CustomTiles` with `isVector == true` ignores tile extension/subdomain placeholders and uses `styleURL` or the first URL in `urls`.
+- `setCustomTile(tile:)` swaps the whole base layer; make sure to remove the old layer and call `mapView.invalidate()`.
 
 ### Build Commands
 
@@ -181,7 +198,7 @@ xcodebuild -workspace OSMMapCoreFrameworkExample.xcworkspace -scheme OSMMapCoreF
 ### Testing
 
 - Unit tests live in `OSMFlutterFrameworkTests/OSMFlutterFrameworkTests.swift`
-- Example app serves as integration test — run on simulator to verify map renders, markers/roads/shapes work, location tracking works.
+- Example app serves as integration test — run on simulator to verify map renders, markers/roads/shapes work, location tracking works, and vector tiles load correctly.
 
 ### Dependency Notes
 
