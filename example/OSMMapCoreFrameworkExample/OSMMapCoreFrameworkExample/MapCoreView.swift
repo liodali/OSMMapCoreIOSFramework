@@ -10,24 +10,34 @@ import Foundation
 import OSMFlutterFramework
 import Polyline
 import SwiftUI
+import UIKit
 import osrm_swift
+
+extension Notification.Name {
+    static let mapCenterChanged = Notification.Name("com.osmflutter.mapCenterChanged")
+    static let mapDidInteract = Notification.Name("com.osmflutter.mapDidInteract")
+}
 
 struct OSMMapView: UIViewControllerRepresentable {
     typealias UIViewControllerType = InnerOSMMapView
 
     let width, height: Int
+    let isVectorTile: Bool
     @Binding var controller: InnerOSMMapView?
 
     init(
-        width: Int = 200, height: Int = 200, controller: Binding<InnerOSMMapView?> = .constant(nil)
+        width: Int = 200, height: Int = 200, isVectorTile: Bool = false,
+        controller: Binding<InnerOSMMapView?> = .constant(nil)
     ) {
         self.width = width
         self.height = height
+        self.isVectorTile = isVectorTile
         self._controller = controller
     }
     func makeUIViewController(context: Context) -> InnerOSMMapView {
         let view = InnerOSMMapView(
-            rect: .init(origin: .zero, size: CGSize(width: width, height: height)))
+            rect: .init(origin: .zero, size: CGSize(width: width, height: height)),
+            isVectorTile: isVectorTile)
         DispatchQueue.main.async {
             self.controller = view
         }
@@ -45,7 +55,8 @@ public func - (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool
 struct MapCoreOSM: View {
     @State private var mapController: InnerOSMMapView?
     @State private var isTracking: Bool = false
-    @State private var searchText: String = ""
+    @State private var isVectorTile: Bool = true
+    @StateObject private var searchViewModel = LocationSearchViewModel()
 
     var body: some View {
         GeometryReader { geometry in
@@ -53,6 +64,7 @@ struct MapCoreOSM: View {
                 OSMMapView(
                     width: Int(geometry.size.width),
                     height: Int(geometry.size.height),
+                    isVectorTile: isVectorTile,
                     controller: $mapController
                 )
                 .onTapGesture {
@@ -63,29 +75,38 @@ struct MapCoreOSM: View {
                 }
 
                 VStack(spacing: 0) {
-                    HStack(spacing: 10) {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-                        TextField("Search", text: $searchText)
-                            .font(.body)
-                        if !searchText.isEmpty {
-                            Button {
-                                searchText = ""
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.gray)
+                    SearchInteractionView(viewModel: searchViewModel) { suggestion in
+                        let target = suggestion.coordinate
+                        searchViewModel.select(suggestion)
+
+                        if let current = mapController?.map.center() {
+                            let distance = CLLocation(
+                                latitude: current.latitude, longitude: current.longitude
+                            ).distance(
+                                from: CLLocation(
+                                    latitude: target.latitude, longitude: target.longitude))
+                            if distance < 100 {
+                                searchViewModel.showSuggestions()
+                            } else {
+                                searchViewModel.setSearchTarget(target)
                             }
+                        } else {
+                            searchViewModel.setSearchTarget(target)
                         }
+
+                        mapController?.moveTo(
+                            location: target,
+                            zoom: nil,
+                            animated: true
+                        )
+                        UIApplication.shared.sendAction(
+                            #selector(UIResponder.resignFirstResponder),
+                            to: nil, from: nil, for: nil
+                        )
                     }
-                    .padding(.horizontal, 12)
-                    .frame(height: 44)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                            .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
-                    )
                     .padding(.horizontal, 16)
                     .padding(.top, 56)
+                    .frame(maxWidth: .infinity, alignment: .top)
 
                     Spacer()
 
@@ -146,6 +167,40 @@ struct MapCoreOSM: View {
                                     .fill(.ultraThinMaterial)
                                     .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
                             )
+
+                            Button {
+                                isVectorTile.toggle()
+                                let tile =
+                                    isVectorTile
+                                    ? CustomTiles([
+                                        "styleURL": "https://tiles.openfreemap.org/styles/liberty",
+                                        "isVector": true,
+                                        "tileSize": 256,
+                                        "maxZoomLevel": "19",
+                                    ])
+                                    : CustomTiles([
+                                        "urls": [
+                                            [
+                                                "url": "https://{s}.tile.openstreetmap.org/",
+                                                "subdomains": ["a", "b", "c"],
+                                            ]
+                                        ],
+                                        "tileExtension": ".png",
+                                        "tileSize": 256,
+                                        "maxZoomLevel": "19",
+                                    ])
+                                mapController?.map.setCustomTile(tile: tile)
+                            } label: {
+                                Image(systemName: isVectorTile ? "map" : "map.fill")
+                                    .font(.system(size: 18))
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(isVectorTile ? .green : .blue)
+                            }
+                            .background(
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(.ultraThinMaterial)
+                                    .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
+                            )
                         }
                         .padding(.trailing, 16)
                         .padding(.bottom, 24)
@@ -153,11 +208,20 @@ struct MapCoreOSM: View {
                 }
             }
             .ignoresSafeArea(.keyboard)
+            .onReceive(NotificationCenter.default.publisher(for: .mapDidInteract)) { _ in
+                searchViewModel.mapDidInteract()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .mapCenterChanged)) {
+                notification in
+                guard let center = notification.userInfo?["center"] as? CLLocationCoordinate2D
+                else { return }
+                searchViewModel.mapDidMove(to: center)
+            }
         }
     }
 }
-class InnerOSMMapView: UIViewController, OnMapGesture, OSMUserLocationHandler, PoylineHandler,
-    MapMarkerHandler
+class InnerOSMMapView: UIViewController, OnMapGesture, OnMapMoved, OSMUserLocationHandler,
+    PoylineHandler, MapMarkerHandler
 {
     func onMarkerSingleTap(location: CLLocationCoordinate2D) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.02) { [unowned self] in
@@ -304,6 +368,24 @@ class InnerOSMMapView: UIViewController, OnMapGesture, OSMUserLocationHandler, P
         self.map.markerManager.removeMarker(location: location)
     }
 
+    func onMove(center: CLLocationCoordinate2D, bounds: BoundingBox, zoom: Double) {
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(
+                name: .mapCenterChanged,
+                object: self,
+                userInfo: ["center": center]
+            )
+        }
+    }
+
+    func onRotate(angle: Double) {}
+
+    func onMapInteraction() {
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .mapDidInteract, object: self)
+        }
+    }
+
     let map: OSMView
     let osrmManager: OSRMManager
     var alert: UIAlertController? = nil
@@ -313,7 +395,9 @@ class InnerOSMMapView: UIViewController, OnMapGesture, OSMUserLocationHandler, P
     let zoomConf = ZoomConfiguration(initZoom: 16, minZoom: 1, maxZoom: 19)
     let initLoc = CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324)
     var zoomL = 16
-    public init(rect: CGRect) {
+    let isVectorTile: Bool
+    public init(rect: CGRect, isVectorTile: Bool = false) {
+        self.isVectorTile = isVectorTile
         self.map = OSMView(
             rect: rect,
             location: initLoc,
@@ -352,6 +436,10 @@ class InnerOSMMapView: UIViewController, OnMapGesture, OSMUserLocationHandler, P
         }
     }
 
+    func moveTo(location: CLLocationCoordinate2D, zoom: Int? = nil, animated: Bool = true) {
+        self.map.moveTo(location: location, zoom: zoom, animated: animated)
+    }
+
     func removeAllMarkers() {
         for geo in self.geos {
             self.map.markerManager.removeMarker(location: geo)
@@ -363,6 +451,7 @@ class InnerOSMMapView: UIViewController, OnMapGesture, OSMUserLocationHandler, P
         //view.addSubview(map.view)
         map.onMapGestureDelegate = self
         map.mapHandlerDelegate = self
+        map.onMapMove = self
         // map.disableTouch()
 
     }
@@ -381,10 +470,20 @@ class InnerOSMMapView: UIViewController, OnMapGesture, OSMUserLocationHandler, P
         }
     }
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         if !initMap {
             //map.initialisationMapWithInitLocation()
             //map.setZoom(zoom: 12)
             initMap = true
+            if isVectorTile {
+                let tile = CustomTiles([
+                    "styleURL": "https://tiles.openfreemap.org/styles/liberty",
+                    "isVector": true,
+                    "tileSize": 256,
+                    "maxZoomLevel": "19",
+                ])
+                self.map.setCustomTile(tile: tile)
+            }
         }
 
         map.roadTapHandlerDelegate = self

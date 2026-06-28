@@ -18,14 +18,18 @@ struct SearchInteractionView: View {
                 }
             )
 
-            LocationSearchSuggestionsView(
-                isLoading: viewModel.isLoading,
-                suggestions: viewModel.suggestions,
-                errorMessage: viewModel.errorMessage,
-                onSelect: { suggestion in
-                    onSelect(suggestion)
-                }
-            )
+            if viewModel.isSuggestionsVisible {
+                LocationSearchSuggestionsView(
+                    isLoading: viewModel.isLoading,
+                    suggestions: viewModel.suggestions,
+                    errorMessage: viewModel.errorMessage,
+                    onSelect: { suggestion in
+                        onSelect(suggestion)
+                    }
+                )
+                .transition(.opacity)
+            }
         }
+        .animation(.easeInOut(duration: 0.2), value: viewModel.isSuggestionsVisible)
     }
 }
