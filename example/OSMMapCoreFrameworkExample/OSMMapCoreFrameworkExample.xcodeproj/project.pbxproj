@@ -23,6 +23,8 @@
 		A111111111111111111111119 /* SearchInteractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11111111111111111111111A /* SearchInteractionView.swift */; };
 		9069A33A2C68CDB600A15ED3 /* osrm-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A3392C68CDB600A15ED3 /* osrm-swift */; };
 		9069A33D2C69157100A15ED3 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A33C2C69157100A15ED3 /* Polyline */; };
+		B00000000000000000000001 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = B00000000000000000000004 /* MapLibre */; };
+		B00000000000000000000002 /* MapLibreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000003 /* MapLibreView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,7 @@
 		A111111111111111111111116 /* LocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModel.swift; sourceTree = "<group>"; };
 		A111111111111111111111118 /* LocationSearchViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViews.swift; sourceTree = "<group>"; };
 		A11111111111111111111111A /* SearchInteractionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInteractionView.swift; sourceTree = "<group>"; };
+		B00000000000000000000003 /* MapLibreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLibreView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +54,7 @@
 				902D49A42FD1919C0019AAEC /* MapCore in Frameworks */,
 				9069A33A2C68CDB600A15ED3 /* osrm-swift in Frameworks */,
 				9069A33D2C69157100A15ED3 /* Polyline in Frameworks */,
+				B00000000000000000000001 /* MapLibre in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				904407582BA91E1E0017B6FE /* MapCoreView.swift */,
+				B00000000000000000000003 /* MapLibreView.swift */,
 				A11111111111111111111111B /* Search */,
 				904407572BA912300017B6FE /* OSMMapCoreFrameworkExample.entitlements */,
 				9044072E2BA90CF80017B6FE /* OSMMapCoreFrameworkExampleApp.swift */,
@@ -138,6 +143,7 @@
 				902C90462FD03ABA00D2D754 /* MapCoreSharedModule */,
 				902C90482FD03ABE00D2D754 /* MapCoreSharedModuleCpp */,
 				902C904B2FD03BA500D2D754 /* OSMFlutterFramework */,
+				B00000000000000000000004 /* MapLibre */,
 			);
 			productName = OSMMapCoreFrameworkExample;
 			productReference = 9044072B2BA90CF80017B6FE /* OSMMapCoreFrameworkExample.app */;
@@ -172,6 +178,7 @@
 				9069A33B2C69157100A15ED3 /* XCRemoteSwiftPackageReference "Polyline" */,
 				901253292C714BEC00023664 /* XCRemoteSwiftPackageReference "maps-core" */,
 				902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../../../OSMFlutterFramework" */,
+				B00000000000000000000005 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
 			);
 			productRefGroup = 9044072C2BA90CF80017B6FE /* Products */;
 			projectDirPath = "";
@@ -207,6 +214,7 @@
 				A111111111111111111111115 /* LocationSearchViewModel.swift in Sources */,
 				A111111111111111111111117 /* LocationSearchViews.swift in Sources */,
 				A111111111111111111111119 /* SearchInteractionView.swift in Sources */,
+				B00000000000000000000002 /* MapLibreView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,6 +471,14 @@
 				version = 5.1.0;
 			};
 		};
+		B00000000000000000000005 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/maplibre/maplibre-gl-native-distribution.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.27.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -494,6 +510,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9069A33B2C69157100A15ED3 /* XCRemoteSwiftPackageReference "Polyline" */;
 			productName = Polyline;
+		};
+		B00000000000000000000004 /* MapLibre */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B00000000000000000000005 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */;
+			productName = MapLibre;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

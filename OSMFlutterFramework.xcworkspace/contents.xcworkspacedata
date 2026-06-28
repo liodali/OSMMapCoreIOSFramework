@@ -16,6 +16,9 @@
             <FileRef
                location = "group:MapCoreView.swift">
             </FileRef>
+            <FileRef
+               location = "group:MapLibreView.swift">
+            </FileRef>
             <Group
                location = "group:Assets.xcassets"
                name = "Assets.xcassets">
