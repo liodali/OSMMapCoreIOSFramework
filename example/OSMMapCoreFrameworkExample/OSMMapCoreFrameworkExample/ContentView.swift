@@ -8,11 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selectedTab = 0
+
     var body: some View {
-        MapCoreOSM()
-            .ignoresSafeArea()
+        TabView(selection: $selectedTab) {
+            MapCoreOSM()
+                .ignoresSafeArea()
+                .tabItem {
+                    Label("MapCore", systemImage: "map")
+                }
+                .tag(0)
+
+            MapLibreView()
+                .ignoresSafeArea()
+                .tabItem {
+                    Label("MapLibre", systemImage: "map.fill")
+                }
+                .tag(1)
+        }
+        .ignoresSafeArea()
     }
 }
+
 #Preview {
     ContentView()
 }
