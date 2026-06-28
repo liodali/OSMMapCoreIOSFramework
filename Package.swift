@@ -24,12 +24,14 @@ let package = Package(
         .product(name: "Polyline", package: "Polyline"),
       ],
       path: "Sources/OSMFlutterFramework",
-        publicHeadersPath: "Sources/OSMFlutterFramework/",
+      resources: [
+        .process("Resources")
+      ],
       //(name: "enable-experimental-features", value: "true")
       // swiftSettings: [
       //     .unsafeFlags(["-enable-experimental-feature", "AccessLevelOnImport"])
       // ]
-    ),
+    )
 
     /*,
     .testTarget(
