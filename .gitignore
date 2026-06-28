@@ -10,3 +10,5 @@ DerivedData/**
 *.resolved
 **/*.resolved
 .derived-data**
+.vscode
+.derivedData

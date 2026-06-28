@@ -3,47 +3,41 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		901253272C714B7B00023664 /* OSMFlutterFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		901253332C714C5600023664 /* OSMFlutterFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 901253322C714C5600023664 /* OSMFlutterFramework.framework */; };
+		902D49A42FD1919C0019AAEC /* MapCore in Frameworks */ = {isa = PBXBuildFile; productRef = 902C90442FD03AB700D2D754 /* MapCore */; };
+		902D49A52FD1919C0019AAEC /* MapCoreSharedModule in Frameworks */ = {isa = PBXBuildFile; productRef = 902C90462FD03ABA00D2D754 /* MapCoreSharedModule */; };
+		902D49A62FD1919C0019AAEC /* MapCoreSharedModuleCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 902C90482FD03ABE00D2D754 /* MapCoreSharedModuleCpp */; };
+		902D49A72FD1919C0019AAEC /* OSMFlutterFramework in Frameworks */ = {isa = PBXBuildFile; productRef = 902C904B2FD03BA500D2D754 /* OSMFlutterFramework */; };
 		9044072F2BA90CF80017B6FE /* OSMMapCoreFrameworkExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9044072E2BA90CF80017B6FE /* OSMMapCoreFrameworkExampleApp.swift */; };
 		904407312BA90CF80017B6FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904407302BA90CF80017B6FE /* ContentView.swift */; };
 		904407332BA90CFA0017B6FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 904407322BA90CFA0017B6FE /* Assets.xcassets */; };
 		904407362BA90CFA0017B6FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 904407352BA90CFA0017B6FE /* Preview Assets.xcassets */; };
 		904407592BA91E1E0017B6FE /* MapCoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904407582BA91E1E0017B6FE /* MapCoreView.swift */; };
+		A111111111111111111111111 /* SearchSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111111111111111111111112 /* SearchSuggestion.swift */; };
+		A111111111111111111111113 /* NominatimSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111111111111111111111114 /* NominatimSearchService.swift */; };
+		A111111111111111111111115 /* LocationSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111111111111111111111116 /* LocationSearchViewModel.swift */; };
+		A111111111111111111111117 /* LocationSearchViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111111111111111111111118 /* LocationSearchViews.swift */; };
+		A111111111111111111111119 /* SearchInteractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11111111111111111111111A /* SearchInteractionView.swift */; };
 		9069A33A2C68CDB600A15ED3 /* osrm-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A3392C68CDB600A15ED3 /* osrm-swift */; };
 		9069A33D2C69157100A15ED3 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A33C2C69157100A15ED3 /* Polyline */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		901253282C714B7B00023664 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				901253272C714B7B00023664 /* OSMFlutterFramework.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		901253302C714C2F00023664 /* OSMFlutterFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OSMFlutterFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		901253322C714C5600023664 /* OSMFlutterFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OSMFlutterFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9044072B2BA90CF80017B6FE /* OSMMapCoreFrameworkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OSMMapCoreFrameworkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9044072E2BA90CF80017B6FE /* OSMMapCoreFrameworkExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMMapCoreFrameworkExampleApp.swift; sourceTree = "<group>"; };
 		904407302BA90CF80017B6FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		904407322BA90CFA0017B6FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		904407352BA90CFA0017B6FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		904407532BA912070017B6FE /* OSMFlutterFramework.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OSMFlutterFramework.xcframework; path = ../../DerivedData/OSMFlutterFramework/Build/Products/OSMFlutterFramework.xcframework; sourceTree = "<group>"; };
 		904407572BA912300017B6FE /* OSMMapCoreFrameworkExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OSMMapCoreFrameworkExample.entitlements; sourceTree = "<group>"; };
 		904407582BA91E1E0017B6FE /* MapCoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapCoreView.swift; sourceTree = "<group>"; };
-		9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OSMFlutterFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A111111111111111111111112 /* SearchSuggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestion.swift; sourceTree = "<group>"; };
+		A111111111111111111111114 /* NominatimSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NominatimSearchService.swift; sourceTree = "<group>"; };
+		A111111111111111111111116 /* LocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModel.swift; sourceTree = "<group>"; };
+		A111111111111111111111118 /* LocationSearchViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViews.swift; sourceTree = "<group>"; };
+		A11111111111111111111111A /* SearchInteractionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInteractionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +45,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				901253332C714C5600023664 /* OSMFlutterFramework.framework in Frameworks */,
+				902D49A72FD1919C0019AAEC /* OSMFlutterFramework in Frameworks */,
+				902D49A62FD1919C0019AAEC /* MapCoreSharedModuleCpp in Frameworks */,
+				902D49A52FD1919C0019AAEC /* MapCoreSharedModule in Frameworks */,
+				902D49A42FD1919C0019AAEC /* MapCore in Frameworks */,
 				9069A33A2C68CDB600A15ED3 /* osrm-swift in Frameworks */,
 				9069A33D2C69157100A15ED3 /* Polyline in Frameworks */,
 			);
@@ -81,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				904407582BA91E1E0017B6FE /* MapCoreView.swift */,
+				A11111111111111111111111B /* Search */,
 				904407572BA912300017B6FE /* OSMMapCoreFrameworkExample.entitlements */,
 				9044072E2BA90CF80017B6FE /* OSMMapCoreFrameworkExampleApp.swift */,
 				904407302BA90CF80017B6FE /* ContentView.swift */,
@@ -88,6 +86,18 @@
 				904407342BA90CFA0017B6FE /* Preview Content */,
 			);
 			path = OSMMapCoreFrameworkExample;
+			sourceTree = "<group>";
+		};
+		A11111111111111111111111B /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				A111111111111111111111112 /* SearchSuggestion.swift */,
+				A111111111111111111111114 /* NominatimSearchService.swift */,
+				A111111111111111111111116 /* LocationSearchViewModel.swift */,
+				A111111111111111111111118 /* LocationSearchViews.swift */,
+				A11111111111111111111111A /* SearchInteractionView.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 		904407342BA90CFA0017B6FE /* Preview Content */ = {
@@ -101,10 +111,6 @@
 		9044073C2BA90EFD0017B6FE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				901253322C714C5600023664 /* OSMFlutterFramework.framework */,
-				901253302C714C2F00023664 /* OSMFlutterFramework.framework */,
-				9044075A2BA920130017B6FE /* OSMFlutterFramework.framework */,
-				904407532BA912070017B6FE /* OSMFlutterFramework.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -119,7 +125,6 @@
 				904407272BA90CF80017B6FE /* Sources */,
 				904407282BA90CF80017B6FE /* Frameworks */,
 				904407292BA90CF80017B6FE /* Resources */,
-				901253282C714B7B00023664 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -129,6 +134,10 @@
 			packageProductDependencies = (
 				9069A3392C68CDB600A15ED3 /* osrm-swift */,
 				9069A33C2C69157100A15ED3 /* Polyline */,
+				902C90442FD03AB700D2D754 /* MapCore */,
+				902C90462FD03ABA00D2D754 /* MapCoreSharedModule */,
+				902C90482FD03ABE00D2D754 /* MapCoreSharedModuleCpp */,
+				902C904B2FD03BA500D2D754 /* OSMFlutterFramework */,
 			);
 			productName = OSMMapCoreFrameworkExample;
 			productReference = 9044072B2BA90CF80017B6FE /* OSMMapCoreFrameworkExample.app */;
@@ -162,6 +171,7 @@
 				9069A3382C68CDB600A15ED3 /* XCRemoteSwiftPackageReference "osrm-swift" */,
 				9069A33B2C69157100A15ED3 /* XCRemoteSwiftPackageReference "Polyline" */,
 				901253292C714BEC00023664 /* XCRemoteSwiftPackageReference "maps-core" */,
+				902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../../../OSMFlutterFramework" */,
 			);
 			productRefGroup = 9044072C2BA90CF80017B6FE /* Products */;
 			projectDirPath = "";
@@ -192,6 +202,11 @@
 				904407592BA91E1E0017B6FE /* MapCoreView.swift in Sources */,
 				904407312BA90CF80017B6FE /* ContentView.swift in Sources */,
 				9044072F2BA90CF80017B6FE /* OSMMapCoreFrameworkExampleApp.swift in Sources */,
+				A111111111111111111111111 /* SearchSuggestion.swift in Sources */,
+				A111111111111111111111113 /* NominatimSearchService.swift in Sources */,
+				A111111111111111111111115 /* LocationSearchViewModel.swift in Sources */,
+				A111111111111111111111117 /* LocationSearchViews.swift in Sources */,
+				A111111111111111111111119 /* SearchInteractionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,7 +337,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = OSMMapCoreFrameworkExample/OSMMapCoreFrameworkExample.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/OSMMapCoreFrameworkExample/OSMMapCoreFrameworkExample.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -360,7 +375,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = OSMMapCoreFrameworkExample/OSMMapCoreFrameworkExample.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/OSMMapCoreFrameworkExample/OSMMapCoreFrameworkExample.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -416,6 +431,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../../../OSMFlutterFramework" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../OSMFlutterFramework;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		901253292C714BEC00023664 /* XCRemoteSwiftPackageReference "maps-core" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -444,6 +466,25 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		902C90442FD03AB700D2D754 /* MapCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 901253292C714BEC00023664 /* XCRemoteSwiftPackageReference "maps-core" */;
+			productName = MapCore;
+		};
+		902C90462FD03ABA00D2D754 /* MapCoreSharedModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 901253292C714BEC00023664 /* XCRemoteSwiftPackageReference "maps-core" */;
+			productName = MapCoreSharedModule;
+		};
+		902C90482FD03ABE00D2D754 /* MapCoreSharedModuleCpp */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 901253292C714BEC00023664 /* XCRemoteSwiftPackageReference "maps-core" */;
+			productName = MapCoreSharedModuleCpp;
+		};
+		902C904B2FD03BA500D2D754 /* OSMFlutterFramework */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = OSMFlutterFramework;
+		};
 		9069A3392C68CDB600A15ED3 /* osrm-swift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9069A3382C68CDB600A15ED3 /* XCRemoteSwiftPackageReference "osrm-swift" */;
