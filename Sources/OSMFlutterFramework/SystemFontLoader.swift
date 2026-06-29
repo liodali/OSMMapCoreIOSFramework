@@ -25,6 +25,14 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
     private let cache = NSCache<NSString, FontAtlas>()
     private let cacheLock = NSLock()
 
+    private static var bundle: Bundle {
+        #if SWIFT_PACKAGE
+            return Bundle.module
+        #else
+            return Bundle(for: SystemFontLoader.self)
+        #endif
+    }
+
     init(
         fontMappings: [String: UIFont],
         charset: String,
@@ -114,10 +122,10 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
         var pngURL: URL?
         for candidate in candidates {
             if jsonURL == nil {
-                jsonURL = Bundle.module.url(forResource: candidate, withExtension: "json")
+                jsonURL = Self.bundle.url(forResource: candidate, withExtension: "json")
             }
             if pngURL == nil {
-                pngURL = Bundle.module.url(forResource: candidate, withExtension: "png")
+                pngURL = Self.bundle.url(forResource: candidate, withExtension: "png")
             }
         }
 
@@ -236,7 +244,7 @@ class SystemFontLoader: NSObject, @unchecked Sendable, MCFontLoaderInterface {
         }
         bundledFontLock.unlock()
         guard
-            let url = Bundle.module.url(
+            let url = bundle.url(
                 forResource: ttfName, withExtension: "ttf", subdirectory: nil)
         else {
             print("SystemFontLoader: \(ttfName).ttf not found in resource bundle")

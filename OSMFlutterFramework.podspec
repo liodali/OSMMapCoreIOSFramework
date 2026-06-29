@@ -28,5 +28,6 @@ Pod::Spec.new do |s|
 
     s.vendored_frameworks = 'OSMFlutterFramework.xcframework'
     s.module_name = 'OSMFlutterFramework'
+    s.swift_version = '5.9'
 
 end

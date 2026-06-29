@@ -14,12 +14,10 @@ import MapKit
     @_implementationOnly import MapCore
 #endif
 
-
 nonisolated public protocol MapMarkerHandler {
-    nonisolated  func onMarkerSingleTap(location: CLLocationCoordinate2D)
-    nonisolated  func onMarkerLongPress(location: CLLocationCoordinate2D)
+    nonisolated func onMarkerSingleTap(location: CLLocationCoordinate2D)
+    nonisolated func onMarkerLongPress(location: CLLocationCoordinate2D)
 }
-
 
 nonisolated public class MarkerManager {
     let map: MCMapView
@@ -79,7 +77,9 @@ nonisolated public class MarkerManager {
                 self.iconLayerInterface?.remove(mcIcon)
                 self.iconLayerInterface?.add(marker.createMapIcon())
                 markers[index!] = marker
-                self.map.invalidate()
+                MainActor.assumeIsolated {
+                    self.map.invalidate()
+                }
             }
         }
     }
@@ -153,14 +153,14 @@ class IconLayerHander: MCIconLayerCallbackInterface {
     }
     func onClickConfirmed(_ icons: [MCIconInfoInterface]) -> Bool {
         if let handler = markerHandler, !skipHandler {
-                if icons.count == 1 {
-                    handler.onMarkerSingleTap(
-                        location: icons.first!.getCoordinate().toCLLocation2D())
-                } else {
-                    icons.forEach { icon in
-                        handler.onMarkerSingleTap(location: icon.getCoordinate().toCLLocation2D())
-                    }
+            if icons.count == 1 {
+                handler.onMarkerSingleTap(
+                    location: icons.first!.getCoordinate().toCLLocation2D())
+            } else {
+                icons.forEach { icon in
+                    handler.onMarkerSingleTap(location: icon.getCoordinate().toCLLocation2D())
                 }
+            }
         }
         return true
     }

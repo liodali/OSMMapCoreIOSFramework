@@ -30,6 +30,13 @@
 		901253252C71270C00023664 /* MapCoreSharedModuleCpp in Frameworks */ = {isa = PBXBuildFile; productRef = 901253242C71270C00023664 /* MapCoreSharedModuleCpp */; };
 		90487F7E2BABA51D007393C8 /* OSMFlutterFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; };
 		90487F7F2BABA51D007393C8 /* OSMFlutterFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		90D660A12CA942F700BDC471 /* SystemFontLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660A02CA942F700BDC471 /* SystemFontLoader.swift */; };
+		90D660A22CA942F700BDC471 /* NotoSans-Regular.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A32CA942F700BDC471 /* NotoSans-Regular.json */; };
+		90D660A42CA942F700BDC471 /* NotoSans-Italic.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A52CA942F700BDC471 /* NotoSans-Italic.json */; };
+		90D660A62CA942F700BDC471 /* NotoSans-Bold.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A72CA942F700BDC471 /* NotoSans-Bold.json */; };
+		90D660A82CA942F700BDC471 /* Noto_Sans_Regular.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A92CA942F700BDC471 /* Noto_Sans_Regular.png */; };
+		90D660AA2CA942F700BDC471 /* Noto_Sans_Italic.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D660AB2CA942F700BDC471 /* Noto_Sans_Italic.png */; };
+		90D660AC2CA942F700BDC471 /* Noto_Sans_Bold.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D660AD2CA942F700BDC471 /* Noto_Sans_Bold.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +82,13 @@
 		9012530D2C71256700023664 /* OSMFlutterFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSMFlutterFramework.h; sourceTree = "<group>"; };
 		9012530E2C71256700023664 /* OSMTileConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMTileConfiguration.swift; sourceTree = "<group>"; };
 		9012530F2C71256700023664 /* OSMView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMView.swift; sourceTree = "<group>"; };
+		90D660A02CA942F700BDC471 /* SystemFontLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemFontLoader.swift; sourceTree = "<group>"; };
+		90D660A32CA942F700BDC471 /* NotoSans-Regular.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NotoSans-Regular.json; sourceTree = "<group>"; };
+		90D660A52CA942F700BDC471 /* NotoSans-Italic.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NotoSans-Italic.json; sourceTree = "<group>"; };
+		90D660A72CA942F700BDC471 /* NotoSans-Bold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NotoSans-Bold.json; sourceTree = "<group>"; };
+		90D660A92CA942F700BDC471 /* Noto_Sans_Regular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Noto_Sans_Regular.png; sourceTree = "<group>"; };
+		90D660AB2CA942F700BDC471 /* Noto_Sans_Italic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Noto_Sans_Italic.png; sourceTree = "<group>"; };
+		90D660AD2CA942F700BDC471 /* Noto_Sans_Bold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Noto_Sans_Bold.png; sourceTree = "<group>"; };
 		90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OSMFlutterFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		90D660952CA942F700BDC471 /* OSMFlutterFramework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "OSMFlutterFramework-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -129,14 +143,29 @@
 			path = models;
 			sourceTree = "<group>";
 		};
+		90D660AE2CA942F700BDC471 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				90D660A32CA942F700BDC471 /* NotoSans-Regular.json */,
+				90D660A52CA942F700BDC471 /* NotoSans-Italic.json */,
+				90D660A72CA942F700BDC471 /* NotoSans-Bold.json */,
+				90D660A92CA942F700BDC471 /* Noto_Sans_Regular.png */,
+				90D660AB2CA942F700BDC471 /* Noto_Sans_Italic.png */,
+				90D660AD2CA942F700BDC471 /* Noto_Sans_Bold.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		901253102C71256700023664 /* OSMFlutterFramework */ = {
 			isa = PBXGroup;
 			children = (
 				90D660952CA942F700BDC471 /* OSMFlutterFramework-Info.plist */,
 				9012530C2C71256700023664 /* models */,
+				90D660AE2CA942F700BDC471 /* Resources */,
 				9012530D2C71256700023664 /* OSMFlutterFramework.h */,
 				9012530E2C71256700023664 /* OSMTileConfiguration.swift */,
 				9012530F2C71256700023664 /* OSMView.swift */,
+				90D660A02CA942F700BDC471 /* SystemFontLoader.swift */,
 			);
 			name = OSMFlutterFramework;
 			path = Sources/OSMFlutterFramework;
@@ -287,6 +316,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				901252E62C70A7DA00023664 /* README.md in Resources */,
+				90D660A22CA942F700BDC471 /* NotoSans-Regular.json in Resources */,
+				90D660A42CA942F700BDC471 /* NotoSans-Italic.json in Resources */,
+				90D660A62CA942F700BDC471 /* NotoSans-Bold.json in Resources */,
+				90D660A82CA942F700BDC471 /* Noto_Sans_Regular.png in Resources */,
+				90D660AA2CA942F700BDC471 /* Noto_Sans_Italic.png in Resources */,
+				90D660AC2CA942F700BDC471 /* Noto_Sans_Bold.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,6 +355,7 @@
 				9012531D2C71257300023664 /* OSMFlutterFramework.h in Sources */,
 				9012531E2C71257300023664 /* OSMTileConfiguration.swift in Sources */,
 				9012531F2C71257300023664 /* OSMView.swift in Sources */,
+				90D660A12CA942F700BDC471 /* SystemFontLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
