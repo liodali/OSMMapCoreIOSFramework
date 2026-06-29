@@ -77,8 +77,9 @@ nonisolated public class MarkerManager {
                 self.iconLayerInterface?.remove(mcIcon)
                 self.iconLayerInterface?.add(marker.createMapIcon())
                 markers[index!] = marker
+                let map = self.map
                 MainActor.assumeIsolated {
-                    self.map.invalidate()
+                    map.invalidate()
                 }
             }
         }
