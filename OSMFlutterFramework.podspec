@@ -27,6 +27,6 @@ Pod::Spec.new do |s|
     s.exclude_files = ['example/**']
 
     s.vendored_frameworks = 'OSMFlutterFramework.xcframework'
-    s.module_name = 'Sources/OSMFlutterFramework'
+    s.module_name = 'OSMFlutterFramework'
 
 end

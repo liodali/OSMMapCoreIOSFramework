@@ -16,13 +16,13 @@
 		904407332BA90CFA0017B6FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 904407322BA90CFA0017B6FE /* Assets.xcassets */; };
 		904407362BA90CFA0017B6FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 904407352BA90CFA0017B6FE /* Preview Assets.xcassets */; };
 		904407592BA91E1E0017B6FE /* MapCoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904407582BA91E1E0017B6FE /* MapCoreView.swift */; };
+		9069A33A2C68CDB600A15ED3 /* osrm-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A3392C68CDB600A15ED3 /* osrm-swift */; };
+		9069A33D2C69157100A15ED3 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A33C2C69157100A15ED3 /* Polyline */; };
 		A111111111111111111111111 /* SearchSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111111111111111111111112 /* SearchSuggestion.swift */; };
 		A111111111111111111111113 /* NominatimSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111111111111111111111114 /* NominatimSearchService.swift */; };
 		A111111111111111111111115 /* LocationSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111111111111111111111116 /* LocationSearchViewModel.swift */; };
 		A111111111111111111111117 /* LocationSearchViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111111111111111111111118 /* LocationSearchViews.swift */; };
 		A111111111111111111111119 /* SearchInteractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11111111111111111111111A /* SearchInteractionView.swift */; };
-		9069A33A2C68CDB600A15ED3 /* osrm-swift in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A3392C68CDB600A15ED3 /* osrm-swift */; };
-		9069A33D2C69157100A15ED3 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = 9069A33C2C69157100A15ED3 /* Polyline */; };
 		B00000000000000000000001 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = B00000000000000000000004 /* MapLibre */; };
 		B00000000000000000000002 /* MapLibreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000003 /* MapLibreView.swift */; };
 /* End PBXBuildFile section */
@@ -93,18 +93,6 @@
 			path = OSMMapCoreFrameworkExample;
 			sourceTree = "<group>";
 		};
-		A11111111111111111111111B /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				A111111111111111111111112 /* SearchSuggestion.swift */,
-				A111111111111111111111114 /* NominatimSearchService.swift */,
-				A111111111111111111111116 /* LocationSearchViewModel.swift */,
-				A111111111111111111111118 /* LocationSearchViews.swift */,
-				A11111111111111111111111A /* SearchInteractionView.swift */,
-			);
-			path = Search;
-			sourceTree = "<group>";
-		};
 		904407342BA90CFA0017B6FE /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +106,18 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A11111111111111111111111B /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				A111111111111111111111112 /* SearchSuggestion.swift */,
+				A111111111111111111111114 /* NominatimSearchService.swift */,
+				A111111111111111111111116 /* LocationSearchViewModel.swift */,
+				A111111111111111111111118 /* LocationSearchViews.swift */,
+				A11111111111111111111111A /* SearchInteractionView.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
