@@ -177,7 +177,7 @@
 				9069A3382C68CDB600A15ED3 /* XCRemoteSwiftPackageReference "osrm-swift" */,
 				9069A33B2C69157100A15ED3 /* XCRemoteSwiftPackageReference "Polyline" */,
 				901253292C714BEC00023664 /* XCRemoteSwiftPackageReference "maps-core" */,
-				902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../../../OSMFlutterFramework" */,
+				902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../../.." */,
 				B00000000000000000000005 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
 			);
 			productRefGroup = 9044072C2BA90CF80017B6FE /* Products */;
@@ -440,9 +440,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../../../OSMFlutterFramework" */ = {
+		902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../../.." */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../OSMFlutterFramework;
+			relativePath = ../..;
 		};
 /* End XCLocalSwiftPackageReference section */
 
