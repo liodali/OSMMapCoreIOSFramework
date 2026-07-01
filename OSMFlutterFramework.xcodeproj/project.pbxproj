@@ -31,6 +31,9 @@
 		90487F7E2BABA51D007393C8 /* OSMFlutterFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; };
 		90487F7F2BABA51D007393C8 /* OSMFlutterFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		90D660A12CA942F700BDC471 /* SystemFontLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660A02CA942F700BDC471 /* SystemFontLoader.swift */; };
+		90D660B12CA942F700BDC471 /* FontAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */; };
+		90D660B32CA942F700BDC471 /* MSDFAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */; };
+		90D660B52CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */; };
 		90D660A22CA942F700BDC471 /* NotoSans-Regular.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A32CA942F700BDC471 /* NotoSans-Regular.json */; };
 		90D660A42CA942F700BDC471 /* NotoSans-Italic.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A52CA942F700BDC471 /* NotoSans-Italic.json */; };
 		90D660A62CA942F700BDC471 /* NotoSans-Bold.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A72CA942F700BDC471 /* NotoSans-Bold.json */; };
@@ -83,6 +86,9 @@
 		9012530E2C71256700023664 /* OSMTileConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMTileConfiguration.swift; sourceTree = "<group>"; };
 		9012530F2C71256700023664 /* OSMView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMView.swift; sourceTree = "<group>"; };
 		90D660A02CA942F700BDC471 /* SystemFontLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemFontLoader.swift; sourceTree = "<group>"; };
+		90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAtlasProvider.swift; sourceTree = "<group>"; };
+		90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSDFAtlasProvider.swift; sourceTree = "<group>"; };
+		90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeSDFAtlasProvider.swift; sourceTree = "<group>"; };
 		90D660A32CA942F700BDC471 /* NotoSans-Regular.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NotoSans-Regular.json; sourceTree = "<group>"; };
 		90D660A52CA942F700BDC471 /* NotoSans-Italic.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NotoSans-Italic.json; sourceTree = "<group>"; };
 		90D660A72CA942F700BDC471 /* NotoSans-Bold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NotoSans-Bold.json; sourceTree = "<group>"; };
@@ -166,6 +172,9 @@
 				9012530E2C71256700023664 /* OSMTileConfiguration.swift */,
 				9012530F2C71256700023664 /* OSMView.swift */,
 				90D660A02CA942F700BDC471 /* SystemFontLoader.swift */,
+				90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */,
+				90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */,
+				90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */,
 			);
 			name = OSMFlutterFramework;
 			path = Sources/OSMFlutterFramework;
@@ -356,6 +365,9 @@
 				9012531E2C71257300023664 /* OSMTileConfiguration.swift in Sources */,
 				9012531F2C71257300023664 /* OSMView.swift in Sources */,
 				90D660A12CA942F700BDC471 /* SystemFontLoader.swift in Sources */,
+				90D660B12CA942F700BDC471 /* FontAtlasProvider.swift in Sources */,
+				90D660B32CA942F700BDC471 /* MSDFAtlasProvider.swift in Sources */,
+				90D660B52CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
