@@ -122,7 +122,10 @@ private class MapCameraListener: MCMapCameraListenerInterface {
         mapChanged?.onMapInteraction()
     }
 }
-public final class OSMView: UIView, OnMapChanged {
+public final class OSMView: UIView, OnMapChanged, VectorTileManageable, MapCameraManageable,
+    MapTileManageable, MapLayerVisibilityManageable, MapTouchManageable, MapInitializable,
+    MapLocationDelegateManageable
+{
 
     private let initLocation: CLLocationCoordinate2D?
     private let zoomConfiguration: ZoomConfiguration
@@ -288,7 +291,7 @@ public final class OSMView: UIView, OnMapChanged {
         finishLayerSwap()
     }
 
-    private func finishLayerSwap() {
+    func finishLayerSwap() {
         if let previousLayer = pendingPreviousLayer {
             self.mapView.remove(layer: previousLayer)
         }
@@ -301,7 +304,7 @@ public final class OSMView: UIView, OnMapChanged {
         pendingPreviousLayer = nil
     }
 
-    private func fetchAndCreateVectorLayer(styleUrl: String) {
+    func fetchAndCreateVectorLayer(styleUrl: String) {
         guard let url = URL(string: styleUrl) else {
             finishLayerSwap()
             return
@@ -332,7 +335,7 @@ public final class OSMView: UIView, OnMapChanged {
         }.resume()
     }
 
-    private func extractQueryParams(from urlString: String) -> [String: String]? {
+    func extractQueryParams(from urlString: String) -> [String: String]? {
         guard let url = URL(string: urlString),
             let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
             let queryItems = components.queryItems,
@@ -345,7 +348,7 @@ public final class OSMView: UIView, OnMapChanged {
         return params
     }
 
-    private func sanitizeStyleJson(_ json: String) -> String {
+    func sanitizeStyleJson(_ json: String) -> String {
         var result = json
         while let range = result.range(of: #"\["in"\s*,"#, options: .regularExpression) {
             result.replaceSubrange(range, with: #"["==","#)
@@ -353,7 +356,7 @@ public final class OSMView: UIView, OnMapChanged {
         return result
     }
 
-    private func createVectorLayer(
+    func createVectorLayer(
         styleJsonUrl: String?, styleJson: String?, sourceUrlParams: [String: String]?
     ) {
         let vector: MCTiled2dMapVectorLayerInterface?
