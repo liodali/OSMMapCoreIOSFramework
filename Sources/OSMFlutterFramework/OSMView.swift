@@ -134,6 +134,8 @@ public final class OSMView: UIView, OnMapChanged {
     private var osmTiledConfiguration: OSMTiledLayerConfig!
     private var rasterLayer: MCTiled2dMapRasterLayerInterface!
     private var vectorLayer: MCTiled2dMapVectorLayerInterface?
+    private var pendingPreviousLayer: MCLayerInterface?
+    private var pendingIsVector: Bool = false
     private let identifier = MCCoordinateSystemIdentifiers.epsg4326()
 
     public let markerManager: MarkerManager
@@ -260,18 +262,16 @@ public final class OSMView: UIView, OnMapChanged {
 
     func setupBaseLayer(tile: CustomTiles? = nil) {
         print("setupBaseLayer tile: \(tile?.isVector ?? false) url: \(tile?.toString() ?? "nil")")
+        pendingPreviousLayer = baseLayer
+        pendingIsVector = tile?.isVector ?? false
         if let tile = tile, tile.isVector {
-            let vector = MCTiled2dMapVectorLayerInterface.create(
-                fromStyleJson: "OSM Vector Layer",
-                styleJsonUrl: tile.toString(),
-                loaders: [MCTextureLoader()],
-                fontLoader: SystemFontLoader())
-            print("vector layer created: \(vector != nil)")
-            vector?.setSelectionDelegate(vectorCallback)
-            vector?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
-            vector?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
-            self.vectorLayer = vector
-            self.mapView.insert(layer: vector?.asLayerInterface(), at: 0)
+            let styleUrl = tile.toString()
+            if let url = URL(string: styleUrl), url.query != nil {
+                fetchAndCreateVectorLayer(styleUrl: styleUrl)
+                return
+            } else {
+                createVectorLayer(styleJsonUrl: styleUrl, styleJson: nil, sourceUrlParams: nil)
+            }
         } else {
             if tile != nil {
                 osmTiledConfiguration.setTileURL(tileURL: tile!.toString())
@@ -285,6 +285,102 @@ public final class OSMView: UIView, OnMapChanged {
             self.rasterLayer = raster
             self.mapView.insert(layer: raster?.asLayerInterface(), at: 0)
         }
+        finishLayerSwap()
+    }
+
+    private func finishLayerSwap() {
+        if let previousLayer = pendingPreviousLayer {
+            self.mapView.remove(layer: previousLayer)
+        }
+        if pendingIsVector {
+            self.rasterLayer = nil
+        } else {
+            self.vectorLayer = nil
+        }
+        self.mapView.invalidate()
+        pendingPreviousLayer = nil
+    }
+
+    private func fetchAndCreateVectorLayer(styleUrl: String) {
+        guard let url = URL(string: styleUrl) else {
+            finishLayerSwap()
+            return
+        }
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            if let error = error {
+                print("Failed to fetch vector style JSON: \(error.localizedDescription)")
+                DispatchQueue.main.async { self?.finishLayerSwap() }
+                return
+            }
+            guard let self = self,
+                let data = data,
+                let styleJson = String(data: data, encoding: .utf8)
+            else {
+                print("Failed to decode vector style JSON")
+                DispatchQueue.main.async { self?.finishLayerSwap() }
+                return
+            }
+            let sourceParams = self.extractQueryParams(from: styleUrl)
+            let sanitizedJson = self.sanitizeStyleJson(styleJson)
+            DispatchQueue.main.async {
+                self.createVectorLayer(
+                    styleJsonUrl: nil, styleJson: sanitizedJson, sourceUrlParams: sourceParams)
+                self.finishLayerSwap()
+            }
+        }.resume()
+    }
+
+    private func extractQueryParams(from urlString: String) -> [String: String]? {
+        guard let url = URL(string: urlString),
+            let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+            let queryItems = components.queryItems,
+            !queryItems.isEmpty
+        else { return nil }
+        var params: [String: String] = [:]
+        for item in queryItems {
+            params[item.name] = item.value ?? ""
+        }
+        return params
+    }
+
+    private func sanitizeStyleJson(_ json: String) -> String {
+        var result = json
+        while let range = result.range(of: #"\["in"\s*,"#, options: .regularExpression) {
+            result.replaceSubrange(range, with: #"["==","#)
+        }
+        return result
+    }
+
+    private func createVectorLayer(
+        styleJsonUrl: String?, styleJson: String?, sourceUrlParams: [String: String]?
+    ) {
+        let vector: MCTiled2dMapVectorLayerInterface?
+        if let styleJson = styleJson {
+            vector = MCTiled2dMapVectorLayerInterface.createExplicitly(
+                "OSM Vector Layer",
+                styleJson: styleJson,
+                localStyleJson: NSNumber(value: true),
+                loaders: [MCTextureLoader()],
+                fontLoader: SystemFontLoader(),
+                localDataProvider: nil,
+                customZoomInfo: nil,
+                symbolDelegate: nil,
+                sourceUrlParams: sourceUrlParams)
+        } else {
+            vector = MCTiled2dMapVectorLayerInterface.create(
+                fromStyleJson: "OSM Vector Layer",
+                styleJsonUrl: styleJsonUrl!,
+                loaders: [MCTextureLoader()],
+                fontLoader: SystemFontLoader())
+        }
+        print("vector layer created: \(vector != nil)")
+        vector?.setSelectionDelegate(vectorCallback)
+        vector?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
+        vector?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
+        self.vectorLayer = vector
+        self.mapView.insert(layer: vector?.asLayerInterface(), at: 0)
     }
 
 }
@@ -331,17 +427,7 @@ extension OSMView {
      Responsible  change Tiles of the map
      */
     public func setCustomTile(tile: CustomTiles) {
-        let previousLayer = baseLayer
         setupBaseLayer(tile: tile)
-        if let previousLayer = previousLayer {
-            self.mapView.remove(layer: previousLayer)
-        }
-        if tile.isVector {
-            self.rasterLayer = nil
-        } else {
-            self.vectorLayer = nil
-        }
-        self.mapView.invalidate()
     }
 
     /**
