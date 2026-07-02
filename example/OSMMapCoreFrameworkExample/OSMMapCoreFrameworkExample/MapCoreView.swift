@@ -22,22 +22,32 @@ struct OSMMapView: UIViewControllerRepresentable {
     typealias UIViewControllerType = InnerOSMMapView
 
     let width, height: Int
-    let isVectorTile: Bool
+    let initialTile: CustomTiles?
+    let startupLocation: CLLocationCoordinate2D
+    let startupMode: StartupLocationMode
     @Binding var controller: InnerOSMMapView?
 
     init(
-        width: Int = 200, height: Int = 200, isVectorTile: Bool = false,
+        width: Int = 200, height: Int = 200,
+        initialTile: CustomTiles? = nil,
+        startupLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(
+            latitude: 47.4358055, longitude: 8.4737324),
+        startupMode: StartupLocationMode = .fixedLocation,
         controller: Binding<InnerOSMMapView?> = .constant(nil)
     ) {
         self.width = width
         self.height = height
-        self.isVectorTile = isVectorTile
+        self.initialTile = initialTile
+        self.startupLocation = startupLocation
+        self.startupMode = startupMode
         self._controller = controller
     }
     func makeUIViewController(context: Context) -> InnerOSMMapView {
         let view = InnerOSMMapView(
             rect: .init(origin: .zero, size: CGSize(width: width, height: height)),
-            isVectorTile: isVectorTile)
+            initialTile: initialTile,
+            startupLocation: startupLocation,
+            startupMode: startupMode)
         DispatchQueue.main.async {
             self.controller = view
         }
@@ -55,7 +65,8 @@ public func - (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool
 struct MapCoreOSM: View {
     @State private var mapController: InnerOSMMapView?
     @State private var isTracking: Bool = false
-    @State private var isVectorTile: Bool = true
+    @State private var showSettings: Bool = false
+    @StateObject private var settings = MapSettings()
     @StateObject private var searchViewModel = LocationSearchViewModel()
 
     var body: some View {
@@ -64,7 +75,9 @@ struct MapCoreOSM: View {
                 OSMMapView(
                     width: Int(geometry.size.width),
                     height: Int(geometry.size.height),
-                    isVectorTile: isVectorTile,
+                    initialTile: settings.makeCustomTiles(),
+                    startupLocation: settings.fixedLocation,
+                    startupMode: settings.startupMode,
                     controller: $mapController
                 )
                 .onTapGesture {
@@ -75,33 +88,49 @@ struct MapCoreOSM: View {
                 }
 
                 VStack(spacing: 0) {
-                    SearchInteractionView(viewModel: searchViewModel) { suggestion in
-                        let target = suggestion.coordinate
-                        searchViewModel.select(suggestion)
+                    HStack(alignment: .top, spacing: 12) {
+                        SearchInteractionView(viewModel: searchViewModel) { suggestion in
+                            let target = suggestion.coordinate
+                            searchViewModel.select(suggestion)
 
-                        if let current = mapController?.map.center() {
-                            let distance = CLLocation(
-                                latitude: current.latitude, longitude: current.longitude
-                            ).distance(
-                                from: CLLocation(
-                                    latitude: target.latitude, longitude: target.longitude))
-                            if distance < 100 {
-                                searchViewModel.showSuggestions()
+                            if let current = mapController?.map.center() {
+                                let distance = CLLocation(
+                                    latitude: current.latitude, longitude: current.longitude
+                                ).distance(
+                                    from: CLLocation(
+                                        latitude: target.latitude, longitude: target.longitude))
+                                if distance < 100 {
+                                    searchViewModel.showSuggestions()
+                                } else {
+                                    searchViewModel.setSearchTarget(target)
+                                }
                             } else {
                                 searchViewModel.setSearchTarget(target)
                             }
-                        } else {
-                            searchViewModel.setSearchTarget(target)
+
+                            mapController?.moveTo(
+                                location: target,
+                                zoom: nil,
+                                animated: true
+                            )
+                            UIApplication.shared.sendAction(
+                                #selector(UIResponder.resignFirstResponder),
+                                to: nil, from: nil, for: nil
+                            )
                         }
 
-                        mapController?.moveTo(
-                            location: target,
-                            zoom: nil,
-                            animated: true
-                        )
-                        UIApplication.shared.sendAction(
-                            #selector(UIResponder.resignFirstResponder),
-                            to: nil, from: nil, for: nil
+                        Button {
+                            showSettings = true
+                        } label: {
+                            Image(systemName: "gearshape")
+                                .font(.system(size: 18, weight: .medium))
+                                .frame(width: 44, height: 44)
+                                .foregroundColor(.primary)
+                        }
+                        .background(
+                            Circle()
+                                .fill(.ultraThinMaterial)
+                                .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
                         )
                     }
                     .padding(.horizontal, 16)
@@ -169,32 +198,13 @@ struct MapCoreOSM: View {
                             )
 
                             Button {
-                                isVectorTile.toggle()
-                                let tile =
-                                    isVectorTile
-                                    ? CustomTiles([
-                                        "styleURL": "https://tiles.openfreemap.org/styles/liberty",
-                                        "isVector": true,
-                                        "tileSize": 256,
-                                        "maxZoomLevel": "19",
-                                    ])
-                                    : CustomTiles([
-                                        "urls": [
-                                            [
-                                                "url": "https://{s}.tile.openstreetmap.org/",
-                                                "subdomains": ["a", "b", "c"],
-                                            ]
-                                        ],
-                                        "tileExtension": ".png",
-                                        "tileSize": 256,
-                                        "maxZoomLevel": "19",
-                                    ])
-                                mapController?.map.setCustomTile(tile: tile)
+                                settings.tileType = settings.tileType == .vector ? .raster : .vector
+                                mapController?.map.setCustomTile(tile: settings.makeCustomTiles())
                             } label: {
-                                Image(systemName: isVectorTile ? "map" : "map.fill")
+                                Image(systemName: settings.isVector ? "map" : "map.fill")
                                     .font(.system(size: 18))
                                     .frame(width: 40, height: 40)
-                                    .foregroundColor(isVectorTile ? .green : .blue)
+                                    .foregroundColor(settings.isVector ? .green : .blue)
                             }
                             .background(
                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -216,6 +226,29 @@ struct MapCoreOSM: View {
                 guard let center = notification.userInfo?["center"] as? CLLocationCoordinate2D
                 else { return }
                 searchViewModel.mapDidMove(to: center)
+            }
+            .onChange(of: settings.tileType) { _ in
+                mapController?.map.setCustomTile(tile: settings.makeCustomTiles())
+            }
+            .onChange(of: settings.vectorStyleURL) { _ in
+                if settings.isVector && settings.isValidVectorURL {
+                    mapController?.map.setCustomTile(tile: settings.makeCustomTiles())
+                }
+            }
+            .onChange(of: settings.rasterSource) { _ in
+                if !settings.isVector {
+                    mapController?.map.setCustomTile(tile: settings.makeCustomTiles())
+                }
+            }
+            .onChange(of: settings.customRasterURL) { _ in
+                if !settings.isVector && settings.rasterSource == .custom
+                    && settings.isValidRasterURL
+                {
+                    mapController?.map.setCustomTile(tile: settings.makeCustomTiles())
+                }
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView(settings: settings, isPresented: $showSettings)
             }
         }
     }
@@ -393,21 +426,27 @@ class InnerOSMMapView: UIViewController, OnMapGesture, OnMapMoved, OSMUserLocati
     var initMap: Bool = false
     let rect: CGRect
     let zoomConf = ZoomConfiguration(initZoom: 16, minZoom: 1, maxZoom: 19)
-    let initLoc = CLLocationCoordinate2D(latitude: 47.4358055, longitude: 8.4737324)
     var zoomL = 16
-    let isVectorTile: Bool
-    public init(rect: CGRect, isVectorTile: Bool = false) {
-        self.isVectorTile = isVectorTile
+    let initialTile: CustomTiles?
+    let startupLocation: CLLocationCoordinate2D
+    let startupMode: StartupLocationMode
+    public init(
+        rect: CGRect, initialTile: CustomTiles? = nil,
+        startupLocation: CLLocationCoordinate2D = CLLocationCoordinate2D(
+            latitude: 47.4358055, longitude: 8.4737324),
+        startupMode: StartupLocationMode = .fixedLocation
+    ) {
+        self.initialTile = initialTile
+        self.startupLocation = startupLocation
+        self.startupMode = startupMode
         self.map = OSMView(
             rect: rect,
-            location: initLoc,
+            location: startupLocation,
             zoomConfig: zoomConf)
 
-        //map.frame = rect//CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 300, height: 300))
         self.rect = rect
         self.osrmManager = try! OSRMManager()
         super.init(nibName: nil, bundle: nil)
-        //map.frame = rect
         self.view.addSubview(self.map)
     }
 
@@ -472,17 +511,13 @@ class InnerOSMMapView: UIViewController, OnMapGesture, OnMapMoved, OSMUserLocati
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !initMap {
-            //map.initialisationMapWithInitLocation()
-            //map.setZoom(zoom: 12)
             initMap = true
-            if isVectorTile {
-                let tile = CustomTiles([
-                    "styleURL": "https://tiles.openfreemap.org/styles/liberty",
-                    "isVector": true,
-                    "tileSize": 256,
-                    "maxZoomLevel": "19",
-                ])
+            if let tile = initialTile {
                 self.map.setCustomTile(tile: tile)
+            }
+            if startupMode == .userLocation {
+                self.map.locationManager.toggleTracking(
+                    configuration: TrackConfiguration(moveMap: true, controlUserMarker: true))
             }
         }
 

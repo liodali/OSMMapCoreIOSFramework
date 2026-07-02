@@ -25,6 +25,8 @@
 		A111111111111111111111119 /* SearchInteractionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11111111111111111111111A /* SearchInteractionView.swift */; };
 		B00000000000000000000001 /* MapLibre in Frameworks */ = {isa = PBXBuildFile; productRef = B00000000000000000000004 /* MapLibre */; };
 		B00000000000000000000002 /* MapLibreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000003 /* MapLibreView.swift */; };
+		C00000000000000000000001 /* MapSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000003 /* MapSettings.swift */; };
+		C00000000000000000000002 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000004 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,8 @@
 		A111111111111111111111118 /* LocationSearchViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViews.swift; sourceTree = "<group>"; };
 		A11111111111111111111111A /* SearchInteractionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInteractionView.swift; sourceTree = "<group>"; };
 		B00000000000000000000003 /* MapLibreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLibreView.swift; sourceTree = "<group>"; };
+		C00000000000000000000003 /* MapSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettings.swift; sourceTree = "<group>"; };
+		C00000000000000000000004 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +87,8 @@
 			children = (
 				904407582BA91E1E0017B6FE /* MapCoreView.swift */,
 				B00000000000000000000003 /* MapLibreView.swift */,
+				C00000000000000000000003 /* MapSettings.swift */,
+				C00000000000000000000004 /* SettingsView.swift */,
 				A11111111111111111111111B /* Search */,
 				904407572BA912300017B6FE /* OSMMapCoreFrameworkExample.entitlements */,
 				9044072E2BA90CF80017B6FE /* OSMMapCoreFrameworkExampleApp.swift */,
@@ -215,6 +221,8 @@
 				A111111111111111111111117 /* LocationSearchViews.swift in Sources */,
 				A111111111111111111111119 /* SearchInteractionView.swift in Sources */,
 				B00000000000000000000002 /* MapLibreView.swift in Sources */,
+				C00000000000000000000001 /* MapSettings.swift in Sources */,
+				C00000000000000000000002 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
