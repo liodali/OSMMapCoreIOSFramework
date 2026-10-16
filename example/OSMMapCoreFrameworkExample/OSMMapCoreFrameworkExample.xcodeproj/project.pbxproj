@@ -163,7 +163,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1530;
+				LastUpgradeCheck = 2650;
 				TargetAttributes = {
 					9044072A2BA90CF80017B6FE = {
 						CreatedOnToolsVersion = 15.3;
@@ -183,7 +183,7 @@
 				9069A3382C68CDB600A15ED3 /* XCRemoteSwiftPackageReference "osrm-swift" */,
 				9069A33B2C69157100A15ED3 /* XCRemoteSwiftPackageReference "Polyline" */,
 				901253292C714BEC00023664 /* XCRemoteSwiftPackageReference "maps-core" */,
-				902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../../.." */,
+				902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../.." */,
 				B00000000000000000000005 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
 			);
 			productRefGroup = 9044072C2BA90CF80017B6FE /* Products */;
@@ -264,6 +264,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 47TCTNRU75;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -287,6 +288,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -327,6 +329,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 47TCTNRU75;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -343,6 +346,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -358,7 +362,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"OSMMapCoreFrameworkExample/Preview Content\"";
-				DEVELOPMENT_TEAM = 47TCTNRU75;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Track user location";
@@ -396,7 +399,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"OSMMapCoreFrameworkExample/Preview Content\"";
-				DEVELOPMENT_TEAM = 47TCTNRU75;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Track user location";
@@ -448,7 +450,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../../.." */ = {
+		902C904A2FD03BA500D2D754 /* XCLocalSwiftPackageReference "../.." */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../..;
 		};
@@ -457,10 +459,10 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		901253292C714BEC00023664 /* XCRemoteSwiftPackageReference "maps-core" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/openmobilemaps/maps-core";
+			repositoryURL = "https://github.com/liodali/maps-core.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.5.0;
+				kind = exactVersion;
+				version = "4.0.1-spm.1";
 			};
 		};
 		9069A3382C68CDB600A15ED3 /* XCRemoteSwiftPackageReference "osrm-swift" */ = {

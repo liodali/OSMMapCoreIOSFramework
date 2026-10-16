@@ -11,15 +11,14 @@ let package = Package(
     .library(name: "OSMFlutterFramework", targets: ["OSMFlutterFramework"])
   ],
   dependencies: [
-    .package(url: "https://github.com/UbiqueInnovation/djinni.git", from: "1.0.9"),
-    .package(url: "https://github.com/openmobilemaps/maps-core.git", from: "3.7.1"),
+    // MapCore 4.0.0 with stable remote djinni resolution (upstream issue #929).
+    .package(url: "https://github.com/liodali/maps-core.git", exact: "4.0.1-spm.1"),
     .package(url: "https://github.com/raphaelmor/Polyline.git", from: "5.1.0"),
   ],
   targets: [
     .target(
       name: "OSMFlutterFramework",
       dependencies: [
-        .product(name: "DjinniSupport", package: "djinni"),
         .product(name: "MapCore", package: "maps-core"),
         .product(name: "Polyline", package: "Polyline"),
       ],

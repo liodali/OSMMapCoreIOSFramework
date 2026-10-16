@@ -1,5 +1,5 @@
 {
-  "originHash" : "b30081243ce56f3e6d92ab9c332a35e6baf321e6ec414c211450e3eec5d70f19",
+  "originHash" : "de892611ff3e6ef21065302f71fb8a5c16e21a7d02ef39e30dc408d91f4b3443",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -31,10 +31,10 @@
     {
       "identity" : "maps-core",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/openmobilemaps/maps-core",
+      "location" : "https://github.com/liodali/maps-core.git",
       "state" : {
-        "revision" : "ca002b84cd9031032452592791a502c71fd268af",
-        "version" : "3.7.1"
+        "revision" : "e04be5b547effd6aa3a32129db68954a1a8b6c60",
+        "version" : "4.0.1-spm.1"
       }
     },
     {

@@ -31,15 +31,15 @@
 		90487F7E2BABA51D007393C8 /* OSMFlutterFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; };
 		90487F7F2BABA51D007393C8 /* OSMFlutterFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		90D660A12CA942F700BDC471 /* SystemFontLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660A02CA942F700BDC471 /* SystemFontLoader.swift */; };
-		90D660B12CA942F700BDC471 /* FontAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */; };
-		90D660B32CA942F700BDC471 /* MSDFAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */; };
-		90D660B52CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */; };
 		90D660A22CA942F700BDC471 /* NotoSans-Regular.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A32CA942F700BDC471 /* NotoSans-Regular.json */; };
 		90D660A42CA942F700BDC471 /* NotoSans-Italic.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A52CA942F700BDC471 /* NotoSans-Italic.json */; };
 		90D660A62CA942F700BDC471 /* NotoSans-Bold.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A72CA942F700BDC471 /* NotoSans-Bold.json */; };
 		90D660A82CA942F700BDC471 /* Noto_Sans_Regular.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D660A92CA942F700BDC471 /* Noto_Sans_Regular.png */; };
 		90D660AA2CA942F700BDC471 /* Noto_Sans_Italic.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D660AB2CA942F700BDC471 /* Noto_Sans_Italic.png */; };
 		90D660AC2CA942F700BDC471 /* Noto_Sans_Bold.png in Resources */ = {isa = PBXBuildFile; fileRef = 90D660AD2CA942F700BDC471 /* Noto_Sans_Bold.png */; };
+		90D660B12CA942F700BDC471 /* FontAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */; };
+		90D660B32CA942F700BDC471 /* MSDFAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */; };
+		90D660B52CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,18 +85,18 @@
 		9012530D2C71256700023664 /* OSMFlutterFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSMFlutterFramework.h; sourceTree = "<group>"; };
 		9012530E2C71256700023664 /* OSMTileConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMTileConfiguration.swift; sourceTree = "<group>"; };
 		9012530F2C71256700023664 /* OSMView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMView.swift; sourceTree = "<group>"; };
+		90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OSMFlutterFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		90D660952CA942F700BDC471 /* OSMFlutterFramework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "OSMFlutterFramework-Info.plist"; sourceTree = SOURCE_ROOT; };
 		90D660A02CA942F700BDC471 /* SystemFontLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemFontLoader.swift; sourceTree = "<group>"; };
-		90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAtlasProvider.swift; sourceTree = "<group>"; };
-		90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSDFAtlasProvider.swift; sourceTree = "<group>"; };
-		90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeSDFAtlasProvider.swift; sourceTree = "<group>"; };
-		90D660A32CA942F700BDC471 /* NotoSans-Regular.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NotoSans-Regular.json; sourceTree = "<group>"; };
-		90D660A52CA942F700BDC471 /* NotoSans-Italic.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NotoSans-Italic.json; sourceTree = "<group>"; };
-		90D660A72CA942F700BDC471 /* NotoSans-Bold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = NotoSans-Bold.json; sourceTree = "<group>"; };
+		90D660A32CA942F700BDC471 /* NotoSans-Regular.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "NotoSans-Regular.json"; sourceTree = "<group>"; };
+		90D660A52CA942F700BDC471 /* NotoSans-Italic.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "NotoSans-Italic.json"; sourceTree = "<group>"; };
+		90D660A72CA942F700BDC471 /* NotoSans-Bold.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "NotoSans-Bold.json"; sourceTree = "<group>"; };
 		90D660A92CA942F700BDC471 /* Noto_Sans_Regular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Noto_Sans_Regular.png; sourceTree = "<group>"; };
 		90D660AB2CA942F700BDC471 /* Noto_Sans_Italic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Noto_Sans_Italic.png; sourceTree = "<group>"; };
 		90D660AD2CA942F700BDC471 /* Noto_Sans_Bold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Noto_Sans_Bold.png; sourceTree = "<group>"; };
-		90B8B8362B1281BF0021DA8F /* OSMFlutterFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OSMFlutterFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		90D660952CA942F700BDC471 /* OSMFlutterFramework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "OSMFlutterFramework-Info.plist"; sourceTree = SOURCE_ROOT; };
+		90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAtlasProvider.swift; sourceTree = "<group>"; };
+		90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSDFAtlasProvider.swift; sourceTree = "<group>"; };
+		90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeSDFAtlasProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,19 +149,6 @@
 			path = models;
 			sourceTree = "<group>";
 		};
-		90D660AE2CA942F700BDC471 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				90D660A32CA942F700BDC471 /* NotoSans-Regular.json */,
-				90D660A52CA942F700BDC471 /* NotoSans-Italic.json */,
-				90D660A72CA942F700BDC471 /* NotoSans-Bold.json */,
-				90D660A92CA942F700BDC471 /* Noto_Sans_Regular.png */,
-				90D660AB2CA942F700BDC471 /* Noto_Sans_Italic.png */,
-				90D660AD2CA942F700BDC471 /* Noto_Sans_Bold.png */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		901253102C71256700023664 /* OSMFlutterFramework */ = {
 			isa = PBXGroup;
 			children = (
@@ -205,6 +192,19 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		90D660AE2CA942F700BDC471 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				90D660A32CA942F700BDC471 /* NotoSans-Regular.json */,
+				90D660A52CA942F700BDC471 /* NotoSans-Italic.json */,
+				90D660A72CA942F700BDC471 /* NotoSans-Bold.json */,
+				90D660A92CA942F700BDC471 /* Noto_Sans_Regular.png */,
+				90D660AB2CA942F700BDC471 /* Noto_Sans_Italic.png */,
+				90D660AD2CA942F700BDC471 /* Noto_Sans_Bold.png */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -277,7 +277,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 2650;
 				TargetAttributes = {
 					9005CBA92B1DD43C00724B22 = {
 						CreatedOnToolsVersion = 15.0.1;
@@ -297,7 +297,6 @@
 			);
 			mainGroup = 90B8B82C2B1281BF0021DA8F;
 			packageReferences = (
-				90D7D9BB2BD956BD006A8014 /* XCRemoteSwiftPackageReference "djinni" */,
 				9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */,
 				901252E02C70A38F00023664 /* XCRemoteSwiftPackageReference "Polyline" */,
 			);
@@ -503,6 +502,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-enable-experimental-feature AccessLevelOnImport";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SYMROOT = DerivedData/OSMFlutterFramework/Build/Products;
@@ -567,6 +567,7 @@
 				MTL_FAST_MATH = YES;
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-enable-experimental-feature AccessLevelOnImport";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SYMROOT = DerivedData/OSMFlutterFramework/Build/Products;
 				VALIDATE_PRODUCT = YES;
@@ -581,12 +582,13 @@
 				APP_SHORTCUTS_ENABLE_FLEXIBLE_MATCHING = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J5JLB26KF5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -627,12 +629,13 @@
 				APP_SHORTCUTS_ENABLE_FLEXIBLE_MATCHING = NO;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = J5JLB26KF5;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -709,18 +712,10 @@
 		};
 		9015BB352BD9575100CCB075 /* XCRemoteSwiftPackageReference "maps-core" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/openmobilemaps/maps-core";
+			repositoryURL = "https://github.com/liodali/maps-core.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.5.0;
-			};
-		};
-		90D7D9BB2BD956BD006A8014 /* XCRemoteSwiftPackageReference "djinni" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/UbiqueInnovation/djinni.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.9;
+				kind = exactVersion;
+				version = "4.0.1-spm.1";
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
