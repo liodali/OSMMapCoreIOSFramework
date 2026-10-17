@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SearchInteractionView: View {
     @ObservedObject var viewModel: LocationSearchViewModel
+    var searchFocused: FocusState<Bool>.Binding
     let onSelect: (SearchSuggestion) -> Void
 
     var body: some View {
@@ -13,6 +14,7 @@ struct SearchInteractionView: View {
                         viewModel.updateQuery(newValue)
                     }
                 ),
+                isFocused: searchFocused,
                 onClear: {
                     viewModel.clear()
                 }

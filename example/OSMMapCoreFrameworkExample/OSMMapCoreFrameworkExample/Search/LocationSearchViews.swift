@@ -2,6 +2,7 @@ import SwiftUI
 
 struct LocationSearchBar: View {
     @Binding var text: String
+    var isFocused: FocusState<Bool>.Binding
     let onClear: () -> Void
 
     var body: some View {
@@ -13,6 +14,7 @@ struct LocationSearchBar: View {
                 .font(.body)
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
+                .focused(isFocused)
 
             if !text.isEmpty {
                 Button(action: onClear) {

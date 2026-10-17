@@ -66,6 +66,7 @@ struct MapCoreOSM: View {
     @State private var mapController: InnerOSMMapView?
     @State private var isTracking: Bool = false
     @State private var showSettings: Bool = false
+    @FocusState private var searchFieldFocused: Bool
     @StateObject private var settings = MapSettings()
     @StateObject private var searchViewModel = LocationSearchViewModel()
 
@@ -80,16 +81,13 @@ struct MapCoreOSM: View {
                     startupMode: settings.startupMode,
                     controller: $mapController
                 )
-                .onTapGesture {
-                    UIApplication.shared.sendAction(
-                        #selector(UIResponder.resignFirstResponder),
-                        to: nil, from: nil, for: nil
-                    )
-                }
 
                 VStack(spacing: 0) {
                     HStack(alignment: .top, spacing: 12) {
-                        SearchInteractionView(viewModel: searchViewModel) { suggestion in
+                        SearchInteractionView(
+                            viewModel: searchViewModel,
+                            searchFocused: $searchFieldFocused
+                        ) { suggestion in
                             let target = suggestion.coordinate
                             searchViewModel.select(suggestion)
 
@@ -113,10 +111,7 @@ struct MapCoreOSM: View {
                                 zoom: nil,
                                 animated: true
                             )
-                            UIApplication.shared.sendAction(
-                                #selector(UIResponder.resignFirstResponder),
-                                to: nil, from: nil, for: nil
-                            )
+                            searchFieldFocused = false
                         }
 
                         Button {
@@ -219,6 +214,7 @@ struct MapCoreOSM: View {
             }
             .ignoresSafeArea(.keyboard)
             .onReceive(NotificationCenter.default.publisher(for: .mapDidInteract)) { _ in
+                searchFieldFocused = false
                 searchViewModel.mapDidInteract()
             }
             .onReceive(NotificationCenter.default.publisher(for: .mapCenterChanged)) {
@@ -415,6 +411,12 @@ class InnerOSMMapView: UIViewController, OnMapGesture, OnMapMoved, OSMUserLocati
 
     func onMapInteraction() {
         DispatchQueue.main.async {
+            // Map gestures consume touches, so SwiftUI tap gestures never fire
+            // over the map. Dismiss whatever holds first responder here.
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder),
+                to: nil, from: nil, for: nil
+            )
             NotificationCenter.default.post(name: .mapDidInteract, object: self)
         }
     }
