@@ -462,7 +462,7 @@
 			repositoryURL = "https://github.com/liodali/maps-core.git";
 			requirement = {
 				kind = exactVersion;
-				version = "4.0.1-spm.1";
+				version = "4.0.1-spm.2";
 			};
 		};
 		9069A3382C68CDB600A15ED3 /* XCRemoteSwiftPackageReference "osrm-swift" */ = {

@@ -11,8 +11,9 @@ let package = Package(
     .library(name: "OSMFlutterFramework", targets: ["OSMFlutterFramework"])
   ],
   dependencies: [
-    // MapCore 4.0.0 with stable remote djinni resolution (upstream issue #929).
-    .package(url: "https://github.com/liodali/maps-core.git", exact: "4.0.1-spm.1"),
+    // MapCore 4.0.0 with stable remote djinni resolution (upstream issue #929)
+    // and an AppKit fallback for indexed PNG tiles.
+    .package(url: "https://github.com/liodali/maps-core.git", exact: "4.0.1-spm.2"),
     .package(url: "https://github.com/raphaelmor/Polyline.git", from: "5.1.0"),
   ],
   targets: [

@@ -1,0 +1,389 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		070A3993908D783E7D51C007 /* MapCore in Frameworks */ = {isa = PBXBuildFile; productRef = 84D077DB94F5CB2C0AEB73D5 /* MapCore */; };
+		2A91D7BB0069DFF00A518BFA /* Noto_Sans_Regular.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF1771E3BEFD604B975B839 /* Noto_Sans_Regular.png */; };
+		41E9EF4DA0D04DBF6E2A2499 /* Noto_Sans_Bold.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B2641CB8D9C32618E3F096E /* Noto_Sans_Bold.png */; };
+		4CF1CE56CED147B82F8FFC66 /* MapCoreMacOSExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD604996252296634311992D /* MapCoreMacOSExampleApp.swift */; };
+		6F0E78E8B0F0B08306976E67 /* NotoSans-Italic.json in Resources */ = {isa = PBXBuildFile; fileRef = 4DD0A52A14E34193A96095D9 /* NotoSans-Italic.json */; };
+		89493C80308D99F0ABD3E2F7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 666B19D13ED60319D674DC56 /* Cocoa.framework */; };
+		93C2B271684D1ABDC4679D41 /* Noto_Sans_Italic.png in Resources */ = {isa = PBXBuildFile; fileRef = FBE4DE70590986BD8E7FD6D5 /* Noto_Sans_Italic.png */; };
+		AB4F944920EE0CB677421EC4 /* NotoSans-Bold.json in Resources */ = {isa = PBXBuildFile; fileRef = 3EB8E947A8A50876718B2710 /* NotoSans-Bold.json */; };
+		BDC1489806B935FB538B3675 /* NotoSans-Regular.json in Resources */ = {isa = PBXBuildFile; fileRef = DA60582F2F83ACAD852F1D12 /* NotoSans-Regular.json */; };
+		D34A4FF41530BA439947CCD1 /* NativeFontLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D937D9615DCA9A6DAABDBA /* NativeFontLoader.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2E78870E9C3A458284C8B5B8 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		37AC5A136BCF6472DC0A264C /* MapCoreMacOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapCoreMacOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		38D937D9615DCA9A6DAABDBA /* NativeFontLoader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NativeFontLoader.swift; sourceTree = "<group>"; };
+		3B2641CB8D9C32618E3F096E /* Noto_Sans_Bold.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = Noto_Sans_Bold.png; sourceTree = "<group>"; };
+		3EB8E947A8A50876718B2710 /* NotoSans-Bold.json */ = {isa = PBXFileReference; includeInIndex = 1; path = "NotoSans-Bold.json"; sourceTree = "<group>"; };
+		4CF1771E3BEFD604B975B839 /* Noto_Sans_Regular.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = Noto_Sans_Regular.png; sourceTree = "<group>"; };
+		4DD0A52A14E34193A96095D9 /* NotoSans-Italic.json */ = {isa = PBXFileReference; includeInIndex = 1; path = "NotoSans-Italic.json"; sourceTree = "<group>"; };
+		666B19D13ED60319D674DC56 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		AD604996252296634311992D /* MapCoreMacOSExampleApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MapCoreMacOSExampleApp.swift; sourceTree = "<group>"; };
+		BFDF3D23F2F03324B73FC268 /* MapCoreMacOSExample.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = MapCoreMacOSExample.entitlements; sourceTree = "<group>"; };
+		DA60582F2F83ACAD852F1D12 /* NotoSans-Regular.json */ = {isa = PBXFileReference; includeInIndex = 1; path = "NotoSans-Regular.json"; sourceTree = "<group>"; };
+		FBE4DE70590986BD8E7FD6D5 /* Noto_Sans_Italic.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = Noto_Sans_Italic.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		109DDF46BBC67C05C4886178 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89493C80308D99F0ABD3E2F7 /* Cocoa.framework in Frameworks */,
+				070A3993908D783E7D51C007 /* MapCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		24625A6A756E7EB432691C0D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B8F6034DE70F56F1F638CC6E /* OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		82056BAAB6BA61ADF130AF84 = {
+			isa = PBXGroup;
+			children = (
+				AEDD5EBCC06AA84CEC6493F8 /* Products */,
+				24625A6A756E7EB432691C0D /* Frameworks */,
+				AD604996252296634311992D /* MapCoreMacOSExampleApp.swift */,
+				BFDF3D23F2F03324B73FC268 /* MapCoreMacOSExample.entitlements */,
+				2E78870E9C3A458284C8B5B8 /* README.md */,
+				38D937D9615DCA9A6DAABDBA /* NativeFontLoader.swift */,
+				C909192AADD2507D1B5E7EB7 /* Fonts */,
+			);
+			sourceTree = "<group>";
+		};
+		AEDD5EBCC06AA84CEC6493F8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				37AC5A136BCF6472DC0A264C /* MapCoreMacOSExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B8F6034DE70F56F1F638CC6E /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				666B19D13ED60319D674DC56 /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		C909192AADD2507D1B5E7EB7 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				3EB8E947A8A50876718B2710 /* NotoSans-Bold.json */,
+				4DD0A52A14E34193A96095D9 /* NotoSans-Italic.json */,
+				DA60582F2F83ACAD852F1D12 /* NotoSans-Regular.json */,
+				3B2641CB8D9C32618E3F096E /* Noto_Sans_Bold.png */,
+				FBE4DE70590986BD8E7FD6D5 /* Noto_Sans_Italic.png */,
+				4CF1771E3BEFD604B975B839 /* Noto_Sans_Regular.png */,
+			);
+			name = Fonts;
+			path = ../../Sources/OSMFlutterFramework/Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6EF12CBB28D5DD7902435163 /* MapCoreMacOSExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F4CB4EEE14EBBAF0675D6263 /* Build configuration list for PBXNativeTarget "MapCoreMacOSExample" */;
+			buildPhases = (
+				769AD89C923DDEFE26FD2E2E /* Sources */,
+				109DDF46BBC67C05C4886178 /* Frameworks */,
+				42B7B73EB245F47F6156A349 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MapCoreMacOSExample;
+			packageProductDependencies = (
+				84D077DB94F5CB2C0AEB73D5 /* MapCore */,
+			);
+			productName = MapCoreMacOSExample;
+			productReference = 37AC5A136BCF6472DC0A264C /* MapCoreMacOSExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1E4BD819479DAB75C08348AC /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 454C5A4E592BF27BCC398975 /* Build configuration list for PBXProject "MapCoreMacOSExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 82056BAAB6BA61ADF130AF84;
+			minimizedProjectReferenceProxies = 0;
+			packageReferences = (
+				BD9B567E211FB6D85FED7F1D /* XCRemoteSwiftPackageReference "maps-core" */,
+			);
+			preferredProjectObjectVersion = 100;
+			productRefGroup = AEDD5EBCC06AA84CEC6493F8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6EF12CBB28D5DD7902435163 /* MapCoreMacOSExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		42B7B73EB245F47F6156A349 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB4F944920EE0CB677421EC4 /* NotoSans-Bold.json in Resources */,
+				6F0E78E8B0F0B08306976E67 /* NotoSans-Italic.json in Resources */,
+				BDC1489806B935FB538B3675 /* NotoSans-Regular.json in Resources */,
+				41E9EF4DA0D04DBF6E2A2499 /* Noto_Sans_Bold.png in Resources */,
+				93C2B271684D1ABDC4679D41 /* Noto_Sans_Italic.png in Resources */,
+				2A91D7BB0069DFF00A518BFA /* Noto_Sans_Regular.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		769AD89C923DDEFE26FD2E2E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CF1CE56CED147B82F8FFC66 /* MapCoreMacOSExampleApp.swift in Sources */,
+				D34A4FF41530BA439947CCD1 /* NativeFontLoader.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		473B3B989BB809922B7C81E5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		6CDB4215B4BBDF11B5A6B680 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MapCoreMacOSExample.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.liodali.MapCoreMacOSExample;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		76A00560E62232D4B50C11A8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MapCoreMacOSExample.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.liodali.MapCoreMacOSExample;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A59F82498253EAFBAE39C436 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		454C5A4E592BF27BCC398975 /* Build configuration list for PBXProject "MapCoreMacOSExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A59F82498253EAFBAE39C436 /* Debug */,
+				473B3B989BB809922B7C81E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F4CB4EEE14EBBAF0675D6263 /* Build configuration list for PBXNativeTarget "MapCoreMacOSExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				76A00560E62232D4B50C11A8 /* Release */,
+				6CDB4215B4BBDF11B5A6B680 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BD9B567E211FB6D85FED7F1D /* XCRemoteSwiftPackageReference "maps-core" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/liodali/maps-core.git";
+			requirement = {
+				kind = exactVersion;
+				version = "4.0.1-spm.2";
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		84D077DB94F5CB2C0AEB73D5 /* MapCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BD9B567E211FB6D85FED7F1D /* XCRemoteSwiftPackageReference "maps-core" */;
+			productName = MapCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 1E4BD819479DAB75C08348AC /* Project object */;
+}

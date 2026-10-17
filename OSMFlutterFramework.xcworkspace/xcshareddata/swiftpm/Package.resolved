@@ -1,5 +1,5 @@
 {
-  "originHash" : "de892611ff3e6ef21065302f71fb8a5c16e21a7d02ef39e30dc408d91f4b3443",
+  "originHash" : "40ce35608e688fb87c4f3519a2716fc7bd9b7f3c0567c88a8679ef0bec051660",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/liodali/maps-core.git",
       "state" : {
-        "revision" : "e04be5b547effd6aa3a32129db68954a1a8b6c60",
-        "version" : "4.0.1-spm.1"
+        "revision" : "62ca996063bc0338d4e3a3a978b5ec5c24a9c4b0",
+        "version" : "4.0.1-spm.2"
       }
     },
     {

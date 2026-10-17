@@ -136,4 +136,7 @@
          location = "group:OSMFlutterFrameworkTests.swift">
       </FileRef>
    </Group>
+   <FileRef
+      location = "group:example/MapCoreMacOSExample/MapCoreMacOSExample.xcodeproj">
+   </FileRef>
 </Workspace>

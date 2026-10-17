@@ -6,12 +6,13 @@ Swift package that wraps MapCore (OpenStreetMap) for iOS. Provides a `UIView`-ba
 
 ## Key Files
 
-- `Package.swift` — SPM manifest, depends on the remote `liodali/maps-core` fork (`4.0.1-spm.1`, based on 4.0.0) and `Polyline`
+- `Package.swift` — SPM manifest, depends on the remote `liodali/maps-core` fork (`4.0.1-spm.2`, based on 4.0.0) and `Polyline`
 - `Sources/OSMFlutterFramework/OSMView.swift` — Main `OSMView` UIView subclass. Owns `MCMapView`, raster/vector tile base layer, camera listener
 - `Sources/OSMFlutterFramework/SystemFontLoader.swift` — `MCFontLoaderInterface` implementation. Generates signed-distance-field (SDF) font atlases and returns `MCFontLoaderResult` for vector tile layers
 - `Sources/OSMFlutterFramework/OSMTileConfiguration.swift` — `OSMMapConfiguration` and `OSMTiledLayerConfig` for raster tile URLs
 - `Sources/OSMFlutterFramework/models/` — Managers: `MarkerManager`, `RoadManager`, `ShapeManager`, `PoisManager`, `LocationManager`
 - `example/` — SwiftUI example app (`MapCoreView.swift`, `ContentView.swift`, search UI)
+- `example/MapCoreMacOSExample/` — Native AppKit/SwiftUI MapCore smoke test, with Vector/Raster selection and shared Noto Sans atlas resources; runs as the `MapCoreMacOSExample` scheme on My Mac.
 
 ## Architecture
 
@@ -173,7 +174,7 @@ extension OSMView {
 
 ### Gotchas
 
-- `MapCore` uses the remote fork `https://github.com/liodali/maps-core.git`, pinned to `4.0.1-spm.1` (based on upstream 4.0.0). The fork always resolves djinni remotely to avoid the conditional local-submodule dependency failure (upstream issue #929). Keep the package manifest and both Xcode projects on the same URL/version. No vendoring or checkout patches are needed.
+- `MapCore` uses the remote fork `https://github.com/liodali/maps-core.git`, pinned to `4.0.1-spm.2` (based on upstream 4.0.0). The fork always resolves djinni remotely to avoid the conditional local-submodule dependency failure (upstream issue #929), and normalizes indexed PNG tiles to RGBA when MetalKit decoding fails on macOS. Keep the package manifest and all three Xcode projects on the same URL/version. No vendoring or checkout patches are needed.
 - `MapCore` is imported as `internal import MapCore` (Swift 5.10+) or `@_implementationOnly import MapCore` (older). Do not expose MapCore types in public APIs.
 - Zoom levels in `ZoomConfiguration` are integer identifiers (0-19). MapCore uses actual zoom scale values. Conversion happens via `getZoomFromZoomIdentifier()` in `OSMView`.
 - `layoutSubviews()` syncs `mapView.frame` to `self.frame` when non-zero.
