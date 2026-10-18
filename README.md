@@ -1,7 +1,7 @@
 # OSM MapCore iOS Framework
 
 [![Platform](https://img.shields.io/badge/platform-iOS%2014%2B-lightgrey)](https://developer.apple.com/ios/)
-[![Swift](https://img.shields.io/badge/Swift-5.9%2B-orange)](https://swift.org)
+[![Swift](https://img.shields.io/badge/Swift-6.1%2B-orange)](https://swift.org)
 [![SPM](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen)](https://swift.org/package-manager/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -35,8 +35,8 @@ vector tiles, markers, roads, shapes, POIs and user-location tracking.
 ## Requirements
 
 - iOS 14.0+
-- Swift 5.9+
-- Xcode 16+
+- Swift 6.1+
+- Xcode with Swift 6.1 or newer
 
 ## Installation (Swift Package Manager)
 
