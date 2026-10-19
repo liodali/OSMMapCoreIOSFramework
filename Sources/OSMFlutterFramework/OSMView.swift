@@ -7,6 +7,9 @@
 
 import Foundation
 import MapKit
+#if os(macOS)
+import AppKit
+#endif
 
 #if compiler(>=5.10)
     /* private */ internal import MapCore
@@ -24,7 +27,7 @@ public protocol OnMapMoved {
     func onMapInteraction()
 }
 
-nonisolated protocol OnMapChanged {
+@MainActor protocol OnMapChanged: AnyObject {
     func onBoundsChanged(bounds: BoundingBox, zoom: Double)
     func onRotationChanged(angle: Double)
     func onMapInteraction()
@@ -71,11 +74,11 @@ private class VectorCallbackInterface: MCTiled2dMapVectorLayerSelectionCallbackI
         return false
     }
 }
-private class MapCameraListener: MCMapCameraListenerInterface {
+private final class MapCameraListener: MCMapCameraListenerInterface, @unchecked Sendable {
 
-    private(set) var mapChanged: OnMapChanged?
+    private(set) weak var mapChanged: (any OnMapChanged)?
     private var lastBounding: MCRectCoord? = nil
-    private(set) var mapView: MCMapView?
+    private(set) weak var mapView: MCMapView?
     private(set) var zoomConfig: MCTileZoomConfiguration?
     init(
         mapChanged: OnMapChanged?, mapView: MCMapView? = nil,
@@ -93,18 +96,18 @@ private class MapCameraListener: MCMapCameraListenerInterface {
         self.zoomConfig = zoomConfig
     }
     public func onVisibleBoundsChanged(_ visibleBounds: MCRectCoord, zoom: Double) {
-        if lastBounding == nil || !(lastBounding == visibleBounds) {
-            let bounds = visibleBounds.toBoundingBox()
-
-            mapChanged?.onBoundsChanged(bounds: bounds, zoom: zoom)
-
-            lastBounding = visibleBounds
-        }
-        if zoomConfig != nil && zoom > zoomConfig!.minZoom.zoom {
-            mapView?.camera.setZoom(zoomConfig!.minZoom.zoom, animated: false)
-        }
-        if zoomConfig != nil && zoom < zoomConfig!.maxZoom.zoom {
-            mapView?.camera.setZoom(zoomConfig!.maxZoom.zoom, animated: false)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            if lastBounding == nil || !(lastBounding == visibleBounds) {
+                mapChanged?.onBoundsChanged(bounds: visibleBounds.toBoundingBox(), zoom: zoom)
+                lastBounding = visibleBounds
+            }
+            if let zoomConfig, zoom > zoomConfig.minZoom.zoom {
+                mapView?.camera.setZoom(zoomConfig.minZoom.zoom, animated: false)
+            }
+            if let zoomConfig, zoom < zoomConfig.maxZoom.zoom {
+                mapView?.camera.setZoom(zoomConfig.maxZoom.zoom, animated: false)
+            }
         }
     }
     func onCameraChange(
@@ -115,17 +118,24 @@ private class MapCameraListener: MCMapCameraListenerInterface {
         //TODO
     }
     public func onRotationChanged(_ angle: Float) {
-        mapChanged?.onRotationChanged(angle: Double(angle))
+        Task { @MainActor [weak self] in self?.mapChanged?.onRotationChanged(angle: Double(angle)) }
     }
 
     public func onMapInteraction() {
-        mapChanged?.onMapInteraction()
+        Task { @MainActor [weak self] in self?.mapChanged?.onMapInteraction() }
     }
 }
-public final class OSMView: UIView, OnMapChanged, VectorTileManageable, MapCameraManageable,
+public final class OSMView: OSMPlatformView, OnMapChanged, VectorTileManageable, MapCameraManageable,
     MapTileManageable, MapLayerVisibilityManageable, MapTouchManageable, MapInitializable,
     MapLocationDelegateManageable
 {
+
+    #if os(macOS)
+    private var acceptsMapInput = true
+    public override func hitTest(_ point: NSPoint) -> NSView? {
+        acceptsMapInput ? super.hitTest(point) : nil
+    }
+    #endif
 
     private let initLocation: CLLocationCoordinate2D?
     private let zoomConfiguration: ZoomConfiguration
@@ -139,7 +149,8 @@ public final class OSMView: UIView, OnMapChanged, VectorTileManageable, MapCamer
     private var vectorLayer: MCTiled2dMapVectorLayerInterface?
     private var pendingPreviousLayer: MCLayerInterface?
     private var pendingIsVector: Bool = false
-    private let identifier = MCCoordinateSystemIdentifiers.epsg4326()
+    private var styleRequest: URLSessionDataTask?
+    private var styleRequestID = UUID()
 
     public let markerManager: MarkerManager
     public let roadManager: RoadManager
@@ -191,7 +202,8 @@ public final class OSMView: UIView, OnMapChanged, VectorTileManageable, MapCamer
         self.shapeManager = ShapeManager(map: mapView)
         self.locationManager = LocationManager(map: mapView, userLocationIcons: nil)
         super.init(frame: rect)
-        self.mapView.backgroundColor = .gray.withAlphaComponent(CGFloat(200))
+        self.mapView.backgroundColor = .gray
+        self.mapView.frame = bounds
         self.addSubview(self.mapView)
 
         self.osmTiledConfiguration = OSMTiledLayerConfig(configuration: self.mapTileConfiguration)
@@ -213,15 +225,20 @@ public final class OSMView: UIView, OnMapChanged, VectorTileManageable, MapCamer
         }
 
     }
-    public override func layoutSubviews() {
-        if frame.width != 0 && frame.height != 0 {
-            self.mapView.frame = frame
-        }
-        super.layoutSubviews()
+    isolated deinit { styleRequest?.cancel() }
+
+    #if os(macOS)
+    public override func layout() {
+        super.layout()
+        mapView.frame = bounds
     }
-    /*public override func loadView() {
-        view = self.mapView
-    }*/
+    #else
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        mapView.frame = bounds
+    }
+    #endif
+
     func onBoundsChanged(bounds: BoundingBox, zoom: Double) {
         let center = center()
         onMapMove?.onMove(center: center, bounds: bounds, zoom: zoom)
@@ -265,6 +282,9 @@ public final class OSMView: UIView, OnMapChanged, VectorTileManageable, MapCamer
 
     func setupBaseLayer(tile: CustomTiles? = nil) {
         print("setupBaseLayer tile: \(tile?.isVector ?? false) url: \(tile?.toString() ?? "nil")")
+        styleRequest?.cancel()
+        styleRequest = nil
+        styleRequestID = UUID()
         pendingPreviousLayer = baseLayer
         pendingIsVector = tile?.isVector ?? false
         if let tile = tile, tile.isVector {
@@ -273,20 +293,25 @@ public final class OSMView: UIView, OnMapChanged, VectorTileManageable, MapCamer
                 fetchAndCreateVectorLayer(styleUrl: styleUrl)
                 return
             } else {
-                createVectorLayer(styleJsonUrl: styleUrl, styleJson: nil, sourceUrlParams: nil)
+                guard createVectorLayer(styleJsonUrl: styleUrl, styleJson: nil, sourceUrlParams: nil) else {
+                    pendingPreviousLayer = nil
+                    return
+                }
             }
         } else {
             if tile != nil {
                 osmTiledConfiguration.setTileURL(tileURL: tile!.toString())
             }
-            let raster = MCTiled2dMapRasterLayerInterface.create(
-                osmTiledConfiguration,
-                loaders: [MCTextureLoader()])
-            raster?.setCallbackHandler(rasterCallback)
-            raster?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
-            raster?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
+            guard let raster = MCTiled2dMapRasterLayerInterface.create(
+                osmTiledConfiguration, loaders: [MCTextureLoader()]) else {
+                pendingPreviousLayer = nil
+                return
+            }
+            raster.setCallbackHandler(rasterCallback)
+            raster.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
+            raster.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
             self.rasterLayer = raster
-            self.mapView.insert(layer: raster?.asLayerInterface(), at: 0)
+            self.mapView.insert(layer: raster.asLayerInterface(), at: 0)
         }
         finishLayerSwap()
     }
@@ -306,33 +331,35 @@ public final class OSMView: UIView, OnMapChanged, VectorTileManageable, MapCamer
 
     func fetchAndCreateVectorLayer(styleUrl: String) {
         guard let url = URL(string: styleUrl) else {
-            finishLayerSwap()
+            pendingPreviousLayer = nil
             return
         }
+        let requestID = styleRequestID
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            if let error = error {
-                print("Failed to fetch vector style JSON: \(error.localizedDescription)")
-                DispatchQueue.main.async { self?.finishLayerSwap() }
-                return
-            }
-            guard let self = self,
-                let data = data,
-                let styleJson = String(data: data, encoding: .utf8)
-            else {
-                print("Failed to decode vector style JSON")
-                DispatchQueue.main.async { self?.finishLayerSwap() }
-                return
-            }
-            let sourceParams = self.extractQueryParams(from: styleUrl)
-            let sanitizedJson = self.sanitizeStyleJson(styleJson)
-            DispatchQueue.main.async {
-                self.createVectorLayer(
-                    styleJsonUrl: nil, styleJson: sanitizedJson, sourceUrlParams: sourceParams)
+        styleRequest = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            DispatchQueue.main.async { [weak self] in
+                guard let self, self.styleRequestID == requestID else { return }
+                self.styleRequest = nil
+                guard error == nil,
+                      let response = response as? HTTPURLResponse,
+                      (200..<300).contains(response.statusCode),
+                      let data, let styleJson = String(data: data, encoding: .utf8) else {
+                    // Keep the current map when the replacement style cannot be downloaded.
+                    self.pendingPreviousLayer = nil
+                    return
+                }
+                let sourceParams = self.extractQueryParams(from: styleUrl)
+                let sanitizedJson = self.sanitizeStyleJson(styleJson)
+                guard self.createVectorLayer(
+                    styleJsonUrl: nil, styleJson: sanitizedJson, sourceUrlParams: sourceParams) else {
+                    self.pendingPreviousLayer = nil
+                    return
+                }
                 self.finishLayerSwap()
             }
-        }.resume()
+        }
+        styleRequest?.resume()
     }
 
     func extractQueryParams(from urlString: String) -> [String: String]? {
@@ -356,9 +383,10 @@ public final class OSMView: UIView, OnMapChanged, VectorTileManageable, MapCamer
         return result
     }
 
+    @discardableResult
     func createVectorLayer(
         styleJsonUrl: String?, styleJson: String?, sourceUrlParams: [String: String]?
-    ) {
+    ) -> Bool {
         let vector: MCTiled2dMapVectorLayerInterface?
         if let styleJson = styleJson {
             vector = MCTiled2dMapVectorLayerInterface.createExplicitly(
@@ -378,12 +406,13 @@ public final class OSMView: UIView, OnMapChanged, VectorTileManageable, MapCamer
                 loaders: [MCTextureLoader()],
                 fontLoader: SystemFontLoader())
         }
-        print("vector layer created: \(vector != nil)")
-        vector?.setSelectionDelegate(vectorCallback)
-        vector?.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
-        vector?.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
+        guard let vector else { return false }
+        vector.setSelectionDelegate(vectorCallback)
+        vector.setMinZoomLevelIdentifier(zoomConfiguration.minZoom as NSNumber)
+        vector.setMaxZoomLevelIdentifier(zoomConfiguration.maxZoom as NSNumber)
         self.vectorLayer = vector
-        self.mapView.insert(layer: vector?.asLayerInterface(), at: 0)
+        self.mapView.insert(layer: vector.asLayerInterface(), at: 0)
+        return true
     }
 
 }
@@ -516,14 +545,22 @@ extension OSMView {
      disable touchs
      */
     public func disableTouch() {
+        #if os(macOS)
+        acceptsMapInput = false
+        #else
         self.mapView.isMultipleTouchEnabled = false
         self.isUserInteractionEnabled = false
+        #endif
     }
     /**
      enable touchs
      */
     public func enableTouch() {
+        #if os(macOS)
+        acceptsMapInput = true
+        #else
         self.mapView.isMultipleTouchEnabled = true
         self.isUserInteractionEnabled = true
+        #endif
     }
 }

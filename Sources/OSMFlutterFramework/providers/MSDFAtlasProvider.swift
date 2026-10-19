@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UIKit
+import ImageIO
 
 #if compiler(>=5.10)
     /* private */ internal import MapCore
@@ -119,8 +119,7 @@ class MSDFAtlasProvider: FontAtlasProvider {
             glyphs.append(glyphEntry)
         }
 
-        guard let image = UIImage(contentsOfFile: pngURL.path),
-            let cgImage = image.cgImage,
+        guard let cgImage = AppleImageUtilities.decodeCGImage(at: pngURL),
             let textureHolder = try? TextureHolder(cgImage)
         else {
             print("MSDFAtlasProvider: failed to load atlas PNG for \(name)")

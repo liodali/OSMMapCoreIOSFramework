@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		46816511C2085E4A173EA82F /* AppleImageUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED64BEC77D15E2C857CCC6C /* AppleImageUtilities.swift */; };
 		9005CBAD2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9005CBAC2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift */; };
 		901252E22C70A38F00023664 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = 901252E12C70A38F00023664 /* Polyline */; };
 		901252E62C70A7DA00023664 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 901252E52C70A7DA00023664 /* README.md */; };
@@ -40,6 +41,8 @@
 		90D660B12CA942F700BDC471 /* FontAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */; };
 		90D660B32CA942F700BDC471 /* MSDFAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */; };
 		90D660B52CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */; };
+		C1A016D0C14167A73257C5BA /* ApplePlatformTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5610346313F50975EE6C625A /* ApplePlatformTypes.swift */; };
+		E6FB062EC61BD98E04023A6B /* OSMViewProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E01228E28E78C568BF9F9B /* OSMViewProtocols.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +70,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1ED64BEC77D15E2C857CCC6C /* AppleImageUtilities.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppleImageUtilities.swift; sourceTree = "<group>"; };
+		34E01228E28E78C568BF9F9B /* OSMViewProtocols.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = OSMViewProtocols.swift; sourceTree = "<group>"; };
+		5610346313F50975EE6C625A /* ApplePlatformTypes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ApplePlatformTypes.swift; sourceTree = "<group>"; };
 		9005CBAA2B1DD43C00724B22 /* OSMFlutterFrameworkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OSMFlutterFrameworkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9005CBAC2B1DD43C00724B22 /* OSMFlutterFrameworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSMFlutterFrameworkTests.swift; sourceTree = "<group>"; };
 		901252E52C70A7DA00023664 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -94,9 +100,9 @@
 		90D660A92CA942F700BDC471 /* Noto_Sans_Regular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Noto_Sans_Regular.png; sourceTree = "<group>"; };
 		90D660AB2CA942F700BDC471 /* Noto_Sans_Italic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Noto_Sans_Italic.png; sourceTree = "<group>"; };
 		90D660AD2CA942F700BDC471 /* Noto_Sans_Bold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Noto_Sans_Bold.png; sourceTree = "<group>"; };
-		90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAtlasProvider.swift; sourceTree = "<group>"; };
-		90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSDFAtlasProvider.swift; sourceTree = "<group>"; };
-		90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeSDFAtlasProvider.swift; sourceTree = "<group>"; };
+		90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = providers/FontAtlasProvider.swift; sourceTree = "<group>"; };
+		90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = providers/MSDFAtlasProvider.swift; sourceTree = "<group>"; };
+		90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = providers/RuntimeSDFAtlasProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		71B90EE6B4AB6F13FFFDB2B3 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				8A458C2E41D37F08C201BDF2 /* OSMFlutterFramework */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		8A458C2E41D37F08C201BDF2 /* OSMFlutterFramework */ = {
+			isa = PBXGroup;
+			children = (
+				A934BF1E6CFF10A1D5E6A6AF /* Platform */,
+			);
+			name = OSMFlutterFramework;
+			sourceTree = "<group>";
+		};
 		9005CBAB2B1DD43C00724B22 /* OSMFlutterFrameworkTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +184,7 @@
 				90D660B02CA942F700BDC471 /* FontAtlasProvider.swift */,
 				90D660B22CA942F700BDC471 /* MSDFAtlasProvider.swift */,
 				90D660B42CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift */,
+				34E01228E28E78C568BF9F9B /* OSMViewProtocols.swift */,
 			);
 			name = OSMFlutterFramework;
 			path = Sources/OSMFlutterFramework;
@@ -175,6 +198,7 @@
 				9005CBAB2B1DD43C00724B22 /* OSMFlutterFrameworkTests */,
 				90B8B8372B1281BF0021DA8F /* Products */,
 				90B8B8602B1402D80021DA8F /* Frameworks */,
+				71B90EE6B4AB6F13FFFDB2B3 /* Sources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -207,6 +231,16 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		A934BF1E6CFF10A1D5E6A6AF /* Platform */ = {
+			isa = PBXGroup;
+			children = (
+				1ED64BEC77D15E2C857CCC6C /* AppleImageUtilities.swift */,
+				5610346313F50975EE6C625A /* ApplePlatformTypes.swift */,
+			);
+			name = Platform;
+			path = Sources/OSMFlutterFramework/Platform;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -235,8 +269,6 @@
 				9005CBC22B1DE0B100724B22 /* PBXTargetDependency */,
 			);
 			name = OSMFlutterFrameworkTests;
-			packageProductDependencies = (
-			);
 			productName = OSMFlutterFrameworkTests;
 			productReference = 9005CBAA2B1DD43C00724B22 /* OSMFlutterFrameworkTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -367,6 +399,9 @@
 				90D660B12CA942F700BDC471 /* FontAtlasProvider.swift in Sources */,
 				90D660B32CA942F700BDC471 /* MSDFAtlasProvider.swift in Sources */,
 				90D660B52CA942F700BDC471 /* RuntimeSDFAtlasProvider.swift in Sources */,
+				46816511C2085E4A173EA82F /* AppleImageUtilities.swift in Sources */,
+				C1A016D0C14167A73257C5BA /* ApplePlatformTypes.swift in Sources */,
+				E6FB062EC61BD98E04023A6B /* OSMViewProtocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

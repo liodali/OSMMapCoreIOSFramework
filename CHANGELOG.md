@@ -1,3 +1,13 @@
+## Unreleased
+
+- Add native macOS 12 support to OSMView and its public managers with AppKit image/color aliases; preserve UIKit on iOS and Catalyst.
+- Share image and font-atlas decoding through CoreGraphics, CoreText, and ImageIO, with resources loaded from the framework bundle. Normalize AppKit symbol images to RGBA8 for Metal upload.
+- Cancel stale vector-style downloads and keep the working map when a replacement download or layer creation fails.
+- Adapt location authorization and guard unsupported heading APIs on macOS; clean up location updates on the main actor.
+- Fix embedded-map layout to use bounds and avoid retaining the wrapper through camera listeners.
+- Make the native example consume OSMFlutterFramework directly and exercise overlays, input, rotation, location, and recreation. Fix its raster template to avoid duplicate PNG extensions.
+- Synchronize standalone Xcode framework source references with the package, including font providers and OSMViewProtocols.swift.
+- Add focused platform tests and compile CI for macOS, iOS Simulator, and Catalyst. Require Swift 6.2 for actor-isolated cleanup.
 
 ## 0.9.0
 

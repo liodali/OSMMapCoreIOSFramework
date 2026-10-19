@@ -115,13 +115,13 @@ public class ShapeManager: BaseManager, Manager {
 
 }
 public struct ShapeStyleConfiguration {
-    let filledColor: UIColor
-    let borderColor: UIColor
+    let filledColor: OSMPlatformColor
+    let borderColor: OSMPlatformColor
     let borderWidth: Double
     let lineCap: MCLineCapType
     let lineJoin: MCLineJoinType
     public init(
-        filledColor: UIColor, borderColor: UIColor, borderWidth: Double,
+        filledColor: OSMPlatformColor, borderColor: OSMPlatformColor, borderWidth: Double,
         lineCap: LineCapType = LineCapType.ROUND
     ) {
         self.filledColor = filledColor

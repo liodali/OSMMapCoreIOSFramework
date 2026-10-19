@@ -32,7 +32,7 @@ public class PoisManager {
             markerHandler.removeHandler()
         }
     }
-    public func setOrCreateIconPoi(id: String, icon: UIImage, iconSize: MarkerIconSize?) {
+    public func setOrCreateIconPoi(id: String, icon: OSMPlatformImage, iconSize: MarkerIconSize?) {
         if pois[id] != nil {
             pois[id]?.setIconMarker(icon: icon, size: iconSize)
         } else {
@@ -72,9 +72,9 @@ struct Poi {
     let id: String
     var markerPois: [MarkerIconPoi] = []
     let mcIconLayer: MCIconLayerInterface?
-    let markerIcon: (icon: UIImage, size: MarkerIconSize?)
+    let markerIcon: (icon: OSMPlatformImage, size: MarkerIconSize?)
     public init(
-        id: String, icon: UIImage, iconSize: MarkerIconSize?, markerPois: [MarkerIconPoi],
+        id: String, icon: OSMPlatformImage, iconSize: MarkerIconSize?, markerPois: [MarkerIconPoi],
         handler: IconLayerHander
     ) {
         self.id = id
@@ -103,7 +103,7 @@ struct Poi {
         self.markerPois.removeAll()
         mcIconLayer?.invalidate()
     }
-    mutating func setIconMarker(icon: UIImage, size: MarkerIconSize?) {
+    mutating func setIconMarker(icon: OSMPlatformImage, size: MarkerIconSize?) {
         mcIconLayer?.clear()
         self.markerPois.enumerated().forEach { index, poi in
             let config = poi.configuration.copyWith(
@@ -125,7 +125,7 @@ public struct MarkerIconPoi {
     }
     public init(location: CLLocationCoordinate2D, angle: Float?, anchor: MarkerAnchor?) {
         self.configuration = MarkerConfiguration(
-            icon: UIImage(), iconSize: nil, angle: angle, anchor: anchor)
+            icon: OSMPlatformImage(), iconSize: nil, angle: angle, anchor: anchor)
         self.location = location
     }
     func createMapIcon() -> MCIconInfoInterface? {
@@ -134,7 +134,11 @@ public struct MarkerIconPoi {
             if let iconSize = configuration.iconSize {
                 MCVec2F(x: Float(iconSize.x), y: Float(iconSize.y))
             } else {
+                #if os(macOS)
+                MCVec2F(x: Float(configuration.icon.size.width), y: Float(configuration.icon.size.height))
+                #else
                 MCVec2F(x: Float(texture.getImageWidth()), y: Float(texture.getImageHeight()))
+                #endif
             }
         let mcCoord = self.location.mcCoord  //.toMCCoordEpsg3857()
         if configuration.anchor != nil {

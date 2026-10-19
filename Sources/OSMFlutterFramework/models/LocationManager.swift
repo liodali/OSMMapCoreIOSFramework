@@ -49,7 +49,11 @@ private class LocationDelegateHandler: NSObject, CLLocationManagerDelegate {
         _ mgr: CLLocationManager, didUpdateLocations locations: [CLLocation]
     ) {
         guard let lm = manager, let location = locations.last else { return }
+        #if os(macOS)
+        let heading = 0.0
+        #else
         let heading = mgr.heading?.trueHeading ?? 0
+        #endif
         Task { @MainActor in
             lm.handleLocationUpdate(location: location, heading: heading)
         }
@@ -103,6 +107,14 @@ public class LocationManager: NSObject {
         iconLayer?.setLayerClickable(false)
         self.map.insert(layer: iconLayer?.asLayerInterface(), at: 3)
     }
+    isolated deinit {
+        locationManager.stopUpdatingLocation()
+        #if !os(macOS)
+        locationManager.stopUpdatingHeading()
+        #endif
+        locationManager.delegate = nil
+    }
+
     public func setUserLocationIcons(userLocationIcons: UserLocationConfiguration) {
         self.userLocationIconConfiguration = userLocationIcons
         if userMarker != nil {
@@ -112,50 +124,43 @@ public class LocationManager: NSObject {
         updateIcon = true
     }
     public func requestSingleLocation() {
-        checkLocationAuthorization()
-        // Start location updates
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         isSingleRetrieve = true
+        checkLocationAuthorization()
     }
-    func requestLocation() {
-        if #available(iOS 14.0, *) {
-            if locationManager.authorizationStatus == CLAuthorizationStatus.authorizedWhenInUse
-                || locationManager.authorizationStatus == CLAuthorizationStatus.authorizedAlways
-            {
-                locationManager.requestLocation()
-            }
-        } else {
-            if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse
-                || CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways
-            {
-                locationManager.requestLocation()
-            }
-        }
+    nonisolated static func isAuthorized(_ status: CLAuthorizationStatus) -> Bool {
+        #if os(macOS)
+        return status == .authorizedAlways
+        #else
+        return status == .authorizedAlways || status == .authorizedWhenInUse
+        #endif
     }
-    private func authorizationLocation() -> CLAuthorizationStatus {
-        if #available(iOS 14, *) {
-            return locationManager.authorizationStatus
-        } else {
-            return CLLocationManager.authorizationStatus()
-        }
-    }
-    func checkLocationAuthorization() {
-        let autorizationLocation = authorizationLocation()
-        if autorizationLocation == CLAuthorizationStatus.authorizedAlways
-            || autorizationLocation == CLAuthorizationStatus.authorizedWhenInUse
-        {
-            locationManager.requestLocation()
-        } else {
-            locationManager.requestWhenInUseAuthorization()  // Request permission
-        }
 
+    func requestLocation() {
+        if Self.isAuthorized(locationManager.authorizationStatus) {
+            locationManager.requestLocation()
+        }
+    }
+
+    private func authorizationLocation() -> CLAuthorizationStatus {
+        locationManager.authorizationStatus
+    }
+
+    func checkLocationAuthorization() {
+        let status = authorizationLocation()
+        if Self.isAuthorized(status) {
+            locationManager.requestLocation()
+        } else if status == .notDetermined {
+            locationManager.requestWhenInUseAuthorization()
+        } else {
+            userLocationHandler?.handlePermission(state: .NotGranted)
+        }
     }
 
     public func requestEnableLocation() {
-        checkLocationAuthorization()  // Request permission
-        // Start location updates
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         enableLocation = true
+        checkLocationAuthorization()
     }
     public func toggleTracking(configuration: TrackConfiguration) {
         if isTracking {
@@ -165,12 +170,21 @@ public class LocationManager: NSObject {
         let autorizationLocation = authorizationLocation()
         if autorizationLocation == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
-        } else {
+        } else if Self.isAuthorized(autorizationLocation) {
             locationManager.startUpdatingLocation()
-            locationManager.startUpdatingHeading()
+            #if !os(macOS)
+            if CLLocationManager.headingAvailable() { locationManager.startUpdatingHeading() }
+            #endif
+        } else {
+            userLocationHandler?.handlePermission(state: .NotGranted)
+            return
         }
         self.controlMapFromOutSide = configuration.moveMap
+        #if os(macOS)
+        self.useDirectionMarker = false
+        #else
         self.useDirectionMarker = configuration.useDirectionMarker
+        #endif
         self.disableMarkerRotation = configuration.disableMarkerRotation
         controlUserMarker = configuration.controlUserMarker
         isTracking = true
@@ -180,7 +194,9 @@ public class LocationManager: NSObject {
     }
     public func stopLocation() {
         locationManager.stopUpdatingLocation()
+        #if !os(macOS)
         locationManager.stopUpdatingHeading()
+        #endif
         isSingleRetrieve = false
         isTracking = false
         iconLayer?.clear()
@@ -199,11 +215,11 @@ public class LocationManager: NSObject {
 
     }
     static func pinIcon() -> MarkerConfiguration {
-        let icon = (UIImage(systemName: "mappin") ?? UIImage()).withTintColor(.red)
+        let icon = AppleImageUtilities.symbol(named: "mappin", tint: .red)
         return MarkerConfiguration(icon: icon, iconSize: nil, angle: nil, anchor: nil)
     }
     static func directionIcon() -> MarkerConfiguration {
-        let icon = (UIImage(systemName: "location.north.fill") ?? UIImage()).withTintColor(.black)
+        let icon = AppleImageUtilities.symbol(named: "location.north.fill", tint: .black)
         return MarkerConfiguration(icon: icon, iconSize: nil, angle: nil, anchor: nil)
     }
 
@@ -213,10 +229,8 @@ public class LocationManager: NSObject {
     }
 
     func handleLocationUpdate(location: CLLocation, heading: Double) {
+        userMCCoord = location.coordinate.mcCoord
         if let handler = userLocationHandler {
-            if userMCCoord == nil || userMCCoord != location.coordinate.mcCoord {
-                userMCCoord = location.coordinate.mcCoord
-            }
             handler.locationChanged(
                 userLocation: location.coordinate, heading: heading
             )
@@ -275,12 +289,13 @@ public class LocationManager: NSObject {
     }
 
     func handleAuthorizationChange(status: CLAuthorizationStatus) {
-        if status == CLAuthorizationStatus.authorizedWhenInUse
-            || status == CLAuthorizationStatus.authorizedAlways
+        if Self.isAuthorized(status)
         {
             if isTracking {
                 locationManager.startUpdatingLocation()
-                locationManager.startUpdatingHeading()
+                #if !os(macOS)
+                if CLLocationManager.headingAvailable() { locationManager.startUpdatingHeading() }
+                #endif
             }
             if isSingleRetrieve || enableLocation {
                 requestLocation()

@@ -255,15 +255,15 @@ struct Road {
 }
 public struct RoadConfiguration {
     let width: Float
-    let color: UIColor
-    let borderColor: UIColor?
+    let color: OSMPlatformColor
+    let borderColor: OSMPlatformColor?
     let borderWidth: Float?
     let opacity: Float
     let lineCap: MCLineCapType
     let lineJoin: MCLineJoinType
     let polylineType: PolylineType
     public init(
-        width: Float, color: UIColor, borderWidth: Float? = nil, borderColor: UIColor? = nil,
+        width: Float, color: OSMPlatformColor, borderWidth: Float? = nil, borderColor: OSMPlatformColor? = nil,
         opacity: Float = 1.0, lineCap: LineCapType = LineCapType.ROUND,
         polylineType: PolylineType = PolylineType.LINE
     ) {

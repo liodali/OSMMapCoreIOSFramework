@@ -1,11 +1,11 @@
-// swift-tools-version:6.1
+// swift-tools-version:6.2
 import PackageDescription
 
 let package = Package(
 
   name: "OSMFlutterFramework",
 
-  platforms: [.iOS(.v14), .macCatalyst(.v14)],
+  platforms: [.iOS(.v14), .macCatalyst(.v14), .macOS(.v12)],
 
   products: [
     .library(name: "OSMFlutterFramework", targets: ["OSMFlutterFramework"])
@@ -31,12 +31,11 @@ let package = Package(
       // swiftSettings: [
       //     .unsafeFlags(["-enable-experimental-feature", "AccessLevelOnImport"])
       // ]
-    )
-
-    /*,
+    ),
     .testTarget(
       name: "OSMFlutterFrameworkTests",
-      dependencies: ["OSMFlutterFramework"]
-    )*/
+      dependencies: ["OSMFlutterFramework"],
+      path: "Tests/OSMFlutterFrameworkTests"
+    )
   ]
 )

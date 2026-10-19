@@ -7,22 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		070A3993908D783E7D51C007 /* MapCore in Frameworks */ = {isa = PBXBuildFile; productRef = 84D077DB94F5CB2C0AEB73D5 /* MapCore */; };
-		2A91D7BB0069DFF00A518BFA /* Noto_Sans_Regular.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF1771E3BEFD604B975B839 /* Noto_Sans_Regular.png */; };
-		41E9EF4DA0D04DBF6E2A2499 /* Noto_Sans_Bold.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B2641CB8D9C32618E3F096E /* Noto_Sans_Bold.png */; };
 		4CF1CE56CED147B82F8FFC66 /* MapCoreMacOSExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD604996252296634311992D /* MapCoreMacOSExampleApp.swift */; };
-		6F0E78E8B0F0B08306976E67 /* NotoSans-Italic.json in Resources */ = {isa = PBXBuildFile; fileRef = 4DD0A52A14E34193A96095D9 /* NotoSans-Italic.json */; };
+		611253AC3E7F9D0394742317 /* OSMFlutterFramework in Frameworks */ = {isa = PBXBuildFile; productRef = DB97B705698B2B42020970C9 /* OSMFlutterFramework */; };
 		89493C80308D99F0ABD3E2F7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 666B19D13ED60319D674DC56 /* Cocoa.framework */; };
-		93C2B271684D1ABDC4679D41 /* Noto_Sans_Italic.png in Resources */ = {isa = PBXBuildFile; fileRef = FBE4DE70590986BD8E7FD6D5 /* Noto_Sans_Italic.png */; };
-		AB4F944920EE0CB677421EC4 /* NotoSans-Bold.json in Resources */ = {isa = PBXBuildFile; fileRef = 3EB8E947A8A50876718B2710 /* NotoSans-Bold.json */; };
-		BDC1489806B935FB538B3675 /* NotoSans-Regular.json in Resources */ = {isa = PBXBuildFile; fileRef = DA60582F2F83ACAD852F1D12 /* NotoSans-Regular.json */; };
-		D34A4FF41530BA439947CCD1 /* NativeFontLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D937D9615DCA9A6DAABDBA /* NativeFontLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2E78870E9C3A458284C8B5B8 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		37AC5A136BCF6472DC0A264C /* MapCoreMacOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapCoreMacOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		38D937D9615DCA9A6DAABDBA /* NativeFontLoader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NativeFontLoader.swift; sourceTree = "<group>"; };
 		3B2641CB8D9C32618E3F096E /* Noto_Sans_Bold.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = Noto_Sans_Bold.png; sourceTree = "<group>"; };
 		3EB8E947A8A50876718B2710 /* NotoSans-Bold.json */ = {isa = PBXFileReference; includeInIndex = 1; path = "NotoSans-Bold.json"; sourceTree = "<group>"; };
 		4CF1771E3BEFD604B975B839 /* Noto_Sans_Regular.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = Noto_Sans_Regular.png; sourceTree = "<group>"; };
@@ -40,7 +32,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89493C80308D99F0ABD3E2F7 /* Cocoa.framework in Frameworks */,
-				070A3993908D783E7D51C007 /* MapCore in Frameworks */,
+				611253AC3E7F9D0394742317 /* OSMFlutterFramework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,7 +55,6 @@
 				AD604996252296634311992D /* MapCoreMacOSExampleApp.swift */,
 				BFDF3D23F2F03324B73FC268 /* MapCoreMacOSExample.entitlements */,
 				2E78870E9C3A458284C8B5B8 /* README.md */,
-				38D937D9615DCA9A6DAABDBA /* NativeFontLoader.swift */,
 				C909192AADD2507D1B5E7EB7 /* Fonts */,
 			);
 			sourceTree = "<group>";
@@ -115,7 +106,7 @@
 			);
 			name = MapCoreMacOSExample;
 			packageProductDependencies = (
-				84D077DB94F5CB2C0AEB73D5 /* MapCore */,
+				DB97B705698B2B42020970C9 /* OSMFlutterFramework */,
 			);
 			productName = MapCoreMacOSExample;
 			productReference = 37AC5A136BCF6472DC0A264C /* MapCoreMacOSExample.app */;
@@ -141,7 +132,7 @@
 			mainGroup = 82056BAAB6BA61ADF130AF84;
 			minimizedProjectReferenceProxies = 0;
 			packageReferences = (
-				BD9B567E211FB6D85FED7F1D /* XCRemoteSwiftPackageReference "maps-core" */,
+				5321E91370FF071087026C7E /* XCLocalSwiftPackageReference ".." */,
 			);
 			preferredProjectObjectVersion = 100;
 			productRefGroup = AEDD5EBCC06AA84CEC6493F8 /* Products */;
@@ -158,12 +149,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB4F944920EE0CB677421EC4 /* NotoSans-Bold.json in Resources */,
-				6F0E78E8B0F0B08306976E67 /* NotoSans-Italic.json in Resources */,
-				BDC1489806B935FB538B3675 /* NotoSans-Regular.json in Resources */,
-				41E9EF4DA0D04DBF6E2A2499 /* Noto_Sans_Bold.png in Resources */,
-				93C2B271684D1ABDC4679D41 /* Noto_Sans_Italic.png in Resources */,
-				2A91D7BB0069DFF00A518BFA /* Noto_Sans_Regular.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,7 +160,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CF1CE56CED147B82F8FFC66 /* MapCoreMacOSExampleApp.swift in Sources */,
-				D34A4FF41530BA439947CCD1 /* NativeFontLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,6 +234,7 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Show your position on the map when you select My Location.";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
@@ -273,6 +258,7 @@
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Show your position on the map when you select My Location.";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
@@ -366,22 +352,18 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		BD9B567E211FB6D85FED7F1D /* XCRemoteSwiftPackageReference "maps-core" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/liodali/maps-core.git";
-			requirement = {
-				kind = exactVersion;
-				version = "4.0.1-spm.2";
-			};
+/* Begin XCLocalSwiftPackageReference section */
+		5321E91370FF071087026C7E /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../..;
 		};
-/* End XCRemoteSwiftPackageReference section */
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		84D077DB94F5CB2C0AEB73D5 /* MapCore */ = {
+		DB97B705698B2B42020970C9 /* OSMFlutterFramework */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = BD9B567E211FB6D85FED7F1D /* XCRemoteSwiftPackageReference "maps-core" */;
-			productName = MapCore;
+			package = 5321E91370FF071087026C7E /* XCLocalSwiftPackageReference ".." */;
+			productName = OSMFlutterFramework;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

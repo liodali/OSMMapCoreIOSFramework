@@ -7,7 +7,7 @@
 
 import CoreText
 import Foundation
-import UIKit
+import ImageIO
 
 #if compiler(>=5.10)
     /* private */ internal import MapCore
@@ -15,12 +15,12 @@ import UIKit
     @_implementationOnly import MapCore
 #endif
 
-/// Generates SDF font atlases at runtime from UIFont glyphs.
+/// Generates SDF font atlases at runtime from CTFont glyphs.
 /// Self-contained — no dependency on MSDFAtlasProvider.
 /// Requires bundled TTF files or system fonts to resolve font names.
 class RuntimeSDFAtlasProvider: FontAtlasProvider {
 
-    private let fontMappings: [String: UIFont]
+    private let fontMappings: [String: CTFont]
     private let charset: String
     private let atlasSize: CGSize
     private let fontSize: CGFloat
@@ -28,7 +28,7 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
     private let distanceRange: CGFloat
 
     init(
-        fontMappings: [String: UIFont] = [:],
+        fontMappings: [String: CTFont] = [:],
         charset: String = RuntimeSDFAtlasProvider.defaultCharset,
         atlasSize: CGSize = CGSize(width: 1024, height: 1024),
         fontSize: CGFloat = 28,
@@ -44,55 +44,16 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
     }
 
     func loadAtlas(forName name: String) -> FontAtlas? {
-        let uiFont = fontMappings[name] ?? Self.uiFont(forStyleName: name, size: fontSize)
-        return generateAtlas(font: uiFont, name: name)
+        let font = fontMappings[name] ?? Self.resolveFont(forStyleName: name, size: fontSize)
+        return generateAtlas(font: font, name: name)
     }
 
     // MARK: - Font resolution
 
-    private static nonisolated(unsafe) var registeredBundledFonts = Set<String>()
-    private static let bundledFontLock = NSLock()
-
-    private static func loadBundledFont(ttfName: String, size: CGFloat) -> UIFont? {
-        bundledFontLock.lock()
-        let alreadyRegistered = registeredBundledFonts.contains(ttfName)
-        if !alreadyRegistered {
-            registeredBundledFonts.insert(ttfName)
-        }
-        bundledFontLock.unlock()
-        guard
-            let url = FontResourceBundle.bundle.url(
-                forResource: ttfName, withExtension: "ttf", subdirectory: nil)
-        else {
-            print("RuntimeSDFAtlasProvider: \(ttfName).ttf not found in resource bundle")
-            return nil
-        }
-        if !alreadyRegistered {
-            var error: Unmanaged<CFError>?
-            guard
-                CTFontManagerRegisterFontsForURL(url as CFURL, .process, &error)
-            else {
-                if let error = error?.takeRetainedValue() {
-                    print("RuntimeSDFAtlasProvider: failed to register \(ttfName): \(error)")
-                }
-                return nil
-            }
-        }
-        guard
-            let dataProvider = CGDataProvider(url: url as CFURL),
-            let cgFont = CGFont(dataProvider)
-        else {
-            print("RuntimeSDFAtlasProvider: could not create CGFont from \(ttfName)")
-            return nil
-        }
-        let psName = cgFont.postScriptName as? String ?? ttfName
-        let ctFont = CTFontCreateWithGraphicsFont(cgFont, size, nil, nil)
-        let descriptor = CTFontCopyFontDescriptor(ctFont)
-        let uiFont = UIFont(descriptor: descriptor, size: size)
-        print(
-            "RuntimeSDFAtlasProvider: loaded bundled \(ttfName) -> family=\(uiFont.familyName) ps=\(psName) name=\(uiFont.fontName)"
-        )
-        return uiFont
+    private static func loadBundledFont(ttfName: String, size: CGFloat) -> CTFont? {
+        guard let url = FontResourceBundle.bundle.url(forResource: ttfName, withExtension: "ttf"),
+              let provider = CGDataProvider(url: url as CFURL), let font = CGFont(provider) else { return nil }
+        return CTFontCreateWithGraphicsFont(font, size, nil, nil)
     }
 
     static let defaultCharset: String = {
@@ -106,61 +67,11 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
         return ascii + latin1 + greek + symbols
     }()
 
-    private static func uiFont(forStyleName name: String, size: CGFloat) -> UIFont {
+    private static func resolveFont(forStyleName name: String, size: CGFloat) -> CTFont {
         let lowercased = name.lowercased()
-        let weight: UIFont.Weight
-        if lowercased.contains("bold") {
-            weight = .bold
-        } else if lowercased.contains("semibold") || lowercased.contains("medium") {
-            weight = .semibold
-        } else if lowercased.contains("light") || lowercased.contains("thin") {
-            weight = .light
-        } else {
-            weight = .regular
-        }
-        let traits: UIFontDescriptor.SymbolicTraits
-        if lowercased.contains("italic") {
-            traits = .traitItalic
-        } else {
-            traits = []
-        }
-
-        let ttfMapping: [String: String] = [
-            "Noto Sans Regular": "NotoSans-Regular",
-            "Noto Sans Italic": "NotoSans-Italic",
-            "Noto Sans Bold": "NotoSans-Bold",
-        ]
-        for (styleName, ttfName) in ttfMapping {
-            if lowercased == styleName.lowercased() {
-                if let font = Self.loadBundledFont(ttfName: ttfName, size: size) {
-                    return font
-                }
-                break
-            }
-        }
-
-        let postscriptNames = [
-            "NotoSans-Regular", "NotoSans-RegularItalic", "NotoSans-Regular-Bold",
-            "Noto Sans Regular", "NotoSans", "NotoSans-Regular",
-        ]
-        for psName in postscriptNames {
-            if let font = UIFont(name: psName, size: size) {
-                return font
-            }
-        }
-
-        let fallbackTtf: String
-        if weight == .bold {
-            fallbackTtf = "NotoSans-Bold"
-        } else if traits == .traitItalic {
-            fallbackTtf = "NotoSans-Italic"
-        } else {
-            fallbackTtf = "NotoSans-Regular"
-        }
-        if let font = Self.loadBundledFont(ttfName: fallbackTtf, size: size) {
-            return font
-        }
-        return UIFont.systemFont(ofSize: size)
+        let variant = lowercased.contains("bold") ? "Bold" : (lowercased.contains("italic") ? "Italic" : "Regular")
+        if let font = loadBundledFont(ttfName: "NotoSans-\(variant)", size: size) { return font }
+        return CTFontCreateWithName("Helvetica" as CFString, size, nil)
     }
 
     // MARK: - SDF atlas generation
@@ -175,8 +86,8 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
         var atlasY: CGFloat = 0
     }
 
-    private func generateAtlas(font: UIFont, name: String) -> FontAtlas? {
-        let ctFont = CTFontCreateWithFontDescriptor(font.fontDescriptor, fontSize, nil)
+    private func generateAtlas(font: CTFont, name: String) -> FontAtlas? {
+        let ctFont = font
         var entries: [GlyphEntry] = []
         var spaceEntry: GlyphEntry?
         let charCodes = Array(charset)
@@ -280,7 +191,7 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
         atlasContext.translateBy(x: 0, y: atlasSize.height)
         atlasContext.scaleBy(x: 1.0, y: -1.0)
 
-        atlasContext.setFillColor(UIColor.black.cgColor)
+        atlasContext.setFillColor(CGColor(gray: 0, alpha: 1))
         atlasContext.fill(CGRect(origin: .zero, size: atlasSize))
 
         for entry in packed {
@@ -299,11 +210,12 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
             return nil
         }
 
-        let uiImage = UIImage(cgImage: atlasCGImage)
-        if let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+        let atlasPNG = AppleImageUtilities.pngData(atlasCGImage)
+        if ProcessInfo.processInfo.arguments.contains("--osm-font-debug"),
+           let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let url = docs.appendingPathComponent(
                 "font_atlas_\(name.replacingOccurrences(of: " ", with: "_")).png")
-            if let pngData = uiImage.pngData() {
+            if let pngData = atlasPNG {
                 try? pngData.write(to: url)
                 print("DEBUG: Atlas saved to \(url.path)")
             }
@@ -313,7 +225,7 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
                     "font_atlas_\(name.replacingOccurrences(of: " ", with: "_"))_correct.png"
                 )
                 return FileManager.default.fileExists(atPath: correctURL.path)
-                    ? UIImage(contentsOfFile: correctURL.path)?.cgImage
+                    ? AppleImageUtilities.decodeCGImage(at: correctURL)
                     : nil
             }() {
                 let comparison = compareAtlases(
@@ -331,8 +243,8 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
             return nil
         }
 
-        let lineHeight = Double(font.lineHeight / fontSize)
-        let base = Double(font.ascender / fontSize)
+        let lineHeight = Double((CTFontGetAscent(font) + CTFontGetDescent(font) + CTFontGetLeading(font)) / fontSize)
+        let base = Double(CTFontGetAscent(font) / fontSize)
         let bitmapSize = MCVec2D(x: Double(atlasSize.width), y: Double(atlasSize.height))
         let info = MCFontWrapper(
             name: name,
@@ -406,9 +318,9 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
             )
         else { return nil }
 
-        grayContext.setFillColor(UIColor.black.cgColor)
+        grayContext.setFillColor(CGColor(gray: 0, alpha: 1))
         grayContext.fill(CGRect(origin: .zero, size: entry.imageSize))
-        grayContext.setFillColor(UIColor.white.cgColor)
+        grayContext.setFillColor(CGColor(gray: 1, alpha: 1))
 
         let drawX = distanceRange + padding - entry.bounds.origin.x
         let drawY = distanceRange + padding - entry.bounds.origin.y
@@ -427,7 +339,7 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
             }
         }
 
-        if entry.charCode == "A" {
+        if entry.charCode == "A" && ProcessInfo.processInfo.arguments.contains("--osm-font-debug") {
             var debugRGBA = [UInt8](repeating: 0, count: width * height * 4)
             for y in 0..<height {
                 for x in 0..<width {
@@ -451,7 +363,7 @@ class RuntimeSDFAtlasProvider: FontAtlasProvider {
                     .first
                 {
                     let url = docs.appendingPathComponent("debug_glyph_A_raw.png")
-                    try? UIImage(cgImage: img).pngData()?.write(to: url)
+                    try? AppleImageUtilities.pngData(img)?.write(to: url)
                     print("DEBUG: Raw glyph A saved to \(url.path) (\(width)x\(height))")
                 }
             }

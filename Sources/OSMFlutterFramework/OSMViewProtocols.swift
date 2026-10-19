@@ -19,7 +19,7 @@ import MapKit
     func sanitizeStyleJson(_ json: String) -> String
     func createVectorLayer(
         styleJsonUrl: String?, styleJson: String?, sourceUrlParams: [String: String]?
-    )
+    ) -> Bool
 }
 
 // MARK: - Camera Management (public)

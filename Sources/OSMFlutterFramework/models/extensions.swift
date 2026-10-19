@@ -143,8 +143,9 @@ extension MCCoord {
 }
 
 
-extension UIImage {
-    func rotate(radians: Float) -> UIImage? {
+extension OSMPlatformImage {
+    #if !os(macOS)
+    func rotate(radians: Float) -> OSMPlatformImage? {
             var newSize = CGRect(origin: CGPoint.zero, size: self.size).applying(CGAffineTransform(rotationAngle: CGFloat(radians))).size
             // Trim off the extremely small float value to prevent core graphics from rounding it up
             newSize.width = floor(newSize.width)
@@ -165,12 +166,13 @@ extension UIImage {
 
             return newImage
         }
+    #endif
     func toTexture(angle:Float)->TextureHolder {
         var iconImage = self
-        if angle != 0 || angle != 360 {
+        if angle != 0 && angle != 360 {
             iconImage  = rotate(radians: angle) ?? self
         }
-        let texture = try! TextureHolder(iconImage.cgImage!)
+        let texture = try! TextureHolder(AppleImageUtilities.cgImage(iconImage) ?? AppleImageUtilities.transparentPixel())
         return texture
     }
 }

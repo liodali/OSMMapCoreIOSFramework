@@ -62,11 +62,11 @@ public struct Marker : Equatable{
 public struct MarkerConfiguration{
 
     let angle:Float?
-    let icon:UIImage
+    let icon:OSMPlatformImage
     let iconSize:MarkerIconSize?
     let anchor:MarkerAnchor?
     let scaleType:MarkerScaleType
-    public init(icon:UIImage,iconSize:MarkerIconSize?,angle: Float?, anchor: MarkerAnchor?,
+    public init(icon:OSMPlatformImage,iconSize:MarkerIconSize?,angle: Float?, anchor: MarkerAnchor?,
                 scaleType:MarkerScaleType = MarkerScaleType.Scale) {
         self.icon = icon
         self.angle = angle
@@ -74,7 +74,7 @@ public struct MarkerConfiguration{
         self.iconSize = iconSize
         self.scaleType = scaleType
     }
-    public func copyWith(icon:UIImage? = nil,
+    public func copyWith(icon:OSMPlatformImage? = nil,
                   iconSize:MarkerIconSize? = nil,
                   angle: Float? = nil,
                   anchor: MarkerAnchor? = nil,
@@ -117,7 +117,11 @@ extension Marker {
         let iconSize = if let iconSize = markerConfiguration.iconSize {
             MCVec2F(x:Float(iconSize.x),y:Float(iconSize.y))
         }else {
-            MCVec2F(x: Float(texture.getImageWidth()), y: Float(texture.getImageHeight()))
+            #if os(macOS)
+                MCVec2F(x: Float(markerConfiguration.icon.size.width), y: Float(markerConfiguration.icon.size.height))
+                #else
+                MCVec2F(x: Float(texture.getImageWidth()), y: Float(texture.getImageHeight()))
+                #endif
         }
        // MCVec2F(x:Float(markerConfiguration.iconSize.x),y:Float(markerConfiguration.iconSize.y))
         let location = mccoord ?? self.location.mcCoord //.toMCCoordEpsg3857()

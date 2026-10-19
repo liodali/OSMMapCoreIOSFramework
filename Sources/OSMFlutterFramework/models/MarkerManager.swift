@@ -54,7 +54,7 @@ nonisolated public class MarkerManager {
     public func updateMarker(
         oldlocation: CLLocationCoordinate2D,
         newlocation: CLLocationCoordinate2D,
-        icon: UIImage?,
+        icon: OSMPlatformImage?,
         iconSize: MarkerIconSize? = nil,
         angle: Float? = nil,
         anchor: MarkerAnchor? = nil,

@@ -1,0 +1,58 @@
+name: Apple platform checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: apple-platforms-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  macos:
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.3'
+      - name: Build native wrapper example
+        run: >-
+          xcodebuild -workspace OSMFlutterFramework.xcworkspace
+          -scheme MapCoreMacOSExample -configuration Release
+          -destination 'generic/platform=macOS'
+          CONFIGURATION_BUILD_DIR=${{ runner.temp }}/osm-native-products
+          CODE_SIGNING_ALLOWED=NO build
+      - name: Test native framework with compiled Metal resources
+        run: |
+          swift build -c release --jobs 3
+          spm_products=$(swift build -c release --show-bin-path)
+          cp "$RUNNER_TEMP/osm-native-products/MapCore_MapCore.bundle/Contents/Resources/default.metallib" \
+            "$spm_products/MapCore_MapCore.bundle/default.metallib"
+          swift test -c release --jobs 3
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        destination:
+          - 'generic/platform=iOS Simulator'
+          - 'generic/platform=macOS,variant=Mac Catalyst'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.3'
+      - name: Compile framework
+        run: >-
+          xcodebuild -project OSMFlutterFramework.xcodeproj
+          -scheme OSMFlutterFramework -configuration Release
+          -destination '${{ matrix.destination }}'
+          CODE_SIGNING_ALLOWED=NO build

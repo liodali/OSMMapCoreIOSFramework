@@ -2,7 +2,7 @@
 
 ## Overview
 
-Swift package that wraps MapCore (OpenStreetMap) for iOS. Provides a `UIView`-based map (`OSMView`) with managers for markers, roads, shapes, POIs, and user location. Designed to be embedded in Flutter apps via platform views, but usable standalone.
+Swift package that wraps MapCore (OpenStreetMap) for iOS, Catalyst, and native macOS. Provides a platform view (`OSMView`, UIView on iOS/Catalyst and NSView on macOS) with managers for markers, roads, shapes, POIs, and user location. Designed to be embedded in Flutter apps via platform views, but usable standalone.
 
 ## Key Files
 
@@ -12,11 +12,11 @@ Swift package that wraps MapCore (OpenStreetMap) for iOS. Provides a `UIView`-ba
 - `Sources/OSMFlutterFramework/OSMTileConfiguration.swift` — `OSMMapConfiguration` and `OSMTiledLayerConfig` for raster tile URLs
 - `Sources/OSMFlutterFramework/models/` — Managers: `MarkerManager`, `RoadManager`, `ShapeManager`, `PoisManager`, `LocationManager`
 - `example/` — SwiftUI example app (`MapCoreView.swift`, `ContentView.swift`, search UI)
-- `example/MapCoreMacOSExample/` — Native AppKit/SwiftUI MapCore smoke test, with Vector/Raster selection and shared Noto Sans atlas resources; runs as the `MapCoreMacOSExample` scheme on My Mac.
+- `example/MapCoreMacOSExample/` — Native AppKit/SwiftUI wrapper example using OSMView, Vector/Raster selection, managers, and framework-bundled font atlases; runs as the `MapCoreMacOSExample` scheme on My Mac.
 
 ## Architecture
 
-- `OSMView` is a `UIView` wrapping `MCMapView` (MapCore)
+- `OSMView` is an `OSMPlatformView` wrapping `MCMapView` (MapCore)
 - `OSMView` sets up **either** a raster or vector base layer at index 0
   - Raster: `OSMTiledLayerConfig` + `MCTiled2dMapRasterLayerInterface`
   - Vector: `MCTiled2dMapVectorLayerInterface.create(fromStyleJson:styleJsonUrl:loaders:fontLoader:)` with `SystemFontLoader()`
@@ -46,6 +46,8 @@ class InnerOSMMapView: UIViewController {
     let map = OSMView(...)
 }
 ```
+
+- `Sources/OSMFlutterFramework/Platform/` — AppKit/UIKit view, image and color aliases plus shared image decoding and AppKit rotation/tint helpers. Catalyst uses the UIKit path.
 
 ## Build & Test
 
@@ -174,10 +176,10 @@ extension OSMView {
 
 ### Gotchas
 
-- `MapCore` uses the remote fork `https://github.com/liodali/maps-core.git`, pinned to `4.0.1-spm.2` (based on upstream 4.0.0). The fork always resolves djinni remotely to avoid the conditional local-submodule dependency failure (upstream issue #929), and normalizes indexed PNG tiles to RGBA when MetalKit decoding fails on macOS. Keep the package manifest and all three Xcode projects on the same URL/version. No vendoring or checkout patches are needed.
+- `MapCore` uses the remote fork `https://github.com/liodali/maps-core.git`, pinned to `4.0.1-spm.2` (based on upstream 4.0.0). The fork always resolves djinni remotely to avoid the conditional local-submodule dependency failure (upstream issue #929), and normalizes indexed PNG tiles to RGBA when MetalKit decoding fails on macOS. Keep the package manifest and the explicit MapCore references in the Xcode projects on the same URL/version; the native macOS example inherits this pin through its local framework package. No vendoring or checkout patches are needed.
 - `MapCore` is imported as `internal import MapCore` (Swift 5.10+) or `@_implementationOnly import MapCore` (older). Do not expose MapCore types in public APIs.
 - Zoom levels in `ZoomConfiguration` are integer identifiers (0-19). MapCore uses actual zoom scale values. Conversion happens via `getZoomFromZoomIdentifier()` in `OSMView`.
-- `layoutSubviews()` syncs `mapView.frame` to `self.frame` when non-zero.
+- `layoutSubviews()` on UIKit and `layout()` on AppKit sync `mapView.frame` to container bounds.
 - `hildeAll()` is intentionally misspelled in source — match existing naming if adding similar methods.
 - `RoadManager` uses two line layers: `lineBorderLayer` (clickable=false) below `lineLayer` (clickable=true). Both must be initialized.
 - `LocationManager` defaults to `controlUserMarker = true`, meaning it draws/moves the user marker automatically.
@@ -199,7 +201,7 @@ xcodebuild -workspace OSMMapCoreFrameworkExample.xcworkspace -scheme OSMMapCoreF
 
 ### Testing
 
-- Unit tests live in `OSMFlutterFrameworkTests/OSMFlutterFrameworkTests.swift`
+- Active SPM platform tests live in `Tests/OSMFlutterFrameworkTests/`; legacy Xcode tests remain in `OSMFlutterFrameworkTests/OSMFlutterFrameworkTests.swift`
 - Example app serves as integration test — run on simulator to verify map renders, markers/roads/shapes work, location tracking works, and vector tiles load correctly.
 
 ### Dependency Notes
