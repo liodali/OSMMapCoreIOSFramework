@@ -1,11 +1,11 @@
 # OSM MapCore iOS Framework
 
-[![Platform](https://img.shields.io/badge/platform-iOS%2014%2B-lightgrey)](https://developer.apple.com/ios/)
-[![Swift](https://img.shields.io/badge/Swift-6.1%2B-orange)](https://swift.org)
+[![Platform](https://img.shields.io/badge/platform-iOS%2014%2B%20%7C%20macOS%2012%2B-lightgrey)](https://developer.apple.com/ios/)
+[![Swift](https://img.shields.io/badge/Swift-6.2%2B-orange)](https://swift.org)
 [![SPM](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen)](https://swift.org/package-manager/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-An iOS framework that wraps the [MapCore](https://github.com/openmobilemaps/maps-core)
+An Apple-platform framework that wraps the [MapCore](https://github.com/openmobilemaps/maps-core)
 SDK to render OpenStreetMap maps with a simple, Swift-friendly API — raster or
 vector tiles, markers, roads, shapes, POIs and user-location tracking.
 
@@ -35,8 +35,8 @@ vector tiles, markers, roads, shapes, POIs and user-location tracking.
 ## Requirements
 
 - iOS 14.0+
-- Swift 6.1+
-- Xcode with Swift 6.1 or newer
+- macOS 12.0+ for native AppKit builds; Mac Catalyst 14.0+ remains supported
+- Swift 6.2+ / Xcode 26 or newer (CI uses Xcode 26.3)
 
 ## Installation (Swift Package Manager)
 
@@ -47,6 +47,48 @@ vector tiles, markers, roads, shapes, POIs and user-location tracking.
  * Or in Xcode: *File → Add Package Dependencies…* → paste the repo URL.
 
 MapCore and all its dependencies resolve automatically — no extra setup needed.
+
+## Native macOS (working tree / next release)
+
+The macOS port is not included in the published `0.9.0` tag yet. Use this local
+package while testing; keep released applications on their verified version.
+
+`OSMView` is an `NSView` on native macOS and a `UIView` on iOS/Catalyst. Public
+`OSMPlatformImage` and `OSMPlatformColor` aliases resolve to `NSImage`/`NSColor`
+on macOS and `UIImage`/`UIColor` on iOS, preserving existing iOS call sites.
+The public managers and camera commands are shared.
+
+```swift
+import AppKit
+import CoreLocation
+import OSMFlutterFramework
+
+let map = OSMView(
+    rect: view.bounds,
+    location: CLLocationCoordinate2D(latitude: 47.3769, longitude: 8.5417),
+    zoomConfig: ZoomConfiguration(initZoom: 14)
+)
+map.autoresizingMask = [.width, .height]
+view.addSubview(map)
+```
+
+Open `OSMFlutterFramework.xcworkspace`, select **MapCoreMacOSExample → My Mac**,
+and run to exercise the wrapper with vector/raster tiles, bundled labels,
+markers, POIs, roads, circles, rotation, static mode, and view recreation.
+The shared scheme uses Release for smooth vector rendering; Debug also builds.
+
+Sandboxed hosts need `com.apple.security.network.client` for remote maps.
+Location is opt-in: a macOS host needs `NSLocationUsageDescription` and, when
+sandboxed, `com.apple.security.personal-information.location`. iOS hosts retain
+`NSLocationWhenInUseUsageDescription`. Configure these in the host application,
+not in package resources. macOS reports heading as zero and uses a fixed marker;
+location denial does not prevent the rest of the map from working.
+
+Mouse clicks, dragging, wheel/pinch zoom use MapCore's AppKit support. Programmatic
+rotation is shared; native rotation gestures, hover, and long-press behavior
+are not provided by the pinned MapCore AppKit adapter. Intel/AMD runtime graphics
+and moving between Retina/non-Retina displays still require device validation.
+The separate Flutter plugin has not been ported by this change.
 
 ## Quick Start
 
