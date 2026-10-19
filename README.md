@@ -9,7 +9,7 @@ An Apple-platform framework that wraps the [MapCore](https://github.com/openmobi
 SDK to render OpenStreetMap maps with a simple, Swift-friendly API — raster or
 vector tiles, markers, roads, shapes, POIs and user-location tracking.
 
- * current version : `0.9.0`
+ * current version : `0.9.1`
 
 > [!WARNING]
 > **CocoaPods support is suspended.** No further pod releases will be
@@ -42,7 +42,7 @@ vector tiles, markers, roads, shapes, POIs and user-location tracking.
 
  * In `Package.swift`
  ```swift
- .package(url: "https://github.com/liodali/OSMMapCoreIOSFramework.git", from: "0.9.0")
+ .package(url: "https://github.com/liodali/OSMMapCoreIOSFramework.git", from: "0.9.1")
  ```
  * Or in Xcode: *File → Add Package Dependencies…* → paste the repo URL.
 

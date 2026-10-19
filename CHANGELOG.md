@@ -1,4 +1,4 @@
-## Unreleased
+## 0.9.1
 
 - Add native macOS 12 support to OSMView and its public managers with AppKit image/color aliases; preserve UIKit on iOS and Catalyst.
 - Share image and font-atlas decoding through CoreGraphics, CoreText, and ImageIO, with resources loaded from the framework bundle. Normalize AppKit symbol images to RGBA8 for Metal upload.
