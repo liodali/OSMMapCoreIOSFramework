@@ -205,6 +205,7 @@ public final class OSMView: OSMPlatformView, OnMapChanged, VectorTileManageable,
         self.mapView.backgroundColor = .gray
         self.mapView.frame = bounds
         self.addSubview(self.mapView)
+        syncMapViewport()
 
         self.osmTiledConfiguration = OSMTiledLayerConfig(configuration: self.mapTileConfiguration)
         vectorCallback.onMapGesture = onMapGestureDelegate
@@ -219,7 +220,7 @@ public final class OSMView: OSMPlatformView, OnMapChanged, VectorTileManageable,
         self.roadManager.initRoadManager(above: baseLayer)
         self.shapeManager.initShapeManager()
         self.markerManager.initMarkerManager()
-        self.setZoom(zoom: zoomConfig.initZoom)
+        self.setZoom(zoom: zoomConfig.initZoom, animated: false)
         if let location = initLocation {
             self.moveTo(location: location, zoom: zoomConfig.initZoom, animated: false)
         }
@@ -231,13 +232,31 @@ public final class OSMView: OSMPlatformView, OnMapChanged, VectorTileManageable,
     public override func layout() {
         super.layout()
         mapView.frame = bounds
+        syncMapViewport()
     }
     #else
     public override func layoutSubviews() {
         super.layoutSubviews()
         mapView.frame = bounds
+        syncMapViewport()
     }
     #endif
+
+    private func syncMapViewport() {
+        #if os(macOS)
+        let size = mapView.convertToBacking(mapView.bounds).size
+        #else
+        let scale = mapView.window?.screen.scale ?? UIScreen.main.scale
+        let size = CGSize(
+            width: mapView.bounds.width * scale, height: mapView.bounds.height * scale)
+        #endif
+        guard size.width.isFinite, size.height.isFinite else { return }
+        let width = Int32(min(max(size.width.rounded(), 0), CGFloat(Int32.max)))
+        let height = Int32(min(max(size.height.rounded(), 0), CGFloat(Int32.max)))
+        let currentSize = mapView.mapInterface.getRenderingContext()?.getViewportSize()
+        if currentSize?.x == width && currentSize?.y == height { return }
+        mapView.mapInterface.setViewportSize(MCVec2I(x: width, y: height))
+    }
 
     func onBoundsChanged(bounds: BoundingBox, zoom: Double) {
         let center = center()
@@ -506,7 +525,7 @@ extension OSMView {
         }
     }
     public func getBoundingBox() -> BoundingBox {
-        self.mapView.camera.getBounds().toBoundingBox()
+        self.mapView.camera.getVisibleRect().toBoundingBox()
     }
     public func enableRotation(enable: Bool) {
         self.mapView.camera.setRotationEnabled(enable)

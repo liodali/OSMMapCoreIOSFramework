@@ -35,12 +35,23 @@ func isEqualTo1eX(value: Float) -> Bool {
     let exponent = Int(log10Value)
     return value == Float(truncating: pow(10, exponent) as NSNumber) && exponent >= 2 && exponent <= 8  // Adjust the range as needed
 }
+private func normalizedLongitude(_ longitude: Double) -> Double {
+    let remainder = longitude.truncatingRemainder(dividingBy: 360)
+    if remainder > 180 { return remainder - 360 }
+    if remainder < -180 { return remainder + 360 }
+    return remainder
+}
+
 extension MCRectCoord {
      func toBoundingBox()-> BoundingBox {
          let topLeft4326 = topLeft.toCLLocation2D()
          let bottomRight4326 = bottomRight.toCLLocation2D()
-         return BoundingBox(north: topLeft4326.longitude,west: topLeft4326.latitude,
-                            east: bottomRight4326.latitude, south: bottomRight4326.longitude)
+         let spansFullWorld = bottomRight4326.longitude - topLeft4326.longitude >= 360
+         return BoundingBox(
+            north: topLeft4326.latitude,
+            west: spansFullWorld ? -180 : normalizedLongitude(topLeft4326.longitude),
+            east: spansFullWorld ? 180 : normalizedLongitude(bottomRight4326.longitude),
+            south: bottomRight4326.latitude)
     }
 }
 extension CLLocationCoordinate2D {
