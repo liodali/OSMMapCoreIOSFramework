@@ -52,7 +52,7 @@ jobs:
           xcode-version: '26.3'
       - name: Compile framework
         run: >-
-          xcodebuild -project OSMFlutterFramework.xcodeproj
+          xcodebuild -workspace .swiftpm/xcode/package.xcworkspace
           -scheme OSMFlutterFramework -configuration Release
           -destination '${{ matrix.destination }}'
           -derivedDataPath '${{ runner.temp }}/osm-framework-derived-data'
