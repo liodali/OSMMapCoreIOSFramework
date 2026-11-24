@@ -39,8 +39,8 @@ extension MCRectCoord {
      func toBoundingBox()-> BoundingBox {
          let topLeft4326 = topLeft.toCLLocation2D()
          let bottomRight4326 = bottomRight.toCLLocation2D()
-         return BoundingBox(north: topLeft4326.longitude,west: topLeft4326.latitude,
-                            east: bottomRight4326.latitude, south: bottomRight4326.longitude)
+         return BoundingBox(north: topLeft4326.latitude, west: topLeft4326.longitude,
+                            east: bottomRight4326.longitude, south: bottomRight4326.latitude)
     }
 }
 extension CLLocationCoordinate2D {
