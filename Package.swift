@@ -1,4 +1,5 @@
 // swift-tools-version:6.2
+// Release: 0.9.2. SwiftPM derives the package version from its Git tag.
 import PackageDescription
 
 let package = Package(
