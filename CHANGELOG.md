@@ -1,3 +1,10 @@
+## 0.9.2
+
+- Correct latitude/longitude assignment when converting geographic and projected rectangles to `BoundingBox`, preserving antimeridian endpoint ordering.
+- Make `OSMView.getBoundingBox()` return the camera's actual visible viewport instead of its configured world/camera limit.
+- Synchronize MapCore's viewport from the view's backing-pixel dimensions during initialization and layout, including before the first Metal draw.
+- Add conversion and rendered-viewport regression coverage for zero-size initialization, callbacks, panning, zooming, resizing, and rotation on Apple platforms.
+
 ## 0.9.1
 
 - Add native macOS 12 support to OSMView and its public managers with AppKit image/color aliases; preserve UIKit on iOS and Catalyst.
