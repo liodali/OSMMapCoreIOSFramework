@@ -24,7 +24,36 @@ final class VisibleBoundsTests: XCTestCase {
         XCTAssertEqual(bounds.west, center.longitude, accuracy: 0.000_001)
     }
 
-    func testRenderedVisibleBoundsTrackCameraViewportAndCallbacks() async throws {
+    func testInitialZoomDoesNotOverrideImmediateExplicitZoom() async throws {
+        try skipWithoutMapCoreRenderingResources()
+        let map = OSMView(
+            rect: CGRect(x: 0, y: 0, width: 640, height: 480), location: nil,
+            zoomConfig: ZoomConfiguration(initZoom: 12))
+
+        XCTAssertEqual(map.zoom(), 12)
+        map.setZoom(zoom: 15, animated: false)
+        try? await Task.sleep(nanoseconds: 500_000_000)
+        XCTAssertEqual(map.zoom(), 15)
+    }
+
+    func testAntimeridianViewportWrapsProjectedLongitudeEndpoints() async throws {
+        try skipWithoutMapCoreRenderingResources()
+        let center = CLLocationCoordinate2D(latitude: 48, longitude: 179.99)
+        let map = OSMView(
+            rect: CGRect(x: 0, y: 0, width: 640, height: 480), location: center,
+            zoomConfig: ZoomConfiguration(initZoom: 14))
+
+        let bounds = map.getBoundingBox()
+        assertFinite(bounds)
+        XCTAssertGreaterThan(bounds.north, bounds.south)
+        XCTAssertGreaterThan(bounds.west, 0)
+        XCTAssertLessThan(bounds.east, 0)
+        XCTAssertLessThan(bounds.east, bounds.west)
+        XCTAssertTrue(center.latitude >= bounds.south && center.latitude <= bounds.north)
+        XCTAssertTrue(center.longitude >= bounds.west || center.longitude <= bounds.east)
+    }
+
+    func testLaidOutVisibleBoundsTrackCameraViewportAndCallbacks() async throws {
         try skipWithoutMapCoreRenderingResources()
         let initialCenter = CLLocationCoordinate2D(latitude: 48, longitude: 6)
         let map = OSMView(
@@ -32,30 +61,13 @@ final class VisibleBoundsTests: XCTestCase {
             zoomConfig: ZoomConfiguration(initZoom: 12))
         let recorder = MapMoveRecorder()
         map.onMapMove = recorder
+        defer { map.onMapMove = nil }
 
+        // Exercise the camera/viewport pipeline without requiring a WindowServer.
         #if os(macOS)
-        let window = NSWindow(
-            contentRect: map.frame, styleMask: [.titled, .resizable], backing: .buffered, defer: false)
-        window.contentView?.addSubview(map)
-        window.makeKeyAndOrderFront(nil)
-        window.layoutIfNeeded()
         map.layout()
-        defer {
-            map.onMapMove = nil
-            window.close()
-        }
         #else
-        let window = UIWindow(frame: map.frame)
-        let viewController = UIViewController()
-        window.rootViewController = viewController
-        viewController.view.addSubview(map)
-        window.makeKeyAndVisible()
-        viewController.view.layoutIfNeeded()
         map.layoutIfNeeded()
-        defer {
-            map.onMapMove = nil
-            window.isHidden = true
-        }
         #endif
 
         let initial = await waitForPositiveVisibleBounds(on: map)

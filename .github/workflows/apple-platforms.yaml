@@ -55,4 +55,5 @@ jobs:
           xcodebuild -project OSMFlutterFramework.xcodeproj
           -scheme OSMFlutterFramework -configuration Release
           -destination '${{ matrix.destination }}'
+          -derivedDataPath '${{ runner.temp }}/osm-framework-derived-data'
           CODE_SIGNING_ALLOWED=NO build

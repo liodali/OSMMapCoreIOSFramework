@@ -1,9 +1,10 @@
 ## 0.9.2
 
-- Correct latitude/longitude assignment when converting geographic and projected rectangles to `BoundingBox`, preserving antimeridian endpoint ordering.
+- Correct latitude/longitude assignment when converting geographic and projected rectangles to `BoundingBox`; normalize projected antimeridian endpoints without collapsing full-world spans.
 - Make `OSMView.getBoundingBox()` return the camera's actual visible viewport instead of its configured world/camera limit.
+- Initialize the configured zoom without animation so it cannot override an immediate explicit zoom command.
 - Synchronize MapCore's viewport from the view's backing-pixel dimensions during initialization and layout, including before the first Metal draw.
-- Add conversion and rendered-viewport regression coverage for zero-size initialization, callbacks, panning, zooming, resizing, and rotation on Apple platforms.
+- Add conversion and viewport integration regression coverage for zero-size initialization, callbacks, panning, zooming, resizing, and rotation on Apple platforms.
 
 ## 0.9.1
 

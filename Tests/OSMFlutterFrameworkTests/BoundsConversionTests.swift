@@ -29,6 +29,22 @@ final class BoundsConversionTests: XCTestCase {
         XCTAssertLessThan(rect.toBoundingBox().east, rect.toBoundingBox().west)
     }
 
+    func testProjectedAntimeridianRectNormalizesLongitudeEndpoints() {
+        let rect = MCRectCoord(
+            topLeft: CLLocationCoordinate2D(latitude: 20, longitude: 179).toMCCoordEpsg3857(),
+            bottomRight: CLLocationCoordinate2D(latitude: 10, longitude: 181).toMCCoordEpsg3857())
+
+        assertBoundingBox(rect.toBoundingBox(), north: 20, south: 10, east: -179, west: 179)
+    }
+
+    func testProjectedFullWorldRectKeepsFullLongitudeSpan() {
+        let bounds = BoundingBox().toMCRectCoord().toBoundingBox()
+
+        XCTAssertEqual(bounds.west, -180, accuracy: 0.000_000_1)
+        XCTAssertEqual(bounds.east, 180, accuracy: 0.000_000_1)
+        XCTAssertGreaterThan(bounds.east, bounds.west)
+    }
+
     private func assertBoundingBox(
         _ bounds: BoundingBox, north: Double, south: Double, east: Double, west: Double,
         accuracy: Double = 0.000_000_1,

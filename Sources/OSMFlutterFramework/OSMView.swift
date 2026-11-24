@@ -220,7 +220,7 @@ public final class OSMView: OSMPlatformView, OnMapChanged, VectorTileManageable,
         self.roadManager.initRoadManager(above: baseLayer)
         self.shapeManager.initShapeManager()
         self.markerManager.initMarkerManager()
-        self.setZoom(zoom: zoomConfig.initZoom)
+        self.setZoom(zoom: zoomConfig.initZoom, animated: false)
         if let location = initLocation {
             self.moveTo(location: location, zoom: zoomConfig.initZoom, animated: false)
         }
